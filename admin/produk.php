@@ -25,10 +25,14 @@ $query_kategori = mysqli_query($koneksi, $sql_kategori);
 
     <h3>Tambah Produk</h3>
 
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
 
         <label>Nama Produk</label><br>
         <input type="text" name="nama_produk" required>
+        <br><br>
+
+        <label>Gambar Produk</label><br>
+        <input type="file" name="gambar" accept="image/*" required>
         <br><br>
 
         <label>Kategori</label><br>
@@ -61,8 +65,19 @@ $query_kategori = mysqli_query($koneksi, $sql_kategori);
         <input type="number" name="harga_large" required>
         <br><br>
 
-        <label>Stok</label><br>
-        <input type="number" name="stok" required>
+        <label>Stok Small</label><br>
+        <input type="number" name="stok_small" required>
+
+        <br><br>
+
+        <label>Stok Medium</label><br>
+        <input type="number" name="stok_medium" required>
+
+        <br><br>
+
+        <label>Stok Large</label><br>
+        <input type="number" name="stok_large" required>
+
         <br><br>
 
         <label>Deskripsi</label><br>
@@ -84,23 +99,33 @@ if(isset($_POST['simpan'])){
     $harga_small = $_POST['harga_small'];
     $harga_medium = $_POST['harga_medium'];
     $harga_large = $_POST['harga_large'];
-    $stok = $_POST['stok'];
+    $stok_small = $_POST['stok_small'];
+    $stok_medium = $_POST['stok_medium'];
+    $stok_large = $_POST['stok_large'];
     $deskripsi = $_POST['deskripsi'];
+    $nama_file = $_FILES['gambar']['name'];
+    $tmp = $_FILES['gambar']['tmp_name'];
+
+    move_uploaded_file($tmp, "../images/".$nama_file);
 
     $sql = "INSERT INTO produk
             (
             id_kategori,
             nama_produk,
+            gambar,
             harga_small,
             harga_medium,
             harga_large,
-            stok,
+            stok_small,
+            stok_medium,
+            stok_large,
             deskripsi
             )
             VALUES
             (
             '$id_kategori',
             '$nama_produk',
+            '$nama_file',
             '$harga_small',
             '$harga_medium',
             '$harga_large',
@@ -129,11 +154,15 @@ if(isset($_POST['simpan'])){
 
     <tr>
         <th>ID</th>
+        <th>Gambar</th>
         <th>Produk</th>
         <th>Kategori</th>
         <th>Small</th>
         <th>Medium</th>
         <th>Large</th>
+        <th>Stok S</th>
+        <th>Stok M</th>
+        <th>Stok L</th>
         <th>Stok</th>
         <th>Deskripsi</th>
         <th>Aksi</th>
@@ -153,12 +182,20 @@ while($data = mysqli_fetch_assoc($query_produk)){
 
 <tr>
     <td><?= $data['id_produk']; ?></td>
+    <td>
+        <img src="../images/<?= $data['gambar']; ?>"
+             width="80"
+             height="80"
+             style="object-fit:cover;">
+    </td>
     <td><?= $data['nama_produk']; ?></td>
     <td><?= $data['nama_kategori']; ?></td>
     <td><?= $data['harga_small']; ?></td>
     <td><?= $data['harga_medium']; ?></td>
     <td><?= $data['harga_large']; ?></td>
-    <td><?= $data['stok']; ?></td>
+    <td><?= $data['stok_small']; ?></td>
+    <tb><?= $data['stok_medium'];?></tb>
+    <tb><?= $data['stok_large'];?></tb>
     <td><?= $data['deskripsi'];?></td>
 
     <td>

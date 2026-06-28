@@ -121,9 +121,15 @@ $data = mysqli_fetch_array($query);
                 id="ukuran">
 
             <button type="submit"
-                    id="btnPesan"
-                    disabled>
-                Pesan Sekarang
+                id="btnKeranjang"
+                formaction="tambah_keranjang.php" disabled>
+                🛒 Tambah ke Keranjang
+            </button>
+
+            <button type="submit"
+                id="btnCheckout"
+                formaction="checkout.php" disabled>
+                ⚡ Checkout Sekarang
             </button>
 
         </form>
@@ -149,7 +155,8 @@ $data = mysqli_fetch_array($query);
                 ukuran;
 
                 // Aktifkan tombol Pesan Sekarang
-                document.getElementById("btnPesan").disabled = false;
+                document.getElementById("btnKeranjang").disabled = false;
+                document.getElementById("btnCheckout").disabled = false;
 
             }
 

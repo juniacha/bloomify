@@ -142,11 +142,6 @@ if($ukuran == "Small"){
         <textarea name="catatan" rows="4" cols="40"></textarea><br><br>
 
         <button type="submit"
-                formaction="tambah_keranjang.php">
-            🛒 Tambah ke Keranjang
-        </button>
-
-        <button type="submit"
                 formaction="checkout.php">
             ⚡ Checkout Sekarang
         </button>

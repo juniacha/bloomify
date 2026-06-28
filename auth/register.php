@@ -6,8 +6,26 @@ if(isset($_POST['daftar'])){
     $nama = $_POST['nama'];
     $email = $_POST['email'];
     $no_hp = $_POST['no_hp'];
+
     $password = $_POST['password'];
     $konfirmasi = $_POST['konfirmasi'];
+
+    // Validasi password
+    if(
+        strlen($password) < 8 ||
+        !preg_match('/[A-Z]/', $password) ||
+        !preg_match('/[a-z]/', $password) ||
+        !preg_match('/[0-9]/', $password) ||
+        !preg_match('/[^a-zA-Z0-9]/', $password)
+    ){
+
+        echo "<script>
+                alert('Password minimal 8 karakter dan harus mengandung huruf besar, huruf kecil, angka, dan simbol.');
+                history.back();
+            </script>";
+
+        exit();
+    }
 
     //cek password
     if($password != $konfirmasi){
@@ -24,6 +42,8 @@ if(isset($_POST['daftar'])){
                     </script>";
         }else{
 
+            $password = password_hash($password, PASSWORD_DEFAULT);
+        
             $sql = "INSERT INTO users
                     (
                     nama,

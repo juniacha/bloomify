@@ -18,6 +18,11 @@ WHERE email='$email'
 ");
 
 $user = mysqli_fetch_assoc($query_user);
+if(!$user){
+    session_destroy();
+    header("Location:../auth/login.php");
+    exit();
+}
 
 //DATA DARI FORM
 
@@ -339,7 +344,8 @@ if($kartu_ucapan) $total += 5000;
             isi_surat,
             catatan,
             total_harga,
-            status
+            status,
+            sumber
         )
         VALUES
         (
@@ -356,7 +362,8 @@ if($kartu_ucapan) $total += 5000;
             '$isi_surat',
             '$catatan',
             '$total',
-            'Pesanan Masuk'
+            'Pesanan Masuk',
+            'Online'
         )";
 
         $query = mysqli_query($koneksi,$sql);

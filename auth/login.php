@@ -8,14 +8,15 @@ if(isset($_POST['login'])){
     $password = $_POST['password'];
 
     $sql = "SELECT * FROM users
-            WHERE email='$email'
-            AND password='$password'";
+        WHERE email='$email'";
 
     $query = mysqli_query($koneksi,$sql);
 
     if(mysqli_num_rows($query) > 0){
 
         $user = mysqli_fetch_assoc($query);
+
+        if(password_verify($password, $user['password'])){
 
         $_SESSION['id_user'] = $user['id_user'];
         $_SESSION['nama'] = $user['nama'];
@@ -34,7 +35,7 @@ if(isset($_POST['login'])){
 
         }
 
-    }else{
+            }else{
 
         echo "<script>
                 alert('Email atau Password salah!');
@@ -42,7 +43,15 @@ if(isset($_POST['login'])){
 
     }
 
+    }else{
+
+        echo "<script>
+                alert('Email atau Password salah!');
+            </script>";
+
+    }
 }
+
 ?>
 
 <!DOCTYPE html>

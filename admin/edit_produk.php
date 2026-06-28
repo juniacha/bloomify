@@ -22,7 +22,9 @@ if(isset($_POST['update'])){
     $harga_small = $_POST['harga_small'];
     $harga_medium = $_POST['harga_medium'];
     $harga_large = $_POST['harga_large'];
-    $stok = $_POST['stok'];
+    $stok_small = $_POST['stok_small'];
+    $stok_medium = $_POST['stok_medium'];
+    $stok_large = $_POST['stok_large'];
     $deskripsi = $_POST['deskripsi'];
 
     $sql_update = "UPDATE produk
@@ -31,7 +33,9 @@ if(isset($_POST['update'])){
                    harga_small='$harga_small',
                    harga_medium='$harga_medium',
                    harga_large='$harga_large',
-                   stok='$stok',
+                   stok_small='$stok_small',
+                   stok_medium='$stok_medium',
+                   stok_large='$stok_large',
                    deskripsi='$deskripsi'
                    WHERE id_produk='$id'";
 
@@ -73,8 +77,16 @@ if(isset($_POST['update'])){
         <input type="number" name="harga_large" value="<?= $data['harga_large']; ?>" required>
         <br><br>
 
-        <label>Stok</label><br>
-        <input type="number" name="stok" value="<?= $data['stok']; ?>" required>
+        <label>Stok Small</label><br>
+        <input type="number" name="stok_small" value="<?= $data['stok_small']; ?>" required>
+        <br><br>
+
+        <label>Stok Medium</label><br>
+        <input type="number" name="stok_medium" value="<?= $data['stok_medium']; ?>" required>
+        <br><br>
+
+        <label>Stok Large</label><br>
+        <input type="number" name="stok_large" value="<?= $data['stok_large']; ?>" required>
         <br><br>
 
         <label>Deskripsi</label><br>

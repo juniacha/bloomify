@@ -9,16 +9,40 @@ if(!isset($_SESSION['email'])){
 
 $id = $_GET['id'];
 
-$sql = "SELECT * FROM transaksi
-        WHERE id_transaksi='$id'";
+$sql = "SELECT transaksi.*, produk.nama_produk
+        FROM transaksi
+        JOIN produk
+        ON transaksi.id_produk = produk.id_produk
+        WHERE transaksi.id_transaksi='$id'";
 
 $query = mysqli_query($koneksi,$sql);
-
 $data = mysqli_fetch_assoc($query);
 
 if(isset($_POST['update'])){
 
     $status = $_POST['status'];
+
+    if($data['status']=="Selesai"){
+
+        echo "<script>
+                alert('Pesanan yang sudah selesai tidak dapat diubah lagi.');
+                window.location='transaksi.php';
+            </script>";
+
+        exit();
+
+    }
+
+    // Validasi pembatalan
+    if($status=="Dibatalkan" && $data['status']!="Menunggu Pembatalan"){
+
+        echo "<script>
+                alert('Pesanan ini belum mengajukan pembatalan');
+                window.location='transaksi.php';
+              </script>";
+        exit();
+
+    }
 
     $update = "UPDATE transaksi
                SET status='$status'
@@ -26,44 +50,136 @@ if(isset($_POST['update'])){
 
     mysqli_query($koneksi,$update);
 
-    header("Location: transaksi.php");
+    // Kembalikan stok jika pembatalan disetujui
+    if($status=="Dibatalkan" && $data['status']!="Dibatalkan"){
+
+        if($data['ukuran']=="Small"){
+
+            mysqli_query($koneksi,"
+            UPDATE produk
+            SET stok_small = stok_small + ".$data['jumlah']."
+            WHERE id_produk='".$data['id_produk']."'
+            ");
+
+        }elseif($data['ukuran']=="Medium"){
+
+            mysqli_query($koneksi,"
+            UPDATE produk
+            SET stok_medium = stok_medium + ".$data['jumlah']."
+            WHERE id_produk='".$data['id_produk']."'
+            ");
+
+        }else{
+
+            mysqli_query($koneksi,"
+            UPDATE produk
+            SET stok_large = stok_large + ".$data['jumlah']."
+            WHERE id_produk='".$data['id_produk']."'
+            ");
+
+        }
+
+    }
+
+    echo "<script>
+            alert('Status berhasil diperbarui');
+            window.location='transaksi.php';
+          </script>";
     exit();
+
 }
 ?>
 
-<h2>Update Status Pesanan</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Status Pesanan</title>
+</head>
+<body>
 
-<form method="POST">
+    <h2>Update Status Pesanan</h2>
+    <a href="transaksi.php">Kembali</a>
+    <hr>
 
-<select name="status">
+    <table border="1" cellpadding="8">
+        <tr>
+            <td>Nama Pemesan</td>
+            <td><?= $data['nama_pemesan']; ?></td>
+        </tr>
+        <tr>
+            <td>Produk</td>
+            <td><?= $data['nama_produk']; ?></td>
+        </tr>
+        <tr>
+            <td>Ukuran</td>
+            <td><?= $data['ukuran']; ?></td>
+        </tr>
+        <tr>
+            <td>Jumlah</td>
+            <td><?= $data['jumlah']; ?></td>
+        </tr>
+        <tr>
+            <td>Total Harga</td>
+            <td>
+                Rp <?= number_format($data['total_harga'],0,',','.'); ?>
+            </td>
+        </tr>
+        <tr>
+            <td>Status Saat Ini</td>
+            <td><?= $data['status']; ?></td>
+        </tr>
+    </table>
 
-    <option value="Pesanan Masuk"
-    <?= ($data['status']=='Pesanan Masuk')?'selected':'' ?>>
-    Pesanan Masuk
-    </option>
+    <br>
 
-    <option value="Sedang Dirangkai"
-    <?= ($data['status']=='Sedang Dirangkai')?'selected':'' ?>>
-    Sedang Dirangkai
-    </option>
+    <form method="POST">
+        <label>Status Baru</label><br><br>
 
-    <option value="Siap Diambil"
-    <?= ($data['status']=='Siap Diambil')?'selected':'' ?>>
-    Siap Diambil
-    </option>
+        <select name="status">
 
-    <option value="Selesai"
-    <?= ($data['status']=='Selesai')?'selected':'' ?>>
-    Selesai
-    </option>
+            <?php if($data['status']=="Selesai"){ ?>
 
-</select>
+                <option value="Selesai" selected>
+                    Selesai
+                </option>
 
-<br><br>
+            <?php }elseif($data['status']=="Menunggu Pembatalan"){ ?>
 
-<button type="submit" name="update">
-    Simpan
-</button>
+                <option value="Dibatalkan">
+                    Setujui Pembatalan
+                </option>
 
+                <option value="Pesanan Masuk">
+                    Tolak Pembatalan
+                </option>
 
-</form>
+            <?php }else{ ?>
+
+                <option value="Pesanan Masuk"
+                <?= ($data['status']=="Pesanan Masuk") ? "selected" : ""; ?>>
+                    Pesanan Masuk
+                </option>
+
+                <option value="Diproses"
+                <?= ($data['status']=="Diproses") ? "selected" : ""; ?>>
+                    Diproses
+                </option>
+
+                <option value="Selesai"
+                <?= ($data['status']=="Selesai") ? "selected" : ""; ?>>
+                    Selesai
+                </option>
+
+            <?php } ?>
+
+        </select>
+
+        <br><br>
+
+        <button type="submit" name="update">Simpan</button>
+        <a href="transaksi.php">Batal</a>
+
+    </form>
+
+</body>
+</html>

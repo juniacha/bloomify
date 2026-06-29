@@ -57,37 +57,121 @@ if(isset($_POST['login'])){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Login Bloomify</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1">
+
+    <title>Login | Bloomify</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet"
+    href="../assets/css/style.css">
+
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
 </head>
-<body>
+<body class="auth-page">
 
-<h2>Login Bloomify</h2>
+    <div class="container">
 
-<form method="POST">
+        <div class="auth-card">
 
-    Email <br>
-    <input type="email" name="email" required>
+            <div class="row g-0">
 
-    <br><br>
+            <!-- FOTO -->
 
-    Password <br>
-    <input type="password" name="password" required>
+            <div class="col-lg-6 d-none d-lg-block">
 
-    <br><br>
+            <div class="auth-image">
 
-    <button type="submit" name="login">
-        Login
-    </button>
+            <img
+            src="../assets/img/login.jpg"
+            alt="Bloomify Login">
 
-</form>
+            </div>
 
-<br>
+            </div>
 
-Belum punya akun?
+            <!-- FORM -->
 
-<a href="register.php">
-    Buat Akun Baru
-</a>
+            <div class="col-lg-6">
+
+            <div class="auth-form">
+
+            <h1>Welcome Back</h1>
+
+            <p>
+
+            Sign in to continue your Bloomify journey.
+
+            </p>
+
+            <form method="POST">
+
+            <div class="mb-3">
+
+            <label>Email</label>
+
+            <input
+            type="email"
+            name="email"
+            class="form-control"
+            placeholder="Enter your email"
+            required>
+
+            </div>
+
+            <div class="mb-4">
+
+            <label>Password</label>
+
+            <input
+            type="password"
+            name="password"
+            class="form-control"
+            placeholder="Enter your password"
+            required>
+
+            </div>
+
+            <button
+            type="submit"
+            name="login"
+            class="btn btn-bloom w-100">
+
+            Login
+
+            </button>
+
+            </form>
+
+            <div class="text-center mt-4">
+
+            Belum punya akun?
+
+            <a href="register.php">
+
+            Daftar Sekarang
+
+            </a>
+
+            </div>
+
+            </div>
+
+            </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 
 </body>
 </html>

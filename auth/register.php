@@ -82,37 +82,167 @@ if(isset($_POST['daftar'])){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Register Bloomify</title>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Register | Bloomify</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="../assets/css/style.css">
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap"
+rel="stylesheet">
+
 </head>
-<body>
-    <h2>Daftar Akun</h2>
+<body class="auth-page">
+
+    <div class="container">
+
+    <div class="auth-card">
+
+    <div class="row g-0">
+
+    <!-- FOTO -->
+
+    <div class="col-lg-6 d-none d-lg-block">
+
+    <div class="auth-image">
+
+    <img
+    src="../assets/img/register.jpg"
+    alt="Bloomify Register">
+
+    </div>
+
+    </div>
+
+    <!-- FORM -->
+
+    <div class="col-lg-6">
+
+    <div class="auth-form">
+
+    <h1>Create Account</h1>
+
+    <p>
+
+    Join Bloomify and start creating beautiful moments.
+
+    </p>
+
     <form method="POST">
 
-        Nama <br>
-        <input type="text" name="nama" required><br><br>
+    <div class="mb-3">
 
-        Email<br>
-        <input type="email" name="email" required><br><br>
+    <label>Nama Lengkap</label>
 
-        No Telp<br><br>
-        <input type="text" name="no_hp" required><br><br>
+    <input
+    type="text"
+    name="nama"
+    class="form-control"
+    placeholder="Nama lengkap"
+    required>
 
-        Password<br>
-        <input type="password" name="password" required><br><br>
+    </div>
 
-        Konfirmasi Password<br>
-        <input type="password" name="konfirmasi" required><br><br>
+    <div class="mb-3">
 
-        <button type="submit" name="daftar">
-            Daftar
-        </button>
+    <label>Email</label>
+
+    <input
+    type="email"
+    name="email"
+    class="form-control"
+    placeholder="Email"
+    required>
+
+    </div>
+
+    <div class="mb-3">
+
+    <label>No. Handphone</label>
+
+    <input
+    type="text"
+    name="no_hp"
+    class="form-control"
+    placeholder="08xxxxxxxxxx"
+    required>
+
+    </div>
+
+    <div class="mb-3">
+
+    <label>Password</label>
+
+    <input
+    type="password"
+    name="password"
+    class="form-control"
+    placeholder="Password"
+    required>
+
+    </div>
+
+    <div class="mb-4">
+
+    <label>Konfirmasi Password</label>
+
+    <input
+    type="password"
+    name="konfirmasi"
+    class="form-control"
+    placeholder="Konfirmasi Password"
+    required>
+
+    <div class="small text-secondary mb-4">
+
+        <i class="bi bi-info-circle me-2"></i>
+
+        Minimal 8 karakter, huruf besar, huruf kecil, angka, dan simbol.
+
+    </div>
+
+    </div>
+
+    <button
+    type="submit"
+    name="daftar"
+    class="btn btn-bloom w-100">
+
+    Create Account
+
+    </button>
 
     </form>
 
-    <br>
+    <div class="text-center mt-4">
 
     Sudah punya akun?
-    <a href="login.php">login</a>
+
+    <a href="login.php">
+
+    Login
+
+    </a>
+
+    </div>
+
+    </div>
+
+    </div>
+
+    </div>
+
+    </div>
+
+    </div>
 
 </body>
 </html>

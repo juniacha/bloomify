@@ -7,6 +7,11 @@ if(!isset($_SESSION['email'])){
     exit();
 }
 
+if($_SESSION['role'] != "admin"){
+    header("Location:../customer/index.php");
+    exit();
+}
+
 $total_produk = mysqli_fetch_assoc(
     mysqli_query($koneksi,"SELECT COUNT(*) AS total FROM produk"));
 
@@ -40,74 +45,822 @@ $pendapatan = mysqli_fetch_assoc(
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Dashboard Admin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard Admin | Bloomify</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
+<body class="admin-bg">
 
-    <h2>Dashboard Admin Bloomify</h2>
-    <hr>
-    <h3>Master Data</h3>
+<div class="admin-wrapper">
 
-    <ul>
-        <li>Total Kategori :
-        <b><?= $total_kategori['total']; ?></b></li>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-        <li>Total Produk :
-        <b><?= $total_produk['total']; ?></b></li>
-    </ul>
+        <div class="logo-area">
 
-    <hr>
+            <h2>Bloomify</h2>
 
-    <h3>Transaksi</h3>
-    <ul>
+            <p>Florist Management</p>
 
-        <li>Total Pesanan :
-        <b><?= $total_pesanan['total']; ?></b></li>
+        </div>
 
-        <li>Pesanan Masuk :
-        <b><?= $pesanan_masuk['total']; ?></b></li>
+        <span class="menu-text">
+            MAIN MENU
+        </span>
 
-        <li>Diproses :
-        <b><?= $diproses['total']; ?></b></li>
+        <nav>
 
-        <li>Menunggu Pembatalan :
-        <b><?= $menunggu['total']; ?></b></li>
+            <a href="dashboard.php" class="active">
 
-        <li>Dibatalkan :
-        <b><?= $dibatalkan['total']; ?></b></li>
+                <i class="bi bi-grid-1x2-fill"></i>
 
-        <li>Selesai :
-        <b><?= $selesai['total']; ?></b></li>
+                Dashboard
 
-    </ul>
+            </a>
 
-        <hr>
-        <h3>Pendapatan</h3>
-        <h2>Rp <?= number_format($pendapatan['total'],0,',','.'); ?></h2>
+            <a href="produk.php">
 
-        <hr>
+                <i class="bi bi-box-seam"></i>
 
-        <h3>Menu Admin</h3>
+                Produk
 
-        <ul>
-            <li>
-                <a href="kategori.php">Kelola Kategori</a>
-            </li>
-            <li>
-                <a href="produk.php">Kelola Produk</a>
-            </li>
-            <li>
-                <a href="transaksi.php">Kelola Pesanan</a>
-            </li>
-            <li>
-                <a href="laporan.php">Laporan Penjualan</a>
-            </li>
-            <li>
-                <a href="../auth/logout.php">Logout</a>
-            </li>
-        </ul>
+            </a>
+
+            <a href="kategori.php">
+
+                <i class="bi bi-tags-fill"></i>
+
+                Kategori
+
+            </a>
+
+            <a href="transaksi.php">
+
+                <i class="bi bi-bag-heart-fill"></i>
+
+                Pesanan
+
+            </a>
+
+            <a href="laporan.php">
+
+                <i class="bi bi-bar-chart-fill"></i>
+
+                Laporan
+
+            </a>
+
+            <a href="../auth/logout.php">
+
+                <i class="bi bi-box-arrow-right"></i>
+
+                Logout
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <!-- CONTENT -->
+
+    <main class="content">
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div>
+
+                <h2>
+
+                    Welcome Back,
+                    <?= $_SESSION['nama']; ?> 
+
+                </h2>
+
+                <p>
+
+                    Bloomify Florist Management Dashboard
+
+                </p>
+
+            </div>
+
+            <div class="top-right">
+
+                <div class="search-box">
+
+                    <i class="bi bi-search"></i>
+
+                    <input
+                    type="text"
+                    placeholder="Search...">
+
+                </div>
+
+                <div class="profile-box">
+
+                    <i class="bi bi-person-circle"></i>
+
+                    <div>
+
+                        <b><?= $_SESSION['nama']; ?></b>
+
+                        <small>Administrator</small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CARD -->
+
+        <div class="row g-4">
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="icon-box">
+
+                        <i class="bi bi-bag-heart"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Total Pesanan</span>
+
+                        <h3><?= $total_pesanan['total']; ?></h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="icon-box">
+
+                        <i class="bi bi-box"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Total Produk</span>
+
+                        <h3><?= $total_produk['total']; ?></h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="icon-box">
+
+                        <i class="bi bi-tags"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Kategori</span>
+
+                        <h3><?= $total_kategori['total']; ?></h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+
+                <div class="stat-card">
+
+                    <div class="icon-box income">
+
+                        <i class="bi bi-wallet2"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>Pendapatan</span>
+
+                        <h3>
+
+                            Rp <?= number_format($pendapatan['total'],0,',','.');?>
+
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ===========================
+    GRAFIK & STATUS
+    =========================== -->
+
+    <div class="row mt-4">
+
+        <div class="col-lg-8">
+
+            <div class="dashboard-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h4>Pendapatan Bulanan</h4>
+
+                        <span>Sales Overview</span>
+
+                    </div>
+
+                    <span class="badge bg-success">
+                        +12%
+                    </span>
+
+                </div>
+
+                <canvas id="incomeChart" height="110"></canvas>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="dashboard-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h4>Status Pesanan</h4>
+
+                        <span>Current Orders</span>
+
+                    </div>
+
+                </div>
+
+                <canvas id="statusChart"></canvas>
+
+                <div class="status-info mt-4">
+
+                    <div>
+
+                        <span class="dot pink"></span>
+
+                        Pesanan Masuk
+
+                        <b><?= $pesanan_masuk['total']; ?></b>
+
+                    </div>
+
+                    <div>
+
+                        <span class="dot green"></span>
+
+                        Diproses
+
+                        <b><?= $diproses['total']; ?></b>
+
+                    </div>
+
+                    <div>
+
+                        <span class="dot peach"></span>
+
+                        Selesai
+
+                        <b><?= $selesai['total']; ?></b>
+
+                    </div>
+
+                    <div>
+
+                        <span class="dot red"></span>
+
+                        Dibatalkan
+
+                        <b><?= $dibatalkan['total']; ?></b>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ===========================
+    QUICK MENU
+    =========================== -->
+
+    <div class="row mt-4">
+
+        <div class="col-lg-3">
+
+            <a href="produk.php" class="quick-menu">
+
+                <i class="bi bi-box-seam"></i>
+
+                <div>
+
+                    <h6>Produk</h6>
+
+                    <small>Kelola Produk</small>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <a href="kategori.php" class="quick-menu">
+
+                <i class="bi bi-tags"></i>
+
+                <div>
+
+                    <h6>Kategori</h6>
+
+                    <small>Data Master</small>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <a href="transaksi.php" class="quick-menu">
+
+                <i class="bi bi-bag-heart"></i>
+
+                <div>
+
+                    <h6>Pesanan</h6>
+
+                    <small>Manage Order</small>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        <div class="col-lg-3">
+
+            <a href="laporan.php" class="quick-menu">
+
+                <i class="bi bi-bar-chart"></i>
+
+                <div>
+
+                    <h6>Laporan</h6>
+
+                    <small>View Report</small>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- ===========================
+    TABLE
+    =========================== -->
+
+    <div class="row mt-4">
+
+        <div class="col-lg-8">
+
+            <div class="dashboard-panel">
+
+                <div class="panel-header">
+
+                    <h4>Ringkasan Dashboard</h4>
+
+                </div>
+
+                <table class="table align-middle mt-3">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Informasi</th>
+
+                            <th>Total</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>Total Pesanan</td>
+
+                            <td><?= $total_pesanan['total']; ?></td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>Total Produk</td>
+
+                            <td><?= $total_produk['total']; ?></td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>Total Kategori</td>
+
+                            <td><?= $total_kategori['total']; ?></td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>Pendapatan</td>
+
+                            <td>
+
+                                Rp <?= number_format($pendapatan['total'],0,',','.'); ?>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="dashboard-panel">
+
+                <h4>Bloomify</h4>
+
+                <p class="text-secondary mt-3">
+
+                    Welcome to Bloomify Admin Dashboard.
+
+                    Kelola produk, kategori, pesanan,
+                    dan laporan penjualan dengan lebih
+                    mudah melalui satu dashboard.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ======================================
+    PESANAN TERBARU & AKTIVITAS
+    ====================================== -->
+
+    <div class="row mt-4">
+
+        <div class="col-lg-8">
+
+            <div class="dashboard-panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h4>Pesanan Terbaru</h4>
+
+                        <span>Latest Transactions</span>
+
+                    </div>
+
+                    <a href="transaksi.php" class="btn btn-sm btn-outline-bloom">
+                        Lihat Semua
+                    </a>
+
+                </div>
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Customer</th>
+
+                            <th>Total</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>#INV001</td>
+
+                            <td>Zhazha</td>
+
+                            <td>Rp350.000</td>
+
+                            <td>
+
+                                <span class="status-badge waiting">
+
+                                    Diproses
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>#INV002</td>
+
+                            <td>Salsa</td>
+
+                            <td>Rp420.000</td>
+
+                            <td>
+
+                                <span class="status-badge success">
+
+                                    Selesai
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>#INV003</td>
+
+                            <td>Nabila</td>
+
+                            <td>Rp280.000</td>
+
+                            <td>
+
+                                <span class="status-badge pending">
+
+                                    Menunggu
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="dashboard-panel">
+
+                <h4>Produk Terlaris</h4>
+
+                <span class="text-secondary">
+                    Best Seller
+                </span>
+
+                <div class="product-item">
+
+                    <div class="product-icon">
+
+                        🌸
+
+                    </div>
+
+                    <div>
+
+                        <h6>Graduation Bouquet</h6>
+
+                        <small>32 Terjual</small>
+
+                    </div>
+
+                </div>
+
+                <div class="product-item">
+
+                    <div class="product-icon">
+
+                        💐
+
+                    </div>
+
+                    <div>
+
+                        <h6>Wedding Bouquet</h6>
+
+                        <small>24 Terjual</small>
+
+                    </div>
+
+                </div>
+
+                <div class="product-item">
+
+                    <div class="product-icon">
+
+                        🌷
+
+                    </div>
+
+                    <div>
+
+                        <h6>Rose Bouquet</h6>
+
+                        <small>18 Terjual</small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ======================================
+    FOOTER
+    ====================================== -->
+
+    <div class="footer-admin">
+
+        © <?= date('Y'); ?>
+
+        Bloomify Florist Management System
+
+    </div>
+
+    </main>
+
+    </div>
+
+    <script>
+
+        const income=document.getElementById('incomeChart');
+
+        new Chart(income,{
+
+        type:'line',
+
+        data:{
+
+        labels:['Jan','Feb','Mar','Apr','Mei','Jun'],
+
+        datasets:[{
+
+        data:[5,8,12,10,18,22],
+
+        borderColor:'#CB807D',
+
+        backgroundColor:'rgba(240,181,179,.35)',
+
+        fill:true,
+
+        tension:.45,
+
+        borderWidth:3
+
+        }]
+
+        },
+
+        options:{
+
+        plugins:{
+        legend:{display:false}
+        },
+
+        scales:{
+        y:{
+        beginAtZero:true
+        }
+        }
+
+        }
+
+        });
+
+        const status=document.getElementById('statusChart');
+
+        new Chart(status,{
+
+        type:'doughnut',
+
+        data:{
+
+        labels:['Masuk','Diproses','Selesai','Batal'],
+
+        datasets:[{
+
+        data:[
+
+        <?= $pesanan_masuk['total'];?>,
+
+        <?= $diproses['total'];?>,
+
+        <?= $selesai['total'];?>,
+
+        <?= $dibatalkan['total'];?>
+
+        ],
+
+        backgroundColor:[
+
+        '#CB807D',
+
+        '#9FA58D',
+
+        '#F0B5B3',
+
+        '#F6839C'
+
+        ],
+
+        borderWidth:0
+
+        }]
+
+        },
+
+        options:{
+
+        plugins:{
+        legend:{display:false}
+        }
+
+        }
+
+        });
+
+    </script>
 
 </body>
 </html>

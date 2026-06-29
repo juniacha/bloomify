@@ -110,7 +110,7 @@ rel="stylesheet">
 
     <!-- FOTO -->
 
-    <div class="col-lg-6 d-none d-lg-block">
+    <div class="col-lg-5 d-none d-lg-block">
 
     <div class="auth-image">
 
@@ -124,7 +124,7 @@ rel="stylesheet">
 
     <!-- FORM -->
 
-    <div class="col-lg-6">
+    <div class="col-lg-7">
 
     <div class="auth-form">
 

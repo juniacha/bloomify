@@ -248,6 +248,15 @@ img{
     padding:8px 16px;
 }
 
+.size-badge{
+    background:#EEF2EA;
+    color:#9FA58D;
+    border-radius:30px;
+    padding:6px 14px;
+    font-size:.85rem;
+    font-weight:500;
+}
+
 .category-badge{
 
     background:#EEF2EA;

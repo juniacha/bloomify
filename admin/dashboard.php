@@ -340,469 +340,118 @@ for($i=1;$i<=12;$i++){
         </div>
 
         <!-- ===========================
-    GRAFIK & STATUS
-    =========================== -->
+        GRAFIK & STATUS
+        =========================== -->
 
-    <div class="row mt-4">
+        <div class="row mt-4">
 
-        <div class="col-lg-8">
+            <!-- KIRI -->
+            <div class="col-lg-8">
 
-            <div class="dashboard-panel">
+                <div class="dashboard-panel">
 
-                <h4 class="mb-4">
+                    <h4 class="mb-4">
+                        <i class="bi bi-graph-up-arrow me-2"></i>
+                        Pendapatan Bulanan
+                    </h4>
 
-                    <i class="bi bi-graph-up-arrow me-2"></i>
-
-                    Pendapatan Bulanan
-
-                </h4>
-
-                <canvas id="chartPendapatan"></canvas>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-4">
-
-            <div class="dashboard-panel">
-
-                <div class="panel-header">
-
-                    <div>
-
-                        <h4>Status Pesanan</h4>
-
-                        <span>Current Orders</span>
-
-                    </div>
+                    <canvas id="chartPendapatan"></canvas>
 
                 </div>
 
-                <canvas id="statusChart"></canvas>
-
-                <div class="status-info mt-4">
-
-                    <div>
-
-                        <span class="dot pink"></span>
-
-                        Pesanan Masuk
-
-                        <b><?= $pesanan_masuk['total']; ?></b>
-
-                    </div>
-
-                    <div>
-
-                        <span class="dot green"></span>
-
-                        Diproses
-
-                        <b><?= $diproses['total']; ?></b>
-
-                    </div>
-
-                    <div>
-
-                        <span class="dot peach"></span>
-
-                        Selesai
-
-                        <b><?= $selesai['total']; ?></b>
-
-                    </div>
-
-                    <div>
-
-                        <span class="dot red"></span>
-
-                        Dibatalkan
-
-                        <b><?= $dibatalkan['total']; ?></b>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- ===========================
-    QUICK MENU
-    =========================== -->
-
-    <div class="row mt-4">
-
-        <div class="col-lg-3">
-
-            <a href="produk.php" class="quick-menu">
-
-                <i class="bi bi-box-seam"></i>
-
-                <div>
-
-                    <h6>Produk</h6>
-
-                    <small>Kelola Produk</small>
-
-                </div>
-
-            </a>
-
-        </div>
-
-        <div class="col-lg-3">
-
-            <a href="kategori.php" class="quick-menu">
-
-                <i class="bi bi-tags"></i>
-
-                <div>
-
-                    <h6>Kategori</h6>
-
-                    <small>Data Master</small>
-
-                </div>
-
-            </a>
-
-        </div>
-
-        <div class="col-lg-3">
-
-            <a href="transaksi.php" class="quick-menu">
-
-                <i class="bi bi-bag-heart"></i>
-
-                <div>
-
-                    <h6>Pesanan</h6>
-
-                    <small>Manage Order</small>
-
-                </div>
-
-            </a>
-
-        </div>
-
-        <div class="col-lg-3">
-
-            <a href="laporan.php" class="quick-menu">
-
-                <i class="bi bi-bar-chart"></i>
-
-                <div>
-
-                    <h6>Laporan</h6>
-
-                    <small>View Report</small>
-
-                </div>
-
-            </a>
-
-        </div>
-
-    </div>
-
-    <!-- ===========================
-    TABLE
-    =========================== -->
-
-    <div class="row mt-4">
-
-        <div class="col-lg-8">
-
-            <div class="dashboard-panel">
-
-                <div class="panel-header">
-
-                    <h4>Ringkasan Dashboard</h4>
-
-                </div>
-
-                <table class="table align-middle mt-3">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>Informasi</th>
-
-                            <th>Total</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        <tr>
-
-                            <td>Total Pesanan</td>
-
-                            <td><?= $total_pesanan['total']; ?></td>
-
-                        </tr>
-
-                        <tr>
-
-                            <td>Total Produk</td>
-
-                            <td><?= $total_produk['total']; ?></td>
-
-                        </tr>
-
-                        <tr>
-
-                            <td>Total Kategori</td>
-
-                            <td><?= $total_kategori['total']; ?></td>
-
-                        </tr>
-
-                        <tr>
-
-                            <td>Pendapatan</td>
-
-                            <td>
-
-                                Rp <?= number_format($pendapatan['total'],0,',','.'); ?>
-
-                            </td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-4">
-
-            <div class="dashboard-panel">
-
-                <h4>Bloomify</h4>
-
-                <p class="text-secondary mt-3">
-
-                    Welcome to Bloomify Admin Dashboard.
-
-                    Kelola produk, kategori, pesanan,
-                    dan laporan penjualan dengan lebih
-                    mudah melalui satu dashboard.
-
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- ======================================
-    PESANAN TERBARU & AKTIVITAS
-    ====================================== -->
-
-    <div class="row mt-4">
-
-        <div class="col-lg-8">
-
-            <div class="dashboard-panel">
-
-                <div class="panel-header">
-
-                    <div>
-
-                        <h4>Pesanan Terbaru</h4>
-
-                        <span>Latest Transactions</span>
-
-                    </div>
-
-                    <a href="transaksi.php" class="btn btn-sm btn-outline-bloom">
-                        Lihat Semua
-                    </a>
-
-                </div>
-
-                <table class="table table-hover align-middle">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>ID</th>
-
-                            <th>Customer</th>
-
-                            <th>Total</th>
-
-                            <th>Status</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                    <?php
-                    while($pesanan=mysqli_fetch_assoc($pesanan_terbaru)){
-                    ?>
-
-                    <tr>
-
-                    <td>
-
-                    #TRX<?= str_pad($pesanan['id_transaksi'],4,"0",STR_PAD_LEFT); ?>
-
-                    </td>
-
-                    <td>
-
-                    <?= $pesanan['nama_pemesan']; ?>
-
-                    </td>
-
-                    <td>
-
-                    Rp <?= number_format($pesanan['total_harga'],0,',','.'); ?>
-
-                    </td>
-
-                    <td>
-
-                    <?php
-
-                    if($pesanan['status']=="Pesanan Masuk"){
-
-                    echo "<span class='status-badge pending'>Pesanan Masuk</span>";
-
-                    }elseif($pesanan['status']=="Diproses"){
-
-                    echo "<span class='status-badge waiting'>Diproses</span>";
-
-                    }elseif($pesanan['status']=="Sedang Diantar"){
-
-                    echo "<span class='status-badge info'>Sedang Diantar</span>";
-
-                    }elseif($pesanan['status']=="Selesai"){
-
-                    echo "<span class='status-badge success'>Selesai</span>";
-
-                    }else{
-
-                    echo "<span class='status-badge cancel'>Dibatalkan</span>";
-
-                    }
-
-                    ?>
-
-                    </td>
-
-                    </tr>
-
-                    <?php } ?>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-4">
-
-            <div class="dashboard-panel">
-
-                <h4>Produk Terlaris</h4>
-
-                <span class="text-secondary">
-                    Best Seller
-                </span>
-
-                <div class="product-item">
-
-                    <div class="product-icon">
-
-                        🌸
-
-                    </div>
-
-                    <?php
-
-                    if(mysqli_num_rows($produk_terlaris)>0){
-
-                    while($produk=mysqli_fetch_assoc($produk_terlaris)){
-
-                    ?>
-
-                    <div class="d-flex align-items-center justify-content-between py-3 border-bottom">
-
-                        <div class="d-flex align-items-center">
-
-                            <img
-                            src="../assets/img/<?= $produk['gambar']; ?>"
-                            width="55"
-                            height="55"
-                            class="rounded-3 me-3"
-                            style="object-fit:cover;">
-
+                <!-- QUICK MENU -->
+                <div class="row g-3 mt-3">
+
+                    <div class="col-md-6">
+                        <a href="produk.php" class="quick-menu">
+                            <i class="bi bi-box-seam"></i>
                             <div>
-
-                                <strong>
-
-                                    <?= $produk['nama_produk']; ?>
-
-                                </strong>
-
-                                <br>
-
-                                <small class="text-muted">
-
-                                    <?= $produk['total_terjual']; ?> kali terjual
-
-                                </small>
-
+                                <h6>Produk</h6>
+                                <small>Kelola Produk</small>
                             </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-6">
+                        <a href="kategori.php" class="quick-menu">
+                            <i class="bi bi-tags"></i>
+                            <div>
+                                <h6>Kategori</h6>
+                                <small>Data Master</small>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-6">
+                        <a href="transaksi.php" class="quick-menu">
+                            <i class="bi bi-bag-heart"></i>
+                            <div>
+                                <h6>Pesanan</h6>
+                                <small>Manage Order</small>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-6">
+                        <a href="laporan.php" class="quick-menu">
+                            <i class="bi bi-bar-chart"></i>
+                            <div>
+                                <h6>Laporan</h6>
+                                <small>View Report</small>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- KANAN -->
+            <div class="col-lg-4">
+
+                <div class="dashboard-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h4>Status Pesanan</h4>
+
+                            <span>Current Orders</span>
 
                         </div>
 
-                        <i class="bi bi-fire text-danger fs-5"></i>
-
                     </div>
 
-                    <?php
+                    <canvas id="statusChart"></canvas>
 
-                    }
+                    <div class="status-info mt-4">
 
-                    }else{
+                        <div>
+                            <span class="dot pink"></span>
+                            Pesanan Masuk
+                            <b><?= $pesanan_masuk['total']; ?></b>
+                        </div>
 
-                    ?>
+                        <div>
+                            <span class="dot green"></span>
+                            Diproses
+                            <b><?= $diproses['total']; ?></b>
+                        </div>
 
-                    <div class="text-center py-5">
+                        <div>
+                            <span class="dot peach"></span>
+                            Selesai
+                            <b><?= $selesai['total']; ?></b>
+                        </div>
 
-                    <i class="bi bi-box-seam fs-1 text-muted"></i>
-
-                    <p class="mt-3">
-
-                    Belum ada produk terjual.
-
-                    </p>
+                        <div>
+                            <span class="dot red"></span>
+                            Dibatalkan
+                            <b><?= $dibatalkan['total']; ?></b>
+                        </div>
 
                     </div>
-
-                    <?php } ?>
 
                 </div>
 
@@ -810,23 +459,322 @@ for($i=1;$i<=12;$i++){
 
         </div>
 
-    </div>
+        <!-- ===========================
+        TABLE
+        =========================== -->
 
-    <!-- ======================================
-    FOOTER
-    ====================================== -->
+        <div class="row mt-4">
 
-    <div class="footer-admin">
+            <div class="col-lg-8">
 
-        © <?= date('Y'); ?>
+                <div class="dashboard-panel">
 
-        Bloomify Florist Management System
+                    <div class="panel-header">
 
-    </div>
+                        <h4>Ringkasan Dashboard</h4>
 
-    </main>
+                    </div>
 
-    </div>
+                    <table class="table align-middle mt-3">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Informasi</th>
+
+                                <th>Total</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>Total Pesanan</td>
+
+                                <td><?= $total_pesanan['total']; ?></td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>Total Produk</td>
+
+                                <td><?= $total_produk['total']; ?></td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>Total Kategori</td>
+
+                                <td><?= $total_kategori['total']; ?></td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td>Pendapatan</td>
+
+                                <td>
+
+                                    Rp <?= number_format($pendapatan['total'],0,',','.'); ?>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="dashboard-panel">
+
+                    <h4>Bloomify</h4>
+
+                    <p class="text-secondary mt-3">
+
+                        Welcome to Bloomify Admin Dashboard.
+
+                        Kelola produk, kategori, pesanan,
+                        dan laporan penjualan dengan lebih
+                        mudah melalui satu dashboard.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ======================================
+        PESANAN TERBARU & AKTIVITAS
+        ====================================== -->
+
+        <div class="row mt-4">
+
+            <div class="col-lg-8">
+
+                <div class="dashboard-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <h4>Pesanan Terbaru</h4>
+
+                            <span>Latest Transactions</span>
+
+                        </div>
+
+                        <a href="transaksi.php" class="btn btn-sm btn-outline-bloom">
+                            Lihat Semua
+                        </a>
+
+                    </div>
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+
+                                <th>Customer</th>
+
+                                <th>Total</th>
+
+                                <th>Status</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        <?php
+                        while($pesanan=mysqli_fetch_assoc($pesanan_terbaru)){
+                        ?>
+
+                        <tr>
+
+                        <td>
+
+                        #TRX<?= str_pad($pesanan['id_transaksi'],4,"0",STR_PAD_LEFT); ?>
+
+                        </td>
+
+                        <td>
+
+                        <?= $pesanan['nama_pemesan']; ?>
+
+                        </td>
+
+                        <td>
+
+                        Rp <?= number_format($pesanan['total_harga'],0,',','.'); ?>
+
+                        </td>
+
+                        <td>
+
+                        <?php
+
+                        if($pesanan['status']=="Pesanan Masuk"){
+
+                        echo "<span class='status-badge pending'>Pesanan Masuk</span>";
+
+                        }elseif($pesanan['status']=="Diproses"){
+
+                        echo "<span class='status-badge waiting'>Diproses</span>";
+
+                        }elseif($pesanan['status']=="Sedang Diantar"){
+
+                        echo "<span class='status-badge info'>Sedang Diantar</span>";
+
+                        }elseif($pesanan['status']=="Selesai"){
+
+                        echo "<span class='status-badge success'>Selesai</span>";
+
+                        }else{
+
+                        echo "<span class='status-badge cancel'>Dibatalkan</span>";
+
+                        }
+
+                        ?>
+
+                        </td>
+
+                        </tr>
+
+                        <?php } ?>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="dashboard-panel">
+
+                    <h4>Produk Terlaris</h4>
+
+                    <span class="text-secondary">
+                        Best Seller
+                    </span>
+
+                    <div class="product-item">
+
+                        <div class="product-icon">
+
+                            🌸
+
+                        </div>
+
+                        <?php
+
+                        if(mysqli_num_rows($produk_terlaris)>0){
+
+                        while($produk=mysqli_fetch_assoc($produk_terlaris)){
+
+                        ?>
+
+                        <div class="d-flex align-items-center justify-content-between py-3 border-bottom">
+
+                            <div class="d-flex align-items-center">
+
+                                <img
+                                src="../assets/img/<?= $produk['gambar']; ?>"
+                                width="55"
+                                height="55"
+                                class="rounded-3 me-3"
+                                style="object-fit:cover;">
+
+                                <div>
+
+                                    <strong>
+
+                                        <?= $produk['nama_produk']; ?>
+
+                                    </strong>
+
+                                    <br>
+
+                                    <small class="text-muted">
+
+                                        <?= $produk['total_terjual']; ?> kali terjual
+
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+                            <i class="bi bi-fire text-danger fs-5"></i>
+
+                        </div>
+
+                        <?php
+
+                        }
+
+                        }else{
+
+                        ?>
+
+                        <div class="text-center py-5">
+
+                        <i class="bi bi-box-seam fs-1 text-muted"></i>
+
+                        <p class="mt-3">
+
+                        Belum ada produk terjual.
+
+                        </p>
+
+                        </div>
+
+                        <?php } ?>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ======================================
+        FOOTER
+        ====================================== -->
+
+        <div class="footer-admin">
+
+            © <?= date('Y'); ?>
+
+            Bloomify Florist Management System
+
+        </div>
+
+        </main>
+
+        </div>
 
     <script>
 

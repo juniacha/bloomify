@@ -129,10 +129,29 @@ if(isset($id_kategori)){
 
                 <div class="d-flex align-items-center gap-3">
 
-                    <a href="keranjang.php"
-                    class="nav-cart">
+                    <?php
+                    $jumlahKeranjang = mysqli_fetch_assoc(
+                        mysqli_query($koneksi,"
+                            SELECT COUNT(*) AS total
+                            FROM keranjang
+                            WHERE id_user='".$_SESSION['id_user']."'
+                        ")
+                    );
+                    ?>
 
-                        <i class="bi bi-bag"></i>
+                    <a href="keranjang.php" class="nav-cart">
+
+                        <i class="bi bi-bag fs-5"></i>
+
+                        <?php if($jumlahKeranjang['total'] > 0){ ?>
+
+                            <span class="cart-badge">
+
+                                <?= $jumlahKeranjang['total']; ?>
+
+                            </span>
+
+                        <?php } ?>
 
                     </a>
 

@@ -263,20 +263,18 @@ rel="stylesheet">
     <!-- =========================
     SEARCH
     ========================= -->
+    <div class="top-right">
 
-    <div class="product-toolbar mb-4">
-
-        <div class="search-product">
+        <div class="search-box">
 
             <i class="bi bi-search"></i>
 
-            <input
-            type="text"
-            id="searchPesanan"
-            placeholder="Cari nama pemesan atau produk...">
+                <input
+                type="text"
+                id="searchPesanan"
+                placeholder="Search...">
 
-        </div>
-
+            </div>
     </div>
 
 
@@ -288,7 +286,7 @@ rel="stylesheet">
 
     <?php while($data=mysqli_fetch_assoc($query)){ ?>
 
-    <div class="col-lg-6 pesanan-item">
+    <div class="col-lg-6 pesanan-item-search">
 
     <div class="product-admin-card">
 
@@ -466,7 +464,7 @@ searchPesanan.addEventListener("keyup", function(){
 
     let keyword = this.value.toLowerCase();
 
-    let card = document.querySelectorAll(".pesanan-item");
+    let card = document.querySelectorAll(".pesanan-item-search");
 
     card.forEach(function(item){
 

@@ -9,12 +9,13 @@ if(!isset($_SESSION['email'])){
 
 $id_user = $_SESSION['id_user'];
 
-$sql = "SELECT keranjang.*,
-        produk.nama_produk,
-        produk.gambar,
-        produk.harga_small,
-        produk.harga_medium,
-        produk.harga_large
+$sql = "SELECT
+            keranjang.*,
+            produk.nama_produk,
+            produk.gambar,
+            produk.harga_small,
+            produk.harga_medium,
+            produk.harga_large
         FROM keranjang
         JOIN produk
         ON keranjang.id_produk = produk.id_produk
@@ -27,9 +28,14 @@ $total_item = mysqli_num_rows($query);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Keranjang Saya</title>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <link rel="stylesheet" href="../assets/css/style.css">
@@ -38,359 +44,565 @@ $total_item = mysqli_num_rows($query);
 href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg sticky-top">
-        <div class="container">
+<!-- ===========================
+NAVBAR
+=========================== -->
 
-            <a class="navbar-brand" href="index.php">
-                <i class="bi bi-flower1 me-2"></i>Bloomify
-            </a>
+<nav class="navbar navbar-expand-lg sticky-top">
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBloomify">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<div class="container">
 
-            <div class="collapse navbar-collapse" id="navbarBloomify">
+<a class="navbar-brand" href="index.php">
+<i class="bi bi-flower1 me-2"></i>Bloomify
+</a>
 
-                <ul class="navbar-nav mx-auto">
+<button class="navbar-toggler"
+type="button"
+data-bs-toggle="collapse"
+data-bs-target="#navbarBloomify">
 
-                    <li class="nav-item">
-                        <a class="nav-link active" href="index.php">Home</a>
-                    </li>
+<span class="navbar-toggler-icon"></span>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#kategori">Kategori</a>
-                    </li>
+</button>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#produk">New Produk</a>
-                    </li>
+<div class="collapse navbar-collapse"
+id="navbarBloomify">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="pesanan_saya.php">Pesanan Saya</a>
-                    </li>
+<ul class="navbar-nav mx-auto">
 
-                </ul>
+<li class="nav-item">
+<a class="nav-link" href="index.php">
+Home
+</a>
+</li>
 
-                <div class="d-flex align-items-center gap-3">
+<li class="nav-item">
+<a class="nav-link" href="kategori.php">
+Produk
+</a>
+</li>
 
-                    <a href="keranjang.php" class="text-dark">
-                        <i class="bi bi-bag fs-5"></i>
-                    </a>
+<li class="nav-item">
+<a class="nav-link" href="produk.php">
+New Produk
+</a>
+</li>
 
-                    <span>
-                        Halo,
-                        <strong><?= $_SESSION['nama']; ?></strong>
-                    </span>
+<li class="nav-item">
+<a class="nav-link" href="pesanan_saya.php">
+Pesanan Saya
+</a>
+</li>
 
-                    <a href="../auth/logout.php" class="btn btn-bloom">
-                        Logout
-                    </a>
+</ul>
 
-                </div>
+<div class="d-flex align-items-center gap-3">
 
-            </div>
+<?php
+$jumlahKeranjang = mysqli_fetch_assoc(
+    mysqli_query($koneksi,"
+        SELECT COUNT(*) AS total
+        FROM keranjang
+        WHERE id_user='".$_SESSION['id_user']."'
+    ")
+);
+?>
 
-        </div>
-    </nav>
+<a href="keranjang.php" class="nav-cart">
 
-    <section class="py-5" style="background:var(--section);">
+    <i class="bi bi-bag fs-5"></i>
 
-        <div class="container text-center">
+    <?php if($jumlahKeranjang['total'] > 0){ ?>
 
-        <span class="section-subtitle">
+        <span class="cart-badge">
 
-        SHOPPING CART
+            <?= $jumlahKeranjang['total']; ?>
 
         </span>
 
-        <h1>
+    <?php } ?>
 
-        Keranjang Saya
+</a>
 
-        </h1>
+<span>
+Halo,
+<strong><?= $_SESSION['nama']; ?></strong>
+</span>
 
-        <p class="text-secondary">
+<a href="../auth/logout.php"
+class="btn btn-bloom">
+Logout
+</a>
 
-        <?= $total_item; ?> Produk di Keranjang
+</div>
 
-        </p>
+</div>
 
-        <a href="kategori.php"
-        class="btn btn-outline-bloom mt-3">
+</div>
 
-        <i class="bi bi-arrow-left me-2"></i>
+</nav>
 
-        Lanjut Belanja
+<!-- ===========================
+HEADER
+=========================== -->
 
-        </a>
+<section class="cart-header">
+
+<div class="container text-center">
+
+<span class="section-subtitle">
+
+SHOPPING CART
+
+</span>
+
+<h1 class="section-title">
+
+Keranjang Saya
+
+</h1>
+
+<p class="section-desc">
+
+<?= $total_item; ?> Produk di Keranjang
+
+</p>
+
+<a href="produk.php"
+class="back-link">
+
+<i class="bi bi-arrow-left"></i>
+
+Lanjut Belanja
+
+</a>
+
+</div>
+
+</section>
+
+<!-- ===========================
+ISI KERANJANG
+=========================== -->
+
+<div class="container py-5">
+
+<?php
+
+if($total_item > 0){
+
+$total_semua = 0;
+
+while($data = mysqli_fetch_assoc($query)){
+
+if($data['ukuran']=="Small"){
+
+    $harga = $data['harga_small'];
+
+}elseif($data['ukuran']=="Medium"){
+
+    $harga = $data['harga_medium'];
+
+}else{
+
+    $harga = $data['harga_large'];
+
+}
+
+$subtotal = $harga * $data['jumlah'];
+
+if($data['boneka']) $subtotal += 25000;
+if($data['balon']) $subtotal += 15000;
+if($data['kartu_ucapan']) $subtotal += 5000;
+
+$total_semua += $subtotal;
+
+?>
+
+<div class="cart-card mb-5">
+
+    <div class="row g-5 align-items-start">
+
+        <!-- FOTO -->
+
+        <div class="col-lg-5">
+
+            <img
+            src="../assets/img/<?= $data['gambar']; ?>"
+            class="cart-image"
+            alt="<?= $data['nama_produk']; ?>">
 
         </div>
 
-    </section>
+        <!-- DETAIL -->
 
-    <?php
-    if($total_item>0){
+        <div class="col-lg-7">
 
-    $total_semua = 0;
-    while($data=mysqli_fetch_assoc($query)){
+            <form
+            action="update_keranjang.php"
+            method="POST">
 
-        if($data['ukuran']=="Small"){
+            <input
+            type="hidden"
+            name="id_keranjang"
+            value="<?= $data['id_keranjang']; ?>">
 
-            $harga=$data['harga_small'];
+            <div class="d-flex justify-content-between align-items-start mb-4">
 
-        }elseif($data['ukuran']=="Medium"){
-
-            $harga=$data['harga_medium'];
-
-        }else{
-
-            $harga=$data['harga_large'];
-
-        }
-
-        $subtotal=$harga*$data['jumlah'];
-
-        if($data['boneka']) $subtotal+=25000;
-        if($data['balon']) $subtotal+=15000;
-        if($data['kartu_ucapan']) $subtotal+=5000;
-
-        $total_semua += $subtotal;
-    ?>
-
-    <div class="card product-card mb-4">
-        <div class="row g-4 align-items-center p-3">
-
-            <div class="col-lg-3">
-                <?php if(!empty($data['gambar'])){ ?>
-                <img
-                    src="../assets/img/<?= $data['gambar']; ?>"
-                    class="img-fluid rounded-4">
-                <?php } ?>
-            </div>
-
-            <div class="col-lg-9">
-                <form id="form<?= $data['id_keranjang']; ?>"
-                    action="update_keranjang.php"
-                    method="POST">
-
-                    <input
-                    type="hidden"
-                    name="id_keranjang"
-                    value="<?= $data['id_keranjang']; ?>">
-                    
-                    <h3 class="mb-2">
-                        <?= $data['nama_produk']; ?>
-                    </h3>
+                <div>
 
                     <span class="size-badge">
+
                         <?= $data['ukuran']; ?>
+
                     </span>
 
-                    <div class="d-flex align-items-center gap-2">
+                    <h2 class="cart-title mt-3">
 
-                        <a
-                        class="btn btn-outline-bloom"
+                        <?= $data['nama_produk']; ?>
 
-                        href="kurang_jumlah.php?id=<?= $data['id_keranjang'];?>">
+                    </h2>
 
-                        <i class="bi bi-dash"></i>
+                    <div class="cart-price mt-2">
 
-                        </a>
-
-                        <span>
-
-                        <?= $data['jumlah']; ?>
-
-                        </span>
-
-                        <a
-                        class="btn btn-outline-bloom"
-
-                        href="tambah_jumlah.php?id=<?= $data['id_keranjang'];?>">
-
-                        <i class="bi bi-plus"></i>
-
-                        </a>
+                        Rp <?= number_format($harga,0,",","."); ?>
 
                     </div>
 
-                    <div class="card p-3 mt-4">
-                        <label>
-                            <input
-                            type="checkbox"
-                            name="boneka"
-
-                            <?= $data['boneka'] ? "checked" : ""; ?>>
-
-                            Boneka (+Rp25.000)
-                        </label>
-
-                        <br><br>
-
-                        <label>
-                            <input
-                            type="checkbox"
-                            name="balon"
-
-                            <?= $data['balon'] ? "checked" : ""; ?>>
-
-                            Balon (+Rp15.000)
-                        </label>
-
-                        <br><br>
-
-                        <label>
-                            <input
-                            type="checkbox"
-                            name="kartu_ucapan"
-
-                            <?= $data['kartu_ucapan'] ? "checked" : ""; ?>>
-
-                            Kartu Ucapan (+Rp5.000)
-                        </label>
-                    </div>
-
-                    <label>Warna Buket</label>
-
-                    <br>
-
-                    <input class="form-control"
-                    type="text"
-                    name="warna_buket"
-                    value="<?= htmlspecialchars($data['warna_buket'] ?? ''); ?>">
-
-                    <br><br>
-
-                    <label>Isi Surat</label>
-
-                    <br>
-
-                    <textarea class="form-control"
-                    name="isi_surat"
-                    rows="4"><?= htmlspecialchars($data['isi_surat'] ?? ''); ?></textarea>
-
-                    <br><br>
-
-                    <label>Catatan</label>
-
-                    <br>
-
-                    <textarea class="form-control"
-                    name="catatan"
-                    rows="3"><?= htmlspecialchars($data['catatan'] ?? ''); ?></textarea>
-
-                   <div class="mt-4">
-
-                        <h4 class="product-price">
-
-                        Subtotal
-
-                        Rp <?= number_format($subtotal,0,',','.');?>
-
-                        </h4>
-
-                    </div>
-
-                        <button class="btn btn-bloom"
-                        type="submit"
-                        class="btn"
-                        name="simpan">
-                        <i class="bi bi-floppy"></i>
-                            Simpan Perubahan
-                        </button>
-
-                        &nbsp;
-
-                        <a class="btn btn-outline-danger"
-                        href="hapus_keranjang.php?id=<?= $data['id_keranjang']; ?>"
-                        onclick="return confirm('Hapus produk ini dari keranjang?')">
-                        <i class="bi bi-trash"></i>
-                            Hapus
-                        </a>
-
-                        &nbsp;
-
-                        <button class="btn btn-success"
-                            type="button"
-                            class="btn"
-                            onclick="checkout(<?= $data['id_keranjang']; ?>)">
-                            <i class="bi bi-credit-card"></i>
-                            Checkout
-                        </button>
-                    </form>
                 </div>
+
+                <a
+                href="hapus_keranjang.php?id=<?= $data['id_keranjang']; ?>"
+                class="delete-link"
+                onclick="return confirm('Hapus produk ini?')">
+
+                    <i class="bi bi-trash3"></i>
+
+                    Hapus
+
+                </a>
+
             </div>
-        </div>
-        <?php
-        }
-        ?>
-
-        <div class="card p-4 mt-4">
-
-            <h4>
-
-            Order Summary
-
-            </h4>
 
             <hr>
 
-            <h3 class="product-price">
+            <div class="mb-4">
 
-            Rp <?= number_format($total_semua,0,',','.');?>
+                <label class="form-label fw-semibold">
 
-            </h3>
+                    Jumlah
 
-        </div>
+                </label>
 
-        <?php
+                <div class="qty-box">
 
-        }else{
+                    <a
+                    href="kurang_jumlah.php?id=<?= $data['id_keranjang']; ?>">
 
-        ?>
+                        <i class="bi bi-dash-lg"></i>
 
-        <div class="text-center py-5">
+                    </a>
 
-            <i class="bi bi-bag-x display-1"></i>
+                    <span>
 
-            <h3 class="mt-4">
+                        <?= $data['jumlah']; ?>
 
-            Keranjang Masih Kosong
+                    </span>
 
-            </h3>
+                    <a
+                    href="tambah_jumlah.php?id=<?= $data['id_keranjang']; ?>">
 
-            <p class="text-secondary">
+                        <i class="bi bi-plus-lg"></i>
 
-            Yuk mulai pilih bouquet favoritmu.
+                    </a>
 
-            </p>
+                </div>
 
-            <a
-            href="kategori.php"
+            </div>
 
-            class="btn btn-bloom">
+            <hr>
 
-            Mulai Belanja
+            <!-- ======================================
+            CUSTOM BOUQUET
+            ====================================== -->
 
-            </a>
+            <h5 class="cart-subtitle">
 
-        </div>
-        <?php } ?>
+                Tambahan Bouquet
 
-        <script>
-            function checkout(id){
+            </h5>
 
-                var form = document.getElementById("form"+id);
+            <div class="row g-3 mb-4">
 
-                form.action = "update_keranjang.php?checkout=1";
-                form.submit();
-            }
-        </script>
+                <div class="col-md-4">
+
+                    <label class="addon-card">
+
+                        <input
+                        type="checkbox"
+                        name="boneka"
+                        value="1"
+                        <?= ($data['boneka']==1) ? 'checked' : ''; ?>>
+
+                        <div>
+
+                            <h6>🧸 Boneka</h6>
+
+                            <small>+ Rp25.000</small>
+
+                        </div>
+
+                    </label>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <label class="addon-card">
+
+                        <input
+                        type="checkbox"
+                        name="balon"
+                        value="1"
+                        <?= ($data['balon']==1) ? 'checked' : ''; ?>>
+
+                        <div>
+
+                            <h6>🎈 Balon</h6>
+
+                            <small>+ Rp15.000</small>
+
+                        </div>
+
+                    </label>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <label class="addon-card">
+
+                        <input
+                        type="checkbox"
+                        name="kartu_ucapan"
+                        value="1"
+                        <?= ($data['kartu_ucapan']==1) ? 'checked' : ''; ?>>
+
+                        <div>
+
+                            <h6>💌 Kartu Ucapan</h6>
+
+                            <small>+ Rp5.000</small>
+
+                        </div>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+
+                        Warna Buket
+
+                    </label>
+
+                    <input
+                    type="text"
+                    class="form-control"
+                    name="warna_buket"
+                    value="<?= $data['warna_buket']; ?>"
+                    placeholder="Contoh : Pink Pastel">
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+
+                        Isi Surat
+
+                    </label>
+
+                    <textarea
+                    class="form-control"
+                    rows="4"
+                    name="isi_surat"
+                    placeholder="Tulis pesan..."><?= $data['isi_surat']; ?></textarea>
+
+                </div>
+
+            </div>
+
+            <div class="mb-4">
+
+                <label class="form-label">
+
+                    Catatan Tambahan
+
+                </label>
+
+                <textarea
+                class="form-control"
+                rows="3"
+                name="catatan"
+                placeholder="Contoh : Tolong dibungkus warna cream"><?= $data['catatan']; ?></textarea>
+
+            </div>
+
+            <hr>
+
+            <div class="cart-footer">
+
+                    <div>
+
+                        <span class="subtotal-label">
+
+                            Subtotal
+
+                        </span>
+
+                        <h2 class="subtotal-price">
+
+                            Rp <?= number_format($subtotal,0,",","."); ?>
+
+                        </h2>
+
+                    </div>
+
+                    <div class="cart-button-group">
+
+                        <button
+                        type="submit"
+                        class="btn btn-outline-bloom">
+
+                            <i class="bi bi-floppy me-2"></i>
+
+                            Simpan
+
+                        </button>
+
+                        <a
+                        href="hapus_keranjang.php?id=<?= $data['id_keranjang']; ?>"
+                        class="btn btn-danger"
+                        onclick="return confirm('Hapus produk ini?')">
+
+                            <i class="bi bi-trash me-2"></i>
+
+                            Hapus
+
+                        </a>
+
+                        <a
+                            href="checkout.php?id_keranjang=<?= $data['id_keranjang']; ?>"
+                            class="btn btn-bloom">
+
+                                <i class="bi bi-credit-card me-2"></i>
+
+                                Checkout
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                </form>
+
+                </div>
+
+                </div>
+
+                </div>
+
+                <?php
+
+                }
+
+                ?>
+
+                <div class="cart-summary">
+
+                    <div>
+
+                        <small>
+
+                            Total Belanja
+
+                        </small>
+
+                        <h2>
+
+                            Rp <?= number_format($total_semua,0,",","."); ?>
+
+                        </h2>
+
+                    </div>
+
+                    <a
+                    href="checkout_semua.php"
+                    class="btn btn-bloom btn-lg">
+
+                        <i class="bi bi-bag-check me-2"></i>
+
+                        Checkout Semua
+
+                    </a>
+
+                </div>
+
+                <?php
+
+                }else{
+
+                ?>
+
+                <div class="empty-cart">
+
+                    <i class="bi bi-bag-x"></i>
+
+                    <h2>
+
+                        Keranjang Masih Kosong
+
+                    </h2>
+
+                    <p>
+
+                        Yuk pilih bouquet favoritmu.
+
+                    </p>
+
+                    <a
+                    href="produk.php"
+                    class="btn btn-bloom">
+
+                        Belanja Sekarang
+
+                    </a>
+
+                </div>
+
+                <?php
+
+                }
+
+                ?>
+
+                </div>
+
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
-</html>
 
+</html>

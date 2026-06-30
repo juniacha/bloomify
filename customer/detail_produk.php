@@ -63,8 +63,30 @@ $data = mysqli_fetch_array($query);
 
                 <div class="d-flex align-items-center gap-3">
 
+                    <?php
+                    $jumlahKeranjang = mysqli_fetch_assoc(
+                        mysqli_query($koneksi,"
+                            SELECT COUNT(*) AS total
+                            FROM keranjang
+                            WHERE id_user='".$_SESSION['id_user']."'
+                        ")
+                    );
+                    ?>
+
                     <a href="keranjang.php" class="nav-cart">
+
                         <i class="bi bi-bag fs-5"></i>
+
+                        <?php if($jumlahKeranjang['total'] > 0){ ?>
+
+                            <span class="cart-badge">
+
+                                <?= $jumlahKeranjang['total']; ?>
+
+                            </span>
+
+                        <?php } ?>
+
                     </a>
 
                     <span>

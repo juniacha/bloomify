@@ -17,7 +17,6 @@ $sql = "SELECT *
         AND id_user='$id_user'";
 
 $query = mysqli_query($koneksi,$sql);
-
 $data = mysqli_fetch_assoc($query);
 
 if(!$data){

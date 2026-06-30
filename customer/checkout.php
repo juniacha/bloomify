@@ -375,11 +375,9 @@ if($kartu_ucapan) $total += 5000;
                             <?= $catatan ?: "-"; ?>
                         </div>
                     </div>
-
+                </div>
             </div>
-
         </div>
-
     </div>
 
 <hr class="my-5">

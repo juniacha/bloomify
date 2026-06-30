@@ -168,9 +168,9 @@ ORDER BY nama_kategori ASC
 
                         <div class="d-flex align-items-center gap-2">
 
-                            <small class="text-secondary">
+                            <p class="text-secondary">
                                 Beautiful bouquets for every occasion
-                            </small>
+                            </p>
 
                         </div>
 
@@ -277,7 +277,7 @@ ORDER BY nama_kategori ASC
 
                     <div class="card product-card position-relative h-100">
 
-                        <span class="badge new-badge">
+                        <span class="new-label">
                             New Collection
                         </span>
 
@@ -301,21 +301,14 @@ ORDER BY nama_kategori ASC
 
                             </h5>
 
+                            <p class="product-desc">
+
+                                <?= substr($produk['deskripsi'],0,70); ?>...
+
+                            </p>
+
                             <div class="product-price mb-4">
-                                <div class="mb-3">
-
-                                    <i class="bi bi-star-fill text-warning"></i>
-
-                                    <i class="bi bi-star-fill text-warning"></i>
-
-                                    <i class="bi bi-star-fill text-warning"></i>
-
-                                    <i class="bi bi-star-fill text-warning"></i>
-
-                                    <i class="bi bi-star-fill text-warning"></i>
-
-                                </div>
-
+                                
                                 Rp <?= number_format($produk['harga_small']); ?>
 
                                 -

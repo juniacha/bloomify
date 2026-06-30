@@ -52,7 +52,7 @@ $data = mysqli_fetch_array($query);
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="kategori.php">Shop</a>
+                        <a class="nav-link" href="produk.php">Shop</a>
                     </li>
 
                     <li class="nav-item">
@@ -63,7 +63,7 @@ $data = mysqli_fetch_array($query);
 
                 <div class="d-flex align-items-center gap-3">
 
-                    <a href="keranjang.php" class="text-dark">
+                    <a href="keranjang.php" class="nav-cart">
                         <i class="bi bi-bag fs-5"></i>
                     </a>
 
@@ -85,12 +85,12 @@ $data = mysqli_fetch_array($query);
 
     <div class="container mt-4">
 
-        <a href="kategori.php"
-        class="btn btn-outline-bloom mb-4">
+        <a href="javascript:history.back()"
+        class="back-link">
 
             <i class="bi bi-arrow-left me-2"></i>
 
-            Back to Shop
+            Kembali
 
         </a>
 
@@ -101,11 +101,9 @@ $data = mysqli_fetch_array($query);
         <div class="row g-5">
 
         <div class="col-lg-6">
-
-        <img
-        src="../assets/img/<?= $data['gambar'];?>"
-        class="img-fluid rounded-4 shadow-lg">
-
+            <img
+            src="../assets/img/<?= $data['gambar'];?>"
+            class="img-fluid rounded-4 shadow-lg detail-img">
         </div>
 
         <div class="col-lg-6">
@@ -134,66 +132,18 @@ $data = mysqli_fetch_array($query);
 
         </p>
 
-        <?= $data['stok_small'] + $data['stok_medium'] + $data['stok_large']; ?>
         <div class="mt-3">
 
             <span class="badge bg-success">
 
             <?= $data['stok_small'] + $data['stok_medium'] + $data['stok_large']; ?>
 
-            Items Available
+            Bouquet Tersedia
 
             </span>
 
-        </div>
-
-        <h5 class="mt-4 mb-3">
-            Harga Bouquet
-        </h5>
-
-        <div class="card mb-4 border-0 shadow-sm rounded-4">
-            <div class="card-body">
-                <div class="d-flex justify-content-between mb-2">
-
-                    <span>Small</span>
-
-                    <strong>
-
-                    Rp <?=number_format($data['harga_small']);?>
-
-                    </strong>
-
-                </div>
-
-                <div class="d-flex justify-content-between mb-2">
-
-                    <span>Medium</span>
-
-                    <strong>
-
-                    Rp <?=number_format($data['harga_medium']);?>
-
-                    </strong>
-
-                </div>
-
-                <div class="d-flex justify-content-between">
-
-                <span>Large</span>
-
-                <strong>
-
-                Rp <?=number_format($data['harga_large']);?>
-
-                </strong>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <hr>
+        </div><br>
+   
         <h5 class="mb-3">Pilih Ukuran Bouquet</h5>
 
         <?php if($data['stok_small'] > 0){ ?>
@@ -210,7 +160,7 @@ $data = mysqli_fetch_array($query);
 
             <label class="form-check-label ms-2">
 
-            <b>small</b>
+            <b>Small</b>
 
             <br>
 
@@ -228,7 +178,7 @@ $data = mysqli_fetch_array($query);
             <input type="radio" disabled>
             Small (Habis)
         </label>
-        <?php } ?> <br><br>
+        <?php } ?> 
 
         <?php if($data['stok_medium'] > 0){ ?>
         <div class="form-check border rounded-4 p-3 mb-3">
@@ -263,7 +213,7 @@ $data = mysqli_fetch_array($query);
             <input type="radio" disabled>
             Medium (Habis)
         </label>
-        <?php } ?> <br><br>
+        <?php } ?> 
 
         <?php if($data['stok_large'] > 0){ ?>
         <div class="form-check border rounded-4 p-3 mb-3">
@@ -299,7 +249,7 @@ $data = mysqli_fetch_array($query);
         </label>
         <?php } ?>
 
-        <hr>
+    
         <div class="alert alert-light mt-4">
 
             <b>Stok :</b>
@@ -324,8 +274,6 @@ $data = mysqli_fetch_array($query);
 
         </div>
 
-        <hr>
-
         <form action="form_pemesanan.php" method="GET">
 
             <input type="hidden"
@@ -348,11 +296,12 @@ $data = mysqli_fetch_array($query);
 
                 disabled>
 
-                    <i class="bi bi-bag-plus-fill me-2"></i>
+                    <i class="bi bi-cart-plus me-2"></i>
 
                 Tambah ke Keranjang
 
             </button>
+            
 
             <button
 
@@ -366,8 +315,7 @@ $data = mysqli_fetch_array($query);
 
                 disabled>
 
-                    <i class="bi bi-lightning-charge-fill me-2"></i>
-
+                    <i class="bi bi-credit-card me-2"></i>
                 Checkout Sekarang
 
             </button>
@@ -411,6 +359,7 @@ $data = mysqli_fetch_array($query);
             }
 
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

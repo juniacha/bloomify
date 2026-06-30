@@ -23,7 +23,7 @@ ORDER BY nama_kategori ASC
 if(isset($_POST['simpan'])){
 
     $id_kategori  = $_POST['id_kategori'];
-    $nama_produk  = $_POST['nama_produk'];
+    $nama_produk = mysqli_real_escape_string($koneksi,$_POST['nama_produk']);
 
     $harga_small  = $_POST['harga_small'];
     $harga_medium = $_POST['harga_medium'];
@@ -33,18 +33,37 @@ if(isset($_POST['simpan'])){
     $stok_medium  = $_POST['stok_medium'];
     $stok_large   = $_POST['stok_large'];
 
-    $deskripsi    = $_POST['deskripsi'];
+    $deskripsi = mysqli_real_escape_string($koneksi,$_POST['deskripsi']);
 
     // Upload gambar
-    $nama_file = $_FILES['gambar']['name'];
-    $tmp_file  = $_FILES['gambar']['tmp_name'];
+    $tmp_file = $_FILES['gambar']['tmp_name'];
 
-    if($nama_file != ""){
+    $ext = strtolower(pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION));
 
-        move_uploaded_file(
-            $tmp_file,
-            "../images/".$nama_file
-        );
+    $nama_file = strtolower($nama_produk);
+
+    $nama_file = str_replace(" ", "-", $nama_file);
+
+    $nama_file = str_replace("'", "", $nama_file);
+
+    $nama_file = str_replace("&", "dan", $nama_file);
+
+    $nama_file = preg_replace("/[^a-z0-9\-]/", "", $nama_file);
+
+    $nama_file .= ".".$ext;
+
+    // Folder penyimpanan
+    $folder = "../assets/img/";
+
+    // Upload
+    if(!move_uploaded_file($tmp_file, $folder.$nama_file)){
+
+        echo "<script>
+        alert('Upload gambar gagal!');
+        history.back();
+        </script>";
+
+        exit();
 
     }
 

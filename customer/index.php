@@ -88,7 +88,7 @@ ORDER BY nama_kategori ASC
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#produk">New Produk</a>
+                        <a class="nav-link" href="#produk">New Arrivals</a>
                     </li>
 
                     <li class="nav-item">
@@ -99,8 +99,8 @@ ORDER BY nama_kategori ASC
 
                 <div class="d-flex align-items-center gap-3">
 
-                    <a href="keranjang.php" class="text-dark">
-                        <i class="bi bi-bag fs-5"></i>
+                    <a href="keranjang.php" class="nav-cart">
+                        <i class="bi bi-bag"></i>
                     </a>
 
                     <span>
@@ -160,7 +160,7 @@ ORDER BY nama_kategori ASC
 
                     <div class="d-flex gap-3">
 
-                        <a href="kategori.php" class="btn btn-bloom">
+                        <a href="produk.php" class="btn btn-bloom">
                             <i class="bi bi-bag me-2"></i>
                             Belanja Sekarang
                         </a>
@@ -198,26 +198,28 @@ ORDER BY nama_kategori ASC
                 <p>
                     Pilih kategori bouquet sesuai kebutuhanmu.
                 </p>
-                <p class="text-secondary">
-                    Pilih kategori bouquet sesuai kebutuhanmu.
-                </p>
             </div>
 
             <div class="row g-4">
             <?php while($kategori=mysqli_fetch_assoc($query_kategori)){ ?>
                 <div class="col-lg-4 col-md-6">
-                    <div class="card category-card text-center p-5 h-100">
-                        <div class="mb-3">
-                            <i class="bi bi-flower1"
-                            style="font-size:60px;color:var(--primary);"></i>
+                    <div class="card category-card text-center h-100 position-relative">
+
+                        <div class="card-body">
+
+                            <i class="bi bi-flower1 mb-3"></i>
+
+                            <h5><?= $kategori['nama_kategori']; ?></h5>
+
+                            <small class="text-secondary">
+                                Klik untuk melihat koleksi
+                            </small>
+
                         </div>
 
-                        <h4><?= $kategori['nama_kategori']; ?></h4>
+                        <a href="produk.php?id_kategori=<?= $kategori['id_kategori']; ?>"
+                        class="stretched-link"></a>
 
-                        <a href="kategori.php?id=<?= $kategori['id_kategori']; ?>"
-                        class="btn btn-outline-bloom mt-3">
-                            Lihat Produk
-                        </a>
                     </div>
                 </div>
             <?php } ?>
@@ -231,11 +233,22 @@ ORDER BY nama_kategori ASC
 
         <div class="container">
 
-            <div class="section-title text-center">
-                <h2>New Arrivals</h2>
-                <p class="text-secondary">
-                    Koleksi bouquet terbaru dari Bloomify.
-                </p>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div>
+
+                    <h2>New Arrivals</h2>
+
+                    <p class="text-secondary mb-0">
+                        Koleksi bouquet terbaru dari Bloomify.
+                    </p>
+
+                </div>
+
+                <a href="produk.php" class="btn btn-outline-bloom">
+                    Lihat Semua
+                </a>
+
             </div>
 
             <div class="row g-4">
@@ -339,7 +352,7 @@ ORDER BY nama_kategori ASC
 
                 <div class="col-md-3">
 
-                    <div class="card feature-card p-5 h-100">
+                    <div class="card feature-card p-4 h-100">
 
                         <div class="feature-icon">
                             <i class="bi bi-flower2"></i>
@@ -431,7 +444,7 @@ ORDER BY nama_kategori ASC
             Craft your perfect bouquet and make every celebration unforgettable.
         </p>
 
-        <a href="kategori.php"
+        <a href="produk.php"
 
         class="btn btn-light px-5">
 
@@ -469,7 +482,7 @@ ORDER BY nama_kategori ASC
                     <ul class="list-unstyled">
 
                         <li><a href="index.php">Home</a></li>
-                        <li><a href="kategori.php">Kategori</a></li>
+                        <li><a href="produk.php">Produk</a></li>
                         <li><a href="pesanan_saya.php">Pesanan Saya</a></li>
 
                     </ul>

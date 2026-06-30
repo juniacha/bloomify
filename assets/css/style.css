@@ -175,6 +175,26 @@ img{
     font-size:.9rem;
 }
 
+.nav-cart{
+    width:42px;
+    height:42px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:50%;
+    background:#fff;
+    border:1px solid #e8e8e8;
+    color:#444;
+    text-decoration:none;
+    font-size:20px;
+    transition:.3s;
+}
+
+.nav-cart:hover{
+    background:var(--primary);
+    color:#fff;
+}
+
 /* =========================
    HERO
 ========================= */
@@ -2151,4 +2171,28 @@ DETAIL PESANAN
 .chart-container{
     position: relative;
     height: 340px;
+}
+
+.back-link{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color:#6c757d;
+    text-decoration:none;
+    font-weight:500;
+    transition:.3s;
+}
+
+.back-link:hover{
+    color:var(--primary);
+}
+
+.back-link i{
+    font-size:18px;
+}
+
+.detail-img{
+    width:100%;
+    height:600px;
+    object-fit:cover;
 }

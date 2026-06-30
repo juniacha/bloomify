@@ -42,6 +42,71 @@ $pendapatan = mysqli_fetch_assoc(
         FROM transaksi
         WHERE status='Selesai'
     "));
+
+$pesanan_terbaru = mysqli_query($koneksi,"
+SELECT transaksi.*, produk.nama_produk
+FROM transaksi
+JOIN produk
+ON transaksi.id_produk = produk.id_produk
+ORDER BY transaksi.tanggal DESC
+LIMIT 5
+");
+
+$produk_terlaris = mysqli_query($koneksi,"
+SELECT
+produk.id_produk,
+produk.nama_produk,
+produk.gambar,
+COUNT(transaksi.id_produk) AS total_terjual
+FROM transaksi
+JOIN produk
+ON transaksi.id_produk = produk.id_produk
+WHERE transaksi.status='Selesai'
+GROUP BY transaksi.id_produk
+ORDER BY total_terjual DESC
+LIMIT 5
+");
+
+$chart = mysqli_query($koneksi,"
+SELECT
+    MONTH(tanggal) AS bulan,
+    SUM(total_harga) AS total
+FROM transaksi
+WHERE status='Selesai'
+GROUP BY MONTH(tanggal)
+");
+
+$hasilChart = [];
+
+while($row = mysqli_fetch_assoc($chart)){
+
+    $hasilChart[$row['bulan']] = $row['total'];
+
+}
+
+$namaBulan = [
+    "Jan","Feb","Mar","Apr","Mei","Jun",
+    "Jul","Agu","Sep","Okt","Nov","Des"
+];
+
+$labelChart = [];
+$dataChart = [];
+
+for($i=1;$i<=12;$i++){
+
+    $labelChart[] = $namaBulan[$i-1];
+
+    if(isset($hasilChart[$i])){
+
+        $dataChart[] = (int)$hasilChart[$i];
+
+    }else{
+
+        $dataChart[] = 0;
+
+    }
+
+}
 ?>
 
 <!DOCTYPE html>
@@ -294,23 +359,15 @@ $pendapatan = mysqli_fetch_assoc(
 
             <div class="dashboard-panel">
 
-                <div class="panel-header">
+                <h4 class="mb-4">
 
-                    <div>
+                    <i class="bi bi-graph-up-arrow me-2"></i>
 
-                        <h4>Pendapatan Bulanan</h4>
+                    Pendapatan Bulanan
 
-                        <span>Sales Overview</span>
+                </h4>
 
-                    </div>
-
-                    <span class="badge bg-success">
-                        +12%
-                    </span>
-
-                </div>
-
-                <canvas id="incomeChart" height="110"></canvas>
+                <canvas id="chartPendapatan"></canvas>
 
             </div>
 
@@ -608,65 +665,63 @@ $pendapatan = mysqli_fetch_assoc(
 
                     <tbody>
 
-                        <tr>
+                    <?php
+                    while($pesanan=mysqli_fetch_assoc($pesanan_terbaru)){
+                    ?>
 
-                            <td>#INV001</td>
+                    <tr>
 
-                            <td>Zhazha</td>
+                    <td>
 
-                            <td>Rp350.000</td>
+                    #TRX<?= str_pad($pesanan['id_transaksi'],4,"0",STR_PAD_LEFT); ?>
 
-                            <td>
+                    </td>
 
-                                <span class="status-badge waiting">
+                    <td>
 
-                                    Diproses
+                    <?= $pesanan['nama_pemesan']; ?>
 
-                                </span>
+                    </td>
 
-                            </td>
+                    <td>
 
-                        </tr>
+                    Rp <?= number_format($pesanan['total_harga'],0,',','.'); ?>
 
-                        <tr>
+                    </td>
 
-                            <td>#INV002</td>
+                    <td>
 
-                            <td>Salsa</td>
+                    <?php
 
-                            <td>Rp420.000</td>
+                    if($pesanan['status']=="Pesanan Masuk"){
 
-                            <td>
+                    echo "<span class='status-badge pending'>Pesanan Masuk</span>";
 
-                                <span class="status-badge success">
+                    }elseif($pesanan['status']=="Diproses"){
 
-                                    Selesai
+                    echo "<span class='status-badge waiting'>Diproses</span>";
 
-                                </span>
+                    }elseif($pesanan['status']=="Sedang Diantar"){
 
-                            </td>
+                    echo "<span class='status-badge info'>Sedang Diantar</span>";
 
-                        </tr>
+                    }elseif($pesanan['status']=="Selesai"){
 
-                        <tr>
+                    echo "<span class='status-badge success'>Selesai</span>";
 
-                            <td>#INV003</td>
+                    }else{
 
-                            <td>Nabila</td>
+                    echo "<span class='status-badge cancel'>Dibatalkan</span>";
 
-                            <td>Rp280.000</td>
+                    }
 
-                            <td>
+                    ?>
 
-                                <span class="status-badge pending">
+                    </td>
 
-                                    Menunggu
+                    </tr>
 
-                                </span>
-
-                            </td>
-
-                        </tr>
+                    <?php } ?>
 
                     </tbody>
 
@@ -694,49 +749,70 @@ $pendapatan = mysqli_fetch_assoc(
 
                     </div>
 
-                    <div>
+                    <?php
 
-                        <h6>Graduation Bouquet</h6>
+                    if(mysqli_num_rows($produk_terlaris)>0){
 
-                        <small>32 Terjual</small>
+                    while($produk=mysqli_fetch_assoc($produk_terlaris)){
+
+                    ?>
+
+                    <div class="d-flex align-items-center justify-content-between py-3 border-bottom">
+
+                        <div class="d-flex align-items-center">
+
+                            <img
+                            src="../assets/img/<?= $produk['gambar']; ?>"
+                            width="55"
+                            height="55"
+                            class="rounded-3 me-3"
+                            style="object-fit:cover;">
+
+                            <div>
+
+                                <strong>
+
+                                    <?= $produk['nama_produk']; ?>
+
+                                </strong>
+
+                                <br>
+
+                                <small class="text-muted">
+
+                                    <?= $produk['total_terjual']; ?> kali terjual
+
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <i class="bi bi-fire text-danger fs-5"></i>
 
                     </div>
 
-                </div>
+                    <?php
 
-                <div class="product-item">
+                    }
 
-                    <div class="product-icon">
+                    }else{
 
-                        💐
+                    ?>
 
-                    </div>
+                    <div class="text-center py-5">
 
-                    <div>
+                    <i class="bi bi-box-seam fs-1 text-muted"></i>
 
-                        <h6>Wedding Bouquet</h6>
+                    <p class="mt-3">
 
-                        <small>24 Terjual</small>
+                    Belum ada produk terjual.
 
-                    </div>
-
-                </div>
-
-                <div class="product-item">
-
-                    <div class="product-icon">
-
-                        🌷
+                    </p>
 
                     </div>
 
-                    <div>
-
-                        <h6>Rose Bouquet</h6>
-
-                        <small>18 Terjual</small>
-
-                    </div>
+                    <?php } ?>
 
                 </div>
 
@@ -763,50 +839,6 @@ $pendapatan = mysqli_fetch_assoc(
     </div>
 
     <script>
-
-        const income=document.getElementById('incomeChart');
-
-        new Chart(income,{
-
-        type:'line',
-
-        data:{
-
-        labels:['Jan','Feb','Mar','Apr','Mei','Jun'],
-
-        datasets:[{
-
-        data:[5,8,12,10,18,22],
-
-        borderColor:'#CB807D',
-
-        backgroundColor:'rgba(240,181,179,.35)',
-
-        fill:true,
-
-        tension:.45,
-
-        borderWidth:3
-
-        }]
-
-        },
-
-        options:{
-
-        plugins:{
-        legend:{display:false}
-        },
-
-        scales:{
-        y:{
-        beginAtZero:true
-        }
-        }
-
-        }
-
-        });
 
         const status=document.getElementById('statusChart');
 
@@ -857,6 +889,76 @@ $pendapatan = mysqli_fetch_assoc(
         }
 
         }
+
+        });
+
+    </script>
+
+    <script>
+
+        const ctx = document.getElementById('chartPendapatan');
+
+        new Chart(ctx,{
+
+            type:'line',
+
+            data:{
+
+                labels:<?= json_encode($labelChart); ?>,
+
+                datasets:[{
+
+                    data:<?= json_encode($dataChart); ?>,
+
+                    borderColor:'#CB807D',
+
+                    backgroundColor:'rgba(203,128,125,.18)',
+
+                    borderWidth:3,
+
+                    pointRadius:6,
+
+                    fill:true,
+
+                    tension:.2
+
+                }]
+
+            },
+
+            options:{
+
+                responsive:true,
+
+                maintainAspectRatio:false,
+
+                plugins:{
+                    legend:{
+                        display:false
+                    }
+                },
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+
+                            callback: function(value){
+
+                                return 'Rp ' + value.toLocaleString('id-ID');
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
 
         });
 

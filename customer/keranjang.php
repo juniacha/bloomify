@@ -168,7 +168,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
             <div class="col-lg-3">
                 <?php if(!empty($data['gambar'])){ ?>
                 <img
-                    src="../assets/img/produk/<?= $data['gambar']; ?>"
+                    src="../assets/img/<?= $data['gambar']; ?>"
                     class="img-fluid rounded-4">
                 <?php } ?>
             </div>

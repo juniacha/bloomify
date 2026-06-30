@@ -85,176 +85,730 @@ AND status='Menunggu Pembatalan'")
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
+
 <head>
-<title>Laporan Penjualan</title>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
+
+<title>Laporan Penjualan | Bloomify</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet"
+href="../assets/css/style.css">
+
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap"
+rel="stylesheet">
+
 </head>
-<body>
 
-    <h2>Laporan Penjualan</h2>
+<body class="admin-bg">
 
-    <a href="dashboard.php">Kembali</a>
-    |
-    <a href="export_excel.php?bulan=<?= $bulan; ?>&tahun=<?= $tahun; ?>&status=<?= $status; ?>">Export Excel</a>
+<div class="admin-wrapper">
 
-    <hr>
+<!-- ==========================
+SIDEBAR
+========================== -->
 
-    <form method="GET">
-        
-        Bulan
-        <select name="bulan">
-            <?php
-            for($i=1;$i<=12;$i++){
-            ?>
+<aside class="sidebar">
 
-            <option
-                value="<?= sprintf("%02d",$i); ?>"
-                <?= ($bulan==sprintf("%02d",$i))?"selected":"";?>>
-                <?= sprintf("%02d",$i); ?>
-            </option>
+<div class="logo-area">
 
-            <?php } ?>
+<h2>Bloomify</h2>
 
-        </select>
+<p>Florist Management</p>
 
-            Tahun
-            <select name="tahun">
-            <?php
-            for($i=2024;$i<=2035;$i++) {
-            ?>
-            <option
-                value="<?= $i;?>"
-                <?= ($tahun==$i)?"selected":"";?>>
+</div>
 
-                <?= $i;?>
+<span class="menu-text">
 
-            </option>
+MAIN MENU
 
-            <?php } ?>
+</span>
 
-        </select>
-            Status
-            <select name="status">
-            <option value="" <?= $status=="" ? "selected" : ""; ?>>Semua</option>
+<nav>
 
-            <option value="Pesanan Masuk"
-            <?= $status=="Pesanan Masuk" ? "selected" : ""; ?>>
-            Pesanan Masuk
-            </option>
+<a href="dashboard.php">
 
-            <option value="Diproses"
-            <?= $status=="Diproses" ? "selected" : ""; ?>>
-            Diproses
-            </option>
+<i class="bi bi-grid"></i>
 
-            <option value="Selesai"
-            <?= $status=="Selesai" ? "selected" : ""; ?>>
-            Selesai
-            </option>
+Dashboard
 
-            <option value="Menunggu Pembatalan"
-            <?= $status=="Menunggu Pembatalan" ? "selected" : ""; ?>>
-            Menunggu Pembatalan
-            </option>
+</a>
 
-            <option value="Dibatalkan"
-            <?= $status=="Dibatalkan" ? "selected" : ""; ?>>
-            Dibatalkan
-            </option>
-        </select>
+<a href="produk.php">
 
-        <input type="submit" value="Filter">
+<i class="bi bi-box-seam"></i>
 
-    </form>
+Produk
 
-    <hr>
+</a>
 
-    <h3>Ringkasan Laporan</h3>
+<a href="kategori.php">
 
-    <table border="1" cellpadding="10">
-        <tr>
-            <td>Total Pesanan</td>
-            <td><b><?= $total_pesanan['total']; ?></b></td>
-        </tr>
-        <tr>
-            <td>Pesanan Masuk</td>
-            <td><b><?= $pesanan_masuk['total']; ?></b></td>
-        </tr>
-        <tr>
-            <td>Diproses</td>
-            <td><b><?= $diproses['total']; ?></b></td>
-        </tr>
-        <tr>
-            <td>Menunggu Pembatalan</td>
-            <td><b><?= $menunggu['total']; ?></b></td>
-        </tr>
-        <tr>
-            <td>Dibatalkan</td>
-            <td><b><?= $dibatalkan['total']; ?></b></td>
-        </tr>
-        <tr>
-            <td>Selesai</td>
-            <td><b><?= $selesai['total']; ?></b></td>
-        </tr>
-        <tr>
-            <td>Total Pendapatan</td>
-            <td>
-                <b>
+<i class="bi bi-tags"></i>
+
+Kategori
+
+</a>
+
+<a href="transaksi.php">
+
+<i class="bi bi-bag-heart"></i>
+
+Pesanan
+
+</a>
+
+<a href="laporan.php" class="active">
+
+<i class="bi bi-bar-chart"></i>
+
+Laporan
+
+</a>
+
+<a href="../auth/logout.php">
+
+<i class="bi bi-box-arrow-right"></i>
+
+Logout
+
+</a>
+
+</nav>
+
+</aside>
+
+<!-- ==========================
+CONTENT
+========================== -->
+
+<main class="content">
+
+<div class="topbar">
+
+<div>
+
+<h2>Laporan Penjualan</h2>
+
+<p>
+
+Ringkasan transaksi dan pendapatan Bloomify.
+
+</p>
+
+</div>
+
+<a
+href="export_excel.php?bulan=<?= $bulan; ?>&tahun=<?= $tahun; ?>&status=<?= $status; ?>"
+class="btn btn-outline-bloom">
+
+<i class="bi bi-download me-2"></i>
+
+Export Excel
+
+</a>
+
+</div>
+
+<!-- ==========================
+FILTER
+========================== -->
+
+<div class="form-admin-card">
+
+<form method="GET">
+
+<div class="row g-3 align-items-end">
+
+<!-- BULAN -->
+
+<div class="col-lg-3">
+
+<label class="form-label">
+
+Bulan
+
+</label>
+
+<select
+name="bulan"
+class="form-select">
+
+<?php
+for($i=1;$i<=12;$i++){
+?>
+
+<option
+value="<?= sprintf("%02d",$i); ?>"
+<?= ($bulan==sprintf("%02d",$i)) ? "selected" : ""; ?>>
+
+<?= sprintf("%02d",$i); ?>
+
+</option>
+
+<?php } ?>
+
+</select>
+
+</div>
+
+<!-- TAHUN -->
+
+<div class="col-lg-3">
+
+<label class="form-label">
+
+Tahun
+
+</label>
+
+<select
+name="tahun"
+class="form-select">
+
+<?php
+for($i=2024;$i<=2035;$i++){
+?>
+
+<option
+value="<?= $i; ?>"
+<?= ($tahun==$i) ? "selected" : ""; ?>>
+
+<?= $i; ?>
+
+</option>
+
+<?php } ?>
+
+</select>
+
+</div>
+
+<!-- STATUS -->
+
+<div class="col-lg-3">
+
+<label class="form-label">
+
+Status
+
+</label>
+
+<select
+name="status"
+class="form-select">
+
+<option value=""
+<?= $status=="" ? "selected" : ""; ?>>
+
+Semua Status
+
+</option>
+
+<option
+value="Pesanan Masuk"
+<?= $status=="Pesanan Masuk" ? "selected" : ""; ?>>
+
+Pesanan Masuk
+
+</option>
+
+<option
+value="Diproses"
+<?= $status=="Diproses" ? "selected" : ""; ?>>
+
+Diproses
+
+</option>
+
+<option
+value="Sedang Diantar"
+<?= $status=="Sedang Diantar" ? "selected" : ""; ?>>
+
+Sedang Diantar
+
+</option>
+
+<option
+value="Selesai"
+<?= $status=="Selesai" ? "selected" : ""; ?>>
+
+Selesai
+
+</option>
+
+<option
+value="Menunggu Pembatalan"
+<?= $status=="Menunggu Pembatalan" ? "selected" : ""; ?>>
+
+Menunggu Pembatalan
+
+</option>
+
+<option
+value="Dibatalkan"
+<?= $status=="Dibatalkan" ? "selected" : ""; ?>>
+
+Dibatalkan
+
+</option>
+
+</select>
+
+</div>
+
+<!-- BUTTON -->
+
+<div class="col-lg-3">
+
+<button
+type="submit"
+class="btn btn-bloom w-100">
+
+<i class="bi bi-funnel me-2"></i>
+
+Filter
+
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+<!-- ==========================
+RINGKASAN LAPORAN
+========================== -->
+
+<div class="row g-4 mb-4">
+
+    <div class="col-lg-4">
+
+        <div class="mini-card">
+
+            <i class="bi bi-receipt"></i>
+
+            <div>
+
+                <span>Total Pesanan</span>
+
+                <h3>
+
+                    <?= $total_pesanan['total']; ?>
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="mini-card">
+
+            <i class="bi bi-wallet2"></i>
+
+            <div>
+
+                <span>Total Pendapatan</span>
+
+                <h3>
+
                     Rp <?= number_format($total_pendapatan['total'],0,',','.'); ?>
-                </b>
-            </td>
-        </tr>
-    </table>
 
-    <br>
+                </h3>
 
-    <h3>Data Transaksi</h3>
+            </div>
 
-    <table border="1" cellpadding="10">
+        </div>
 
-        <tr>
-            <th>ID</th>
-            <th>Tanggal</th>
-            <th>Pemesan</th>
-            <th>No HP</th>
-            <th>Produk</th>
-            <th>Ukuran</th>
-            <th>Jumlah</th>
-            <th>Total</th>
-            <th>Sumber</th>
-            <th>Status</th>
-        </tr>
+    </div>
 
-        <?php
-        if(mysqli_num_rows($query)>0){
-        while($data=mysqli_fetch_assoc($query)){
-        ?>
+    <div class="col-lg-4">
 
-        <tr>
-            <td><?= $data['id_transaksi']; ?></td>
-            <td><?= date('d-m-Y',strtotime($data['tanggal'])); ?></td>
-            <td><?= $data['nama_pemesan']; ?></td>
-            <td><?= $data['no_hp']; ?></td>
-            <td><?= $data['nama_produk']; ?></td>
-            <td><?= $data['ukuran']; ?></td>
-            <td><?= $data['jumlah']; ?></td>
-            <td>
-                Rp <?= number_format($data['total_harga'],0,',','.'); ?>
-            </td>
-            <td><?= $data['sumber']; ?></td>
-            <td><?= $data['status']; ?></td>
-        </tr>
-        <?php } ?>
+        <div class="mini-card">
 
-        <?php
-        }else{
-        ?>
-        <tr>
-            <td colspan="10" align="center">
-                Data tidak ditemukan
-            </td>
-        </tr>
-        <?php } ?>
-    </table>
+            <i class="bi bi-check-circle-fill"></i>
+
+            <div>
+
+                <span>Pesanan Selesai</span>
+
+                <h3>
+
+                    <?= $selesai['total']; ?>
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row g-4 mb-4">
+
+    <div class="col-lg-3">
+
+        <div class="mini-card">
+
+            <i class="bi bi-hourglass-split"></i>
+
+            <div>
+
+                <span>Pesanan Masuk</span>
+
+                <h3>
+
+                    <?= $pesanan_masuk['total']; ?>
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3">
+
+        <div class="mini-card">
+
+            <i class="bi bi-gear-fill"></i>
+
+            <div>
+
+                <span>Diproses</span>
+
+                <h3>
+
+                    <?= $diproses['total']; ?>
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3">
+
+        <div class="mini-card">
+
+            <i class="bi bi-clock-history"></i>
+
+            <div>
+
+                <span>Menunggu</span>
+
+                <h3>
+
+                    <?= $menunggu['total']; ?>
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3">
+
+        <div class="mini-card">
+
+            <i class="bi bi-x-circle-fill"></i>
+
+            <div>
+
+                <span>Dibatalkan</span>
+
+                <h3>
+
+                    <?= $dibatalkan['total']; ?>
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ==========================
+DATA TRANSAKSI
+========================== -->
+
+<div class="form-admin-card">
+
+<h4 class="mb-4">
+
+Daftar Transaksi
+
+</h4>
+
+<div class="table-responsive">
+
+<table class="table table-hover align-middle">
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>Tanggal</th>
+
+<th>Pemesan</th>
+
+<th>Produk</th>
+
+<th>Total</th>
+
+<th>Sumber</th>
+
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<?php
+
+if(mysqli_num_rows($query)>0){
+
+while($data=mysqli_fetch_assoc($query)){
+
+?>
+
+<tr>
+
+<td>
+
+#TRX<?= str_pad($data['id_transaksi'],4,"0",STR_PAD_LEFT); ?>
+
+</td>
+
+<td>
+
+<?= date('d M Y',strtotime($data['tanggal'])); ?>
+
+</td>
+
+<td>
+
+<div class="fw-semibold">
+
+<?= $data['nama_pemesan']; ?>
+
+</div>
+
+<small class="text-muted">
+
+<?= $data['no_hp']; ?>
+
+</small>
+
+</td>
+
+<td>
+
+<div class="fw-semibold">
+
+<?= $data['nama_produk']; ?>
+
+</div>
+
+<small class="text-muted">
+
+<?= $data['ukuran']; ?>
+
+•
+
+<?= $data['jumlah']; ?> pcs
+
+</small>
+
+</td>
+
+<td class="text-bloom">
+
+<strong>
+
+Rp <?= number_format($data['total_harga'],0,',','.'); ?>
+
+</strong>
+
+</td>
+
+<td>
+
+<?php
+
+if($data['sumber']=="Online"){
+
+?>
+
+<span class="badge bg-info">
+
+Online
+
+</span>
+
+<?php
+
+}else{
+
+?>
+
+<span class="badge bg-secondary">
+
+Offline
+
+</span>
+
+<?php } ?>
+
+</td>
+
+<td>
+
+<?php
+
+if($data['status']=="Pesanan Masuk"){
+
+?>
+
+<span class="badge bg-warning text-dark">
+
+Pesanan Masuk
+
+</span>
+
+<?php
+
+}elseif($data['status']=="Diproses"){
+
+?>
+
+<span class="badge bg-primary">
+
+Diproses
+
+</span>
+
+<?php
+
+}elseif($data['status']=="Sedang Diantar"){
+
+?>
+
+<span class="badge bg-info">
+
+Sedang Diantar
+
+</span>
+
+<?php
+
+}elseif($data['status']=="Selesai"){
+
+?>
+
+<span class="badge bg-success">
+
+Selesai
+
+</span>
+
+<?php
+
+}elseif($data['status']=="Menunggu Pembatalan"){
+
+?>
+
+<span class="badge bg-dark">
+
+Menunggu Pembatalan
+
+</span>
+
+<?php
+
+}else{
+
+?>
+
+<span class="badge bg-danger">
+
+Dibatalkan
+
+</span>
+
+<?php } ?>
+
+</td>
+
+</tr>
+
+<?php
+
+}
+
+}else{
+
+?>
+
+<tr>
+
+<td colspan="7" class="text-center py-5">
+
+<i class="bi bi-inbox fs-1 text-muted"></i>
+
+<p class="mt-3 mb-0">
+
+Belum ada data transaksi.
+
+</p>
+
+</td>
+
+</tr>
+
+<?php } ?>
+
+</tbody>
+
+</table>
+
+</div>
+</div>
+
+</main>
+
+</div>
+
 </body>
+
 </html>

@@ -91,95 +91,257 @@ if(isset($_POST['update'])){
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
+
 <head>
-    <title>Edit Status Pesanan</title>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Update Status | Bloomify</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="../assets/css/style.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 </head>
-<body>
 
-    <h2>Update Status Pesanan</h2>
-    <a href="transaksi.php">Kembali</a>
-    <hr>
+<body class="admin-bg">
 
-    <table border="1" cellpadding="8">
-        <tr>
-            <td>Nama Pemesan</td>
-            <td><?= $data['nama_pemesan']; ?></td>
-        </tr>
-        <tr>
-            <td>Produk</td>
-            <td><?= $data['nama_produk']; ?></td>
-        </tr>
-        <tr>
-            <td>Ukuran</td>
-            <td><?= $data['ukuran']; ?></td>
-        </tr>
-        <tr>
-            <td>Jumlah</td>
-            <td><?= $data['jumlah']; ?></td>
-        </tr>
-        <tr>
-            <td>Total Harga</td>
-            <td>
-                Rp <?= number_format($data['total_harga'],0,',','.'); ?>
-            </td>
-        </tr>
-        <tr>
-            <td>Status Saat Ini</td>
-            <td><?= $data['status']; ?></td>
-        </tr>
-    </table>
+<div class="admin-wrapper">
 
-    <br>
+    <aside class="sidebar">
 
-    <form method="POST">
-        <label>Status Baru</label><br><br>
+        <div class="logo-area">
 
-        <select name="status">
+            <h2>Bloomify</h2>
 
-            <?php if($data['status']=="Selesai"){ ?>
+            <p>Florist Management</p>
 
-                <option value="Selesai" selected>
-                    Selesai
-                </option>
+        </div>
 
-            <?php }elseif($data['status']=="Menunggu Pembatalan"){ ?>
+        <span class="menu-text">MAIN MENU</span>
 
-                <option value="Dibatalkan">
-                    Setujui Pembatalan
-                </option>
+        <nav>
 
-                <option value="Pesanan Masuk">
-                    Tolak Pembatalan
-                </option>
+            <a href="dashboard.php">
+                <i class="bi bi-grid"></i>
+                Dashboard
+            </a>
 
-            <?php }else{ ?>
+            <a href="produk.php">
+                <i class="bi bi-box-seam"></i>
+                Produk
+            </a>
 
-                <option value="Pesanan Masuk"
-                <?= ($data['status']=="Pesanan Masuk") ? "selected" : ""; ?>>
-                    Pesanan Masuk
-                </option>
+            <a href="kategori.php">
+                <i class="bi bi-tags"></i>
+                Kategori
+            </a>
 
-                <option value="Diproses"
-                <?= ($data['status']=="Diproses") ? "selected" : ""; ?>>
-                    Diproses
-                </option>
+            <a href="transaksi.php" class="active">
+                <i class="bi bi-bag-heart"></i>
+                Pesanan
+            </a>
 
-                <option value="Selesai"
-                <?= ($data['status']=="Selesai") ? "selected" : ""; ?>>
-                    Selesai
-                </option>
+            <a href="laporan.php">
+                <i class="bi bi-bar-chart"></i>
+                Laporan
+            </a>
 
-            <?php } ?>
+            <a href="../auth/logout.php">
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+            </a>
 
-        </select>
+        </nav>
 
-        <br><br>
+    </aside>
 
-        <button type="submit" name="update">Simpan</button>
-        <a href="transaksi.php">Batal</a>
+    <main class="content">
 
-    </form>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h1 class="form-title mb-2">
+                    Update Status Pesanan
+                </h1>
+
+                <p class="text-muted">
+                    Perbarui status pesanan customer.
+                </p>
+
+            </div>
+
+            <a href="transaksi.php" class="btn btn-outline-bloom">
+
+                <i class="bi bi-arrow-left me-2"></i>
+
+                Kembali
+
+            </a>
+
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+
+            <table class="table align-middle">
+
+                <tr>
+
+                    <th width="220">Nama Pemesan</th>
+
+                    <td><?= $data['nama_pemesan']; ?></td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Produk</th>
+
+                    <td><?= $data['nama_produk']; ?></td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Ukuran</th>
+
+                    <td><?= $data['ukuran']; ?></td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Jumlah</th>
+
+                    <td><?= $data['jumlah']; ?></td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Total Harga</th>
+
+                    <td class="text-bloom">
+
+                        Rp <?= number_format($data['total_harga'],0,',','.'); ?>
+
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Status Saat Ini</th>
+
+                    <td>
+
+                        <span class="badge bg-secondary">
+
+                            <?= $data['status']; ?>
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+            <hr>
+
+            <form method="POST">
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+
+                        Status Baru
+
+                    </label>
+
+                    <select name="status" class="form-select">
+
+                        <?php if($data['status']=="Selesai"){ ?>
+
+                            <option value="Selesai" selected>
+
+                                Selesai
+
+                            </option>
+
+                        <?php }elseif($data['status']=="Menunggu Pembatalan"){ ?>
+
+                            <option value="Dibatalkan">
+
+                                Setujui Pembatalan
+
+                            </option>
+
+                            <option value="Pesanan Masuk">
+
+                                Tolak Pembatalan
+
+                            </option>
+
+                        <?php }else{ ?>
+
+                            <option value="Pesanan Masuk"
+                            <?= ($data['status']=="Pesanan Masuk") ? "selected" : ""; ?>>
+
+                                Pesanan Masuk
+
+                            </option>
+
+                            <option value="Diproses"
+                            <?= ($data['status']=="Diproses") ? "selected" : ""; ?>>
+
+                                Diproses
+
+                            </option>
+
+                            <option value="Selesai"
+                            <?= ($data['status']=="Selesai") ? "selected" : ""; ?>>
+
+                                Selesai
+
+                            </option>
+
+                        <?php } ?>
+
+                    </select>
+
+                </div>
+
+                <button class="btn btn-bloom" name="update">
+
+                    <i class="bi bi-check-circle me-2"></i>
+
+                    Simpan Perubahan
+
+                </button>
+
+                <a href="transaksi.php" class="btn btn-outline-secondary ms-2">
+
+                    Batal
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
 
 </body>
+
 </html>

@@ -103,7 +103,7 @@ $data = mysqli_fetch_array($query);
         <div class="col-lg-6">
 
         <img
-        src="../assets/img/produk/<?= $data['gambar'];?>"
+        src="../assets/img/<?= $data['gambar'];?>"
         class="img-fluid rounded-4 shadow-lg">
 
         </div>

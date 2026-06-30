@@ -175,9 +175,9 @@ rel="stylesheet">
 
     <!-- CARD STATISTIK -->
 
-    <div class="row g-4 mb-4">
+    <div class="row gx-4 gy-4">
 
-    <div class="col-lg-4">
+    <div class="col-lg-6 col-xl-4">
 
     <div class="mini-card">
 
@@ -281,26 +281,25 @@ rel="stylesheet">
 
                     <?php if(!empty($data['gambar'])){ ?>
 
-                    <img
-                    src="../images/<?= $data['gambar']; ?>"
-                    alt="<?= $data['nama_produk']; ?>">
+                        <img
+                        src="../assets/img/<?= $data['gambar']; ?>"
+                        class="card-img-top"
+                        alt="<?= $data['nama_produk']; ?>">
 
-                    <?php }else{ ?>
+                    <?php } else { ?>
 
-                    <img
-                    src="../assets/img/no-image.png"
-                    alt="No Image">
+                        <img
+                        src="../assets/img/no-image.png"
+                        class="card-img-top"
+                        alt="No Image">
 
                     <?php } ?>
 
                     <span class="badge-category">
-
                         <?= $data['nama_kategori']; ?>
-
                     </span>
 
                 </div>
-
                 <?php
 
                 $totalStok =

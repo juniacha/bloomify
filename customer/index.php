@@ -251,7 +251,7 @@ ORDER BY nama_kategori ASC
                         </span>
 
                         <img
-                            src="../uploads/<?= $produk['gambar']; ?>"
+                            src="../assets/img/<?= $produk['gambar']; ?>"
                             class="card-img-top"
                             alt="<?= $produk['nama_produk']; ?>"
                         >

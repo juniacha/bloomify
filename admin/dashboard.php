@@ -223,16 +223,6 @@ for($i=1;$i<=12;$i++){
 
             <div class="top-right">
 
-                <div class="search-box">
-
-                    <i class="bi bi-search"></i>
-
-                    <input
-                    type="text"
-                    placeholder="Search...">
-
-                </div>
-
                 <div class="profile-box">
 
                     <i class="bi bi-person-circle"></i>

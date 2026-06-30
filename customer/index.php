@@ -146,10 +146,6 @@ ORDER BY nama_kategori ASC
 
                         <div class="d-flex align-items-center gap-2">
 
-                            <span class="text-warning fs-5">
-                                ★★★★★
-                            </span>
-
                             <small class="text-secondary">
                                 Beautiful bouquets for every occasion
                             </small>

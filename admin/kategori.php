@@ -240,19 +240,18 @@ rel="stylesheet">
 
         <!-- SEARCH -->
 
-        <div class="product-toolbar mt-4">
+        <div class="top-right">
 
-        <div class="search-product">
+            <div class="search-box">
 
-        <i class="bi bi-search"></i>
+                <i class="bi bi-search"></i>
 
-        <input
-        type="text"
-        id="searchKategori"
-        placeholder="Cari kategori...">
+                    <input
+                    type="text"
+                    id="searchKategori"
+                    placeholder="Search...">
 
-        </div>
-
+                </div>
         </div>
 
         <!-- LIST KATEGORI -->
@@ -267,7 +266,7 @@ rel="stylesheet">
 
         ?>
 
-        <div class="col-lg-4 kategori-item">
+        <div class="col-lg-4 kategori-item-search">
 
         <div class="kategori-card">
 
@@ -464,7 +463,7 @@ searchKategori.addEventListener("keyup",function(){
 
     let keyword = this.value.toLowerCase();
 
-    let kategori = document.querySelectorAll(".kategori-item");
+    let kategori = document.querySelectorAll(".kategori-item-search");
 
     kategori.forEach(function(item){
 

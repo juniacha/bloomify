@@ -247,21 +247,19 @@ rel="stylesheet">
 
     <!-- SEARCH -->
 
-    <div class="product-toolbar">
+    <div class="top-right">
 
-    <div class="search-box">
+        <div class="search-box">
 
-    <i class="bi bi-search"></i>
+            <i class="bi bi-search"></i>
 
-    <input
-    type="text"
-    id="searchProduk"
-    placeholder="Cari produk...">
+                <input
+                type="text"
+                id="searchProduk"
+                placeholder="Search...">
 
+            </div>
     </div>
-
-    </div>
-
     <!-- PRODUCT -->
 
     <div class="row g-4">
@@ -273,7 +271,7 @@ rel="stylesheet">
 
         ?>
 
-        <div class="col-lg-6 col-xl-4 product-item">
+        <div class="col-lg-6 col-xl-3 product-search-item">
 
             <div class="product-card-admin">
 
@@ -453,7 +451,7 @@ rel="stylesheet">
 
             let keyword = this.value.toLowerCase();
 
-            let items = document.querySelectorAll(".product-item");
+            let items = document.querySelectorAll(".product-search-item");
 
             items.forEach(function(item){
 

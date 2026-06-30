@@ -6,7 +6,6 @@ html{
 ========================================== */
 
 :root{
-
     /* Main Color */
     --primary:#CB807D;
     --primary-hover:#B86F6C;
@@ -32,7 +31,6 @@ html{
 
     /* Shadow */
     --shadow:0 10px 30px rgba(0,0,0,.06);
-
 }
 
 *{
@@ -211,19 +209,15 @@ img{
 }
 
 @keyframes float{
-
     0%{
     transform:translateY(0);
     }
-
     50%{
     transform:translateY(-10px);
     }
-
     100%{
     transform:translateY(0);
     }
-
 }
 
 /* ===========================
@@ -241,24 +235,18 @@ img{
 }
 
 .product-card:hover{
-
     transform:translateY(-8px);
-
 }
 
 .product-card img{
-
     width:100%;
     height:250px;
     object-fit:cover;
     transition:.35s;
-
 }
 
 .product-card:hover img{
-
     transform:scale(1.05);
-
 }
 
 .new-badge{
@@ -278,82 +266,59 @@ img{
 }
 
 .category-badge{
-
     background:#EEF2EA;
     color:#9FA58D;
     padding:8px 15px;
     border-radius:30px;
     font-size:.85rem;
-
 }
 
 .product-title{
-
     font-size:1.25rem;
     font-weight:600;
     line-height:1.5;
     min-height:65px;
-
 }
 
 .product-price{
-
     font-size:1.15rem;
     color:var(--primary);
     font-weight:700;
-
 }
 
 .section-title{
-
     margin-bottom:60px;
-
 }
 
 .section-title h2{
-
     font-size:52px;
-
 }
 
 .section-title p{
-
     color:var(--text-light);
-
 }
 
 .section-subtitle{
-
-letter-spacing:3px;
-
-font-size:.8rem;
-
-color:var(--secondary);
-
-font-weight:600;
-
+    letter-spacing:3px;
+    font-size:.8rem;
+    color:var(--secondary);
+    font-weight:600;
 }
 
 .category-card{
-
     background:#FFF8F9;
-
 }
 
 .category-card:hover{
-
     background:white;
-
 }
 
 .badge{
-
     font-weight:500;
     background:#FCE4E2 !important;
     border-radius:30px;
     color:#CB807D !important;
     padding:8px 15px;
-
 }
 
 .card button{
@@ -365,13 +330,9 @@ font-weight:600;
 }
 
 .feature-card{
-
     border:none;
-
     border-radius:24px;
-
     transition:.3s;
-
 }
 
 .feature-card h5{
@@ -385,27 +346,19 @@ font-weight:600;
 }
 
 .feature-card:hover{
-
     transform:translateY(-8px);
-
     box-shadow:0 15px 30px rgba(0,0,0,.08);
-
 }
 
 .feature-icon{
     width:70px;
     height:70px;
-
     display:flex;
     justify-content:center;
     align-items:center;
-
     margin:0 auto 20px;
-
     border-radius:50%;
-
     background:#EEF2EA;
-
     color:var(--secondary);
     transition:.35s;
     font-size:30px;
@@ -416,15 +369,10 @@ font-weight:600;
 }
 
 .cta-section{
-
     background:#CB807D;
-
     border-radius:30px;
-
     margin:80px auto;
-
     color:white;
-
 }
 
 .cta-section .btn{
@@ -442,33 +390,21 @@ font-weight:600;
 }
 
 .info-box{
-
     background:#FFF8F8;
-
     border:1px solid #F0E2E2;
-
     border-radius:16px;
-
     padding:15px;
-
     margin-bottom:15px;
-
 }
 
 .form-check{
-
-cursor:pointer;
-
-transition:.3s;
-
+    cursor:pointer;
+    transition:.3s;
 }
 
 .form-check:hover{
-
-border-color:var(--primary);
-
-background:#FFF8F9;
-
+    border-color:var(--primary);
+    background:#FFF8F9;
 }
 
 .product-description{
@@ -480,44 +416,30 @@ background:#FFF8F9;
 
 /* FOOTER */
 footer{
-
     background:#fff7f9;
-
 }
 
 footer h3,
 footer h5{
-
     color:var(--text);
-
 }
 
 footer ul{
-
     padding:0;
-
 }
 
 footer ul li{
-
     margin-bottom:10px;
-
 }
 
 footer a{
-
     color:var(--text-light);
-
     transition:.3s;
-
 }
 
 footer a:hover{
-
     color:var(--primary);
-
     padding-left:5px;
-
 }
 
 /*==============================
@@ -525,13 +447,11 @@ AUTH PAGE
 ==============================*/
 
 .auth-page{
-
     min-height:100vh;
     display:flex;
     align-items:center;
     justify-content:center;
     background:#FFF8F9;
-
 }
 
 .auth-card{
@@ -580,19 +500,13 @@ AUTH PAGE
 }
 
 .auth-form a{
-
     color:#CB807D;
-
     font-weight:600;
-
     text-decoration:none;
-
 }
 
 .auth-form a:hover{
-
     color:#9FA58D;
-
 }
 
 /*==============================
@@ -600,147 +514,88 @@ ADMIN DASHBOARD
 ==============================*/
 
 .admin-bg{
-
     background:#F9F8F7;
-
 }
 
 .admin-wrapper{
-
     display:flex;
-
     min-height:100vh;
-
 }
 
 .sidebar{
-
     width:270px;
-
     background:#fff;
-
     padding:35px 25px;
-
     border-right:1px solid #eee;
-
     position:fixed;
-
     top:0;
-
     left:0;
-
     bottom:0;
-
 }
 
 .logo-area h2{
-
     font-family:'Cormorant Garamond',serif;
-
     font-size:42px;
-
     margin-bottom:0;
-
 }
 
 .logo-area p{
-
     color:#888;
-
     font-size:14px;
-
 }
 
 .menu-text{
-
     display:block;
-
     color:#bbb;
-
     margin:40px 0 15px;
-
     font-size:12px;
-
     letter-spacing:2px;
-
 }
 
 .sidebar nav a{
-
     display:flex;
-
     align-items:center;
-
     gap:15px;
-
     color:#666;
-
     padding:15px 18px;
-
     margin-bottom:10px;
-
     border-radius:18px;
-
     text-decoration:none;
-
     transition:.3s;
-
 }
 
 .sidebar nav a:hover{
-
     background:#FFF2F3;
-
     color:#CB807D;
-
 }
 
 .sidebar .active{
-
     background:#CB807D;
-
     color:#fff !important;
-
 }
 
 .content{
-
     margin-left:270px;
-
     width:100%;
-
     padding:35px;
-
 }
 
 .topbar{
-
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
     margin-bottom:40px;
-
 }
 
 .topbar h2{
-
     font-size:46px;
-
     font-family:'Cormorant Garamond',serif;
-
 }
 
 .top-right{
-
     display:flex;
-
     gap:20px;
-
     align-items:center;
-
 }
 
 .search-box{
@@ -748,7 +603,7 @@ ADMIN DASHBOARD
     display:flex;
     max-width: 500px;
     align-items:center;
-
+    margin: 20px 0;
     background:#fff;
 
     padding:12px 18px;
@@ -1149,9 +1004,9 @@ FOOTER
 .product-card-admin{
 
     background:#fff;
-    max-width:450px;
+    max-width:470px;
     border-radius:24px;
-    margin: auto;
+    margin: 0 10px 0 10px;
     overflow:hidden;
     box-shadow:0 10px 30px rgba(0,0,0,.06);
     transition:.35s;

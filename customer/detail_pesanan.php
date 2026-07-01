@@ -178,13 +178,25 @@ rel="stylesheet">
 
         <?php
         if($data['status']=="Pesanan Masuk"){
+
             $badge="warning";
+
         }elseif($data['status']=="Diproses"){
+
             $badge="info";
+
+        }elseif($data['status']=="Sedang Diantar"){
+
+            $badge="primary";
+
         }elseif($data['status']=="Selesai"){
+
             $badge="success";
+
         }else{
+
             $badge="secondary";
+
         }
         ?>
 
@@ -461,7 +473,19 @@ rel="stylesheet">
     class="form-control"
     style="min-height:90px;">
 
-        <?= !empty($data['alamat']) ? nl2br(htmlspecialchars($data['alamat'])) : "-"; ?>
+        <?php
+        if($data['metode_pengiriman']=="Ambil di Toko"){
+
+            echo "Pesanan diambil langsung di toko.";
+
+        }else{
+
+            echo !empty($data['alamat'])
+            ? nl2br(htmlspecialchars($data['alamat']))
+            : "-";
+
+        }
+        ?>
 </div>
 </div>
     

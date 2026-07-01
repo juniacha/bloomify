@@ -75,6 +75,7 @@ if(isset($_POST['buat_pesanan'])){
     $jumlah = (int)$_POST['jumlah'];
 
     $metode_pengiriman = $_POST['metode_pengiriman'];
+    $metode_pembayaran = $_POST['metode_pembayaran'];
     $alamat = mysqli_real_escape_string($koneksi,$_POST['alamat']);
 
     $boneka = isset($_POST['boneka']) ? 1 : 0;
@@ -124,6 +125,7 @@ if(isset($_POST['buat_pesanan'])){
         no_hp,
         alamat,
         metode_pengiriman,
+        metode_pembayaran,
         id_produk,
         jumlah,
         ukuran,
@@ -145,6 +147,7 @@ if(isset($_POST['buat_pesanan'])){
         '$no_hp',
         '$alamat',
         '$metode_pengiriman',
+        '$metode_pembayaran',
         '$id_produk',
         '$jumlah',
         '$ukuran',
@@ -486,6 +489,41 @@ required></textarea>
 
 </div>
 
+<div class="mb-4">
+
+    <label class="form-label">
+
+        Metode Pembayaran
+
+    </label>
+
+    <select
+    name="metode_pembayaran"
+    class="form-select"
+    required>
+
+        <option value="">-- Pilih Metode Pembayaran --</option>
+
+        <option value="Transfer Bank">
+            Transfer Bank
+        </option>
+
+        <option value="QRIS">
+            QRIS
+        </option>
+
+        <option value="COD">
+            COD (Bayar di Tempat)
+        </option>
+
+        <option value="Tunai">
+            Tunai (Ambil di Toko)
+        </option>
+
+    </select>
+
+</div>
+
 <hr class="my-4">
 
 <h4 class="mb-3">
@@ -603,31 +641,50 @@ Ringkasan Pembayaran
 
 </h4>
 
-<div class="detail-box mb-4">
+<div class="detail-box">
 
-<div class="d-flex justify-content-between mb-2">
+    <div class="d-flex justify-content-between mb-2">
+        <span>Harga Bouquet</span>
+        <span>Rp <?= number_format($harga,0,",","."); ?></span>
+    </div>
 
-<span>Harga Bouquet</span>
+    <div id="bonekaBox" style="display:none;">
+        <div class="d-flex justify-content-between mb-2">
+            <span>Boneka</span>
+            <span>+ Rp25.000</span>
+        </div>
+    </div>
 
-<strong>
+    <div id="balonBox" style="display:none;">
+        <div class="d-flex justify-content-between mb-2">
+            <span>Balon</span>
+            <span>+ Rp15.000</span>
+        </div>
+    </div>
 
-Rp <?= number_format($harga,0,',','.'); ?>
+    <div id="kartuBox" style="display:none;">
+        <div class="d-flex justify-content-between mb-2">
+            <span>Kartu Ucapan</span>
+            <span>+ Rp5.000</span>
+        </div>
+    </div>
 
-</strong>
+    <div id="ongkirBox" style="display:none;">
+        <div class="d-flex justify-content-between mb-2">
+            <span>Ongkir</span>
+            <span>+ Rp20.000</span>
+        </div>
+    </div>
 
-</div>
+    <hr>
 
-<div class="d-flex justify-content-between">
-
-<span>Total</span>
-
-<h5 class="text-bloom mb-0" id="totalHarga">
-
-Rp <?= number_format($harga,0,',','.'); ?>
-
-</h5>
-
-</div>
+    <div class="d-flex justify-content-between">
+        <strong>Total</strong>
+        <strong class="text-bloom" id="totalHarga">
+            Rp <?= number_format($harga,0,",","."); ?>
+        </strong>
+    </div>
+    <hr>
 
 </div>
 
@@ -706,27 +763,52 @@ function hitungTotal(){
 
     let total = harga * parseInt(jumlah.value);
 
+    const bonekaBox = document.getElementById("bonekaBox");
+    const balonBox = document.getElementById("balonBox");
+    const kartuBox = document.getElementById("kartuBox");
+    const ongkirBox = document.getElementById("ongkirBox");
+
     if(document.getElementById("boneka").checked){
 
+        bonekaBox.style.display = "block";
         total += 25000;
+
+    }else{
+
+        bonekaBox.style.display = "none";
 
     }
 
     if(document.getElementById("balon").checked){
 
+        balonBox.style.display = "block";
         total += 15000;
+
+    }else{
+
+        balonBox.style.display = "none";
 
     }
 
     if(document.getElementById("kartu_ucapan").checked){
 
+        kartuBox.style.display = "block";
         total += 5000;
+
+    }else{
+
+        kartuBox.style.display = "none";
 
     }
 
     if(document.getElementById("metode_pengiriman").value=="Delivery"){
 
+        ongkirBox.style.display = "block";
         total += 20000;
+
+    }else{
+
+        ongkirBox.style.display = "none";
 
     }
 
@@ -752,7 +834,8 @@ document.getElementById("metode_pengiriman").addEventListener("change", function
 });
 
 hitungTotal();
-</script> 
+
+</script>
 
 </body>
 </html>

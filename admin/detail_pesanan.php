@@ -194,7 +194,7 @@ rel="stylesheet">
 
                         <td>Nama</td>
 
-                        <td>: <?= $data['nama_pemesan']; ?></td>
+                        <td>: <?= htmlspecialchars($data['nama_pemesan']); ?></td>
 
                     </tr>
 
@@ -202,7 +202,7 @@ rel="stylesheet">
 
                         <td>No. HP</td>
 
-                        <td>: <?= $data['no_hp']; ?></td>
+                        <td>: <?= htmlspecialchars($data['no_hp']); ?></td>
 
                     </tr>
 
@@ -214,7 +214,21 @@ rel="stylesheet">
 
                             :
 
-                            <?= !empty($data['alamat']) ? nl2br($data['alamat']) : '-'; ?>
+                            <?php
+
+                            if($data['metode_pengiriman']=="Ambil di Toko"){
+
+                                echo "Pesanan diambil langsung di toko.";
+
+                            }else{
+
+                                echo !empty($data['alamat'])
+                                ? nl2br(htmlspecialchars($data['alamat']))
+                                : "-";
+
+                            }
+
+                            ?>
 
                         </td>
 
@@ -224,7 +238,15 @@ rel="stylesheet">
 
                         <td>Metode</td>
 
-                        <td>: <?= $data['metode_pengiriman']; ?></td>
+                        <td>: <?= htmlspecialchars($data['metode_pengiriman']); ?></td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>Metode Pembayaran</td>
+
+                        <td>: <?= htmlspecialchars($data['metode_pembayaran']); ?></td>
 
                     </tr>
 
@@ -232,7 +254,7 @@ rel="stylesheet">
 
                         <td>Sumber</td>
 
-                        <td>: <?= $data['sumber']; ?></td>
+                        <td>: <?= htmlspecialchars($data['sumber']); ?></td>
 
                     </tr>
 
@@ -303,7 +325,7 @@ rel="stylesheet">
                         <img
                         src="../assets/img/<?= $data['gambar']; ?>"
                         class="detail-image"
-                        alt="<?= $data['nama_produk']; ?>">
+                        alt="<?= htmlspecialchars($data['nama_produk']); ?>">
 
                     </div>
 
@@ -447,7 +469,7 @@ rel="stylesheet">
 
                     <div class="detail-box">
 
-                        <?= !empty($data['warna_buket']) ? $data['warna_buket'] : "-"; ?>
+                        <?= !empty($data['warna_buket']) ? htmlspecialchars($data['warna_buket']) : "-"; ?>
 
                     </div>
 
@@ -463,7 +485,7 @@ rel="stylesheet">
 
                     <div class="detail-box">
 
-                        <?= !empty($data['isi_surat']) ? nl2br($data['isi_surat']) : "-"; ?>
+                        <?= !empty($data['isi_surat']) ? nl2br(htmlspecialchars($data['isi_surat'])) : "-"; ?>
 
                     </div>
 
@@ -479,7 +501,7 @@ rel="stylesheet">
 
                     <div class="detail-box">
 
-                        <?= !empty($data['catatan']) ? nl2br($data['catatan']) : "-"; ?>
+                        <?= !empty($data['catatan']) ? nl2br(htmlspecialchars($data['catatan'])) : "-"; ?>
 
                     </div>
 

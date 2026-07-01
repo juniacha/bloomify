@@ -197,7 +197,7 @@ if(isset($_POST['update'])){
 
                     <th width="220">Nama Pemesan</th>
 
-                    <td><?= $data['nama_pemesan']; ?></td>
+                    <td><?= htmlspecialchars($data['nama_pemesan']); ?></td>
 
                 </tr>
 
@@ -205,7 +205,7 @@ if(isset($_POST['update'])){
 
                     <th>Produk</th>
 
-                    <td><?= $data['nama_produk']; ?></td>
+                    <td><?= htmlspecialchars($data['nama_produk']); ?></td>
 
                 </tr>
 
@@ -243,9 +243,35 @@ if(isset($_POST['update'])){
 
                     <td>
 
-                        <span class="badge bg-secondary">
+                        <?php
 
-                            <?= $data['status']; ?>
+                        if($data['status']=="Pesanan Masuk"){
+
+                            $badge="warning text-dark";
+
+                        }elseif($data['status']=="Diproses"){
+
+                            $badge="info";
+
+                        }elseif($data['status']=="Sedang Diantar"){
+
+                            $badge="primary";
+
+                        }elseif($data['status']=="Selesai"){
+
+                            $badge="success";
+
+                        }else{
+
+                            $badge="danger";
+
+                        }
+
+                        ?>
+
+                        <span class="badge bg-<?= $badge; ?>">
+
+                            <?= htmlspecialchars($data['status']); ?>
 
                         </span>
 
@@ -272,46 +298,53 @@ if(isset($_POST['update'])){
                         <?php if($data['status']=="Selesai"){ ?>
 
                             <option value="Selesai" selected>
-
                                 Selesai
+                            </option>
 
+                        <?php }elseif($data['status']=="Pesanan Masuk"){ ?>
+
+                            <option value="Pesanan Masuk" selected>
+                                Pesanan Masuk
+                            </option>
+
+                            <option value="Diproses">
+                                Diproses
+                            </option>
+
+                        <?php }elseif($data['status']=="Diproses"){ ?>
+
+                            <option value="Diproses" selected>
+                                Diproses
+                            </option>
+
+                            <option value="Sedang Diantar">
+                                Sedang Diantar
+                            </option>
+
+                        <?php }elseif($data['status']=="Sedang Diantar"){ ?>
+
+                            <option value="Sedang Diantar" selected>
+                                Sedang Diantar
+                            </option>
+
+                            <option value="Selesai">
+                                Selesai
                             </option>
 
                         <?php }elseif($data['status']=="Menunggu Pembatalan"){ ?>
 
                             <option value="Dibatalkan">
-
                                 Setujui Pembatalan
-
                             </option>
 
-                            <option value="Pesanan Masuk">
-
+                            <option value="Diproses">
                                 Tolak Pembatalan
-
                             </option>
 
                         <?php }else{ ?>
 
-                            <option value="Pesanan Masuk"
-                            <?= ($data['status']=="Pesanan Masuk") ? "selected" : ""; ?>>
-
-                                Pesanan Masuk
-
-                            </option>
-
-                            <option value="Diproses"
-                            <?= ($data['status']=="Diproses") ? "selected" : ""; ?>>
-
-                                Diproses
-
-                            </option>
-
-                            <option value="Selesai"
-                            <?= ($data['status']=="Selesai") ? "selected" : ""; ?>>
-
-                                Selesai
-
+                            <option value="<?= htmlspecialchars($data['status']); ?>" selected>
+                                <?= htmlspecialchars($data['status']); ?>
                             </option>
 
                         <?php } ?>

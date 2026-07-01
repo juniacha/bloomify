@@ -103,7 +103,7 @@ rel="stylesheet">
     <a class="nav-link active"
     href="pesanan_saya.php">
 
-    Pesanan Saya
+    Riwayat Pesanan
 
     </a>
 
@@ -154,28 +154,28 @@ rel="stylesheet">
     class="py-5"
     style="background:var(--section);">
 
-    <div class="container text-center">
+        <div class="container">
+            <a href="index.php"
+            class="back-link d-inline-flex mb-4">
+                <i class="bi bi-arrow-left me-2"></i>
+                Kembali
+            </a>
 
-    <span class="section-subtitle">
+            <div class="text-center">
+                <span class="section-subtitle">
+                    MY ORDER
+                </span>
 
-    MY ORDER
+                <h1 class="mt-3">
+                    Pesanan Saya
+                </h1>
 
-    </span>
+                <p class="text-secondary">
+                    Lihat status seluruh pesanan bouquet-mu.
+                </p>
 
-    <h1 class="mt-3">
-
-    Pesanan Saya
-
-    </h1>
-
-    <p class="text-secondary">
-
-    Lihat status seluruh pesanan bouquet-mu.
-
-    </p>
-
-    </div>
-
+            </div>
+        </div>
     </section>
 
 

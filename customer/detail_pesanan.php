@@ -89,7 +89,7 @@ rel="stylesheet">
     </li>
 
     <li class="nav-item">
-    <a class="nav-link active" href="pesanan_saya.php">Pesanan Saya</a>
+    <a class="nav-link active" href="pesanan_saya.php">Riwayat Pesanan</a>
     </li>
 
     </ul>

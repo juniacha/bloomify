@@ -92,7 +92,7 @@ ORDER BY nama_kategori ASC
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="pesanan_saya.php">Pesanan Saya</a>
+                        <a class="nav-link" href="pesanan_saya.php">Riwayat Pesanan</a>
                     </li>
 
                 </ul>
@@ -494,7 +494,7 @@ ORDER BY nama_kategori ASC
 
                         <li><a href="index.php">Home</a></li>
                         <li><a href="produk.php">Produk</a></li>
-                        <li><a href="pesanan_saya.php">Pesanan Saya</a></li>
+                        <li><a href="pesanan_saya.php">Riwayat Pesanan</a></li>
 
                     </ul>
 

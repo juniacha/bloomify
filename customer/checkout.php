@@ -204,7 +204,7 @@ if($kartu_ucapan) $total += 5000;
                     <li class="nav-item">
                         <a class="nav-link"
                         href="pesanan_saya.php">
-                        Pesanan Saya
+                        Riwayat Pesanan
                         </a>
                     </li>
 

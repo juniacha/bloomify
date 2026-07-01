@@ -82,20 +82,14 @@ Home
 </li>
 
 <li class="nav-item">
-<a class="nav-link" href="kategori.php">
+<a class="nav-link" href="produk.php">
 Produk
 </a>
 </li>
 
 <li class="nav-item">
-<a class="nav-link" href="produk.php">
-New Produk
-</a>
-</li>
-
-<li class="nav-item">
 <a class="nav-link" href="pesanan_saya.php">
-Pesanan Saya
+Riwayat Pesanan
 </a>
 </li>
 

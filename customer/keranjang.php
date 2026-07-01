@@ -380,36 +380,6 @@ $total_semua += $subtotal;
 
                 ?>
 
-                <div class="cart-summary">
-
-                    <div>
-
-                        <small>
-
-                            Total Belanja
-
-                        </small>
-
-                        <h2>
-
-                            Rp <?= number_format($total_semua,0,",","."); ?>
-
-                        </h2>
-
-                    </div>
-
-                    <a
-                    href="checkout_semua.php"
-                    class="btn btn-bloom btn-lg">
-
-                        <i class="bi bi-bag-check me-2"></i>
-
-                        Checkout Semua
-
-                    </a>
-
-                </div>
-
                 <?php
 
                 }else{

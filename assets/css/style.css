@@ -237,8 +237,7 @@ img{
 ========================= */
 
 .hero-section{
-    background: linear-gradient(180deg,#FFFDFC 0%,#FFF7F5 100%);
-    min-height:80vh;
+    background: #fff8f8;
     display:flex;
     align-items:center;
 }
@@ -511,8 +510,6 @@ AUTH PAGE
 }
 
 .auth-image img{
-    width:100%;
-    height:100%;
     object-fit:cover;
 }
 

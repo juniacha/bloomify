@@ -2,27 +2,27 @@
 session_start();
 include '../config/koneksi.php';
 
-if(!isset($_SESSION['email'])){
+if (!isset($_SESSION['email'])) {
     header("Location:../auth/login.php");
     exit();
 }
 
-if($_SESSION['role'] != "customer"){
+if ($_SESSION['role'] != "customer") {
     header("Location:../admin/dashboard.php");
     exit();
 }
 
 // Filter kategori
 $where = "";
-if(isset($_GET['id_kategori'])){
+if (isset($_GET['id_kategori'])) {
     $id_kategori = $_GET['id_kategori'];
     $where = "WHERE produk.id_kategori='$id_kategori'";
-}else{
+} else {
     $where = "";
 }
 
 // Query produk
-$query_produk = mysqli_query($koneksi,"
+$query_produk = mysqli_query($koneksi, "
 SELECT
 produk.*,
 kategori.nama_kategori
@@ -40,19 +40,20 @@ ORDER BY produk.id_produk DESC
 // Judul halaman
 $judul = "Semua Bouquet";
 
-if(isset($id_kategori)){
+if (isset($id_kategori)) {
 
-    $kategori = mysqli_fetch_assoc(mysqli_query($koneksi,"
+    $kategori = mysqli_fetch_assoc(mysqli_query($koneksi, "
     SELECT nama_kategori
     FROM kategori
     WHERE id_kategori='$id_kategori'
     "));
 
-    $judul = "Bouquet ".$kategori['nama_kategori'];
+    $judul = "Bouquet " . $kategori['nama_kategori'];
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -63,9 +64,12 @@ if(isset($id_kategori)){
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
@@ -74,36 +78,29 @@ if(isset($id_kategori)){
                 <i class="bi bi-flower1 me-2"></i>Bloomify
             </a>
 
-            <button class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarBloomify">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBloomify">
 
                 <span class="navbar-toggler-icon"></span>
 
             </button>
 
-            <div class="collapse navbar-collapse"
-                id="navbarBloomify">
+            <div class="collapse navbar-collapse" id="navbarBloomify">
 
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link"
-                        href="index.php">
+                        <a class="nav-link" href="index.php">
                             Home
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link active"
-                        href="produk.php">
+                        <a class="nav-link active" href="produk.php">
                             Produk
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link"
-                        href="pesanan_saya.php">
+                        <a class="nav-link" href="pesanan_saya.php">
                             Riwayat Pesanan
                         </a>
                     </li>
@@ -114,17 +111,17 @@ if(isset($id_kategori)){
 
                     <?php
                     $jumlahKeranjang = mysqli_fetch_assoc(
-                        mysqli_query($koneksi,"
+                        mysqli_query($koneksi, "
                             SELECT COUNT(*) AS total
                             FROM keranjang
-                            WHERE id_user='".$_SESSION['id_user']."'
+                            WHERE id_user='" . $_SESSION['id_user'] . "'
                         ")
                     );
                     ?>
 
                     <a href="keranjang.php" class="nav-cart">
                         <i class="bi bi-bag fs-5"></i>
-                        <?php if($jumlahKeranjang['total'] > 0){ ?>
+                        <?php if ($jumlahKeranjang['total'] > 0) { ?>
 
                             <span class="cart-badge">
                                 <?= $jumlahKeranjang['total']; ?>
@@ -138,8 +135,7 @@ if(isset($id_kategori)){
                         <strong><?= $_SESSION['nama']; ?></strong>
                     </span>
 
-                    <a href="../auth/logout.php"
-                    class="btn btn-bloom">
+                    <a href="../auth/logout.php" class="btn btn-bloom">
                         Logout
                     </a>
                 </div>
@@ -163,61 +159,58 @@ if(isset($id_kategori)){
                     </p>
                 </div>
 
-                <?php if(isset($_GET['id_kategori'])){ ?>
+                <?php if (isset($_GET['id_kategori'])) { ?>
 
-                <a href="produk.php" class="btn btn-outline-bloom">
-                    Semua Produk
-                </a>
+                    <a href="produk.php" class="btn btn-outline-bloom">
+                        Semua Produk
+                    </a>
                 <?php } ?>
-        </div>
-
-    <div class="row g-4">
-        <div class="row g-4">
-            <?php while($produk = mysqli_fetch_assoc($query_produk)){ ?>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="card product-card position-relative h-100">
-                    <img
-                        src="../assets/img/<?= $produk['gambar']; ?>"
-                        class="card-img-top"
-                        alt="<?= $produk['nama_produk']; ?>"
-                    >
-
-                    <div class="card-body d-flex flex-column">
-                        <span class="badge category-badge align-self-start mb-3">
-                            <?= $produk['nama_kategori']; ?>
-                        </span>
-
-                        <h5 class="product-title">
-                            <?= $produk['nama_produk']; ?>
-                        </h5>
-
-                        <div class="product-price mb-4">
-                            <p class="product-desc">
-                                <?= substr($produk['deskripsi'],0,70); ?>...
-                            </p>
-
-                            Rp <?= number_format($produk['harga_small']); ?>
-                            -
-                            Rp <?= number_format($produk['harga_large']); ?>
-                        </div>
-
-                        <a
-                            href="detail_produk.php?id=<?= $produk['id_produk']; ?>"
-                            class="btn btn-bloom mt-auto w-100">
-
-                            Lihat Detail
-                        </a>
-                    </div>
-                </div>
             </div>
 
-            <?php } ?>
+            <div class="row g-4">
+                <div class="row g-4">
+                            <?php while ($produk = mysqli_fetch_assoc($query_produk)) { ?>
 
-        </div>
-</section>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card product-card position-relative h-100">
+                                <img src="../assets/img/<?= $produk['gambar']; ?>" class="card-img-top"
+                                    alt="<?= $produk['nama_produk']; ?>">
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../assets/js/script.js"></script>
+                                <div class="card-body d-flex flex-column">
+                                    <span class="badge category-badge align-self-start mb-3">
+                                                    <?= $produk['nama_kategori']; ?>
+                                    </span>
+
+                                    <h5 class="product-title">
+                                                    <?= $produk['nama_produk']; ?>
+                                    </h5>
+
+                                    <div class="product-price mb-4">
+                                        <p class="product-desc">
+                                                        <?= substr($produk['deskripsi'], 0, 70); ?>...
+                                        </p>
+
+                                        Rp <?= number_format($produk['harga_small']); ?>
+                                        -
+                                        Rp <?= number_format($produk['harga_large']); ?>
+                                    </div>
+
+                                    <a href="detail_produk.php?id=<?= $produk['id_produk']; ?>"
+                                        class="btn btn-bloom mt-auto w-100">
+
+                                        Lihat Detail
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                            <?php } ?>
+
+                </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/script.js"></script>
 </body>
+
 </html>

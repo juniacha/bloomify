@@ -2,7 +2,7 @@
 session_start();
 include '../config/koneksi.php';
 
-if(!isset($_SESSION['id_user'])){
+if (!isset($_SESSION['id_user'])) {
     header("Location:../auth/login.php");
     exit();
 }
@@ -21,39 +21,39 @@ $sql = "SELECT keranjang.*,
         WHERE keranjang.id_keranjang='$id'
         AND keranjang.id_user='$id_user'";
 
-$query = mysqli_query($koneksi,$sql);
+$query = mysqli_query($koneksi, $sql);
 $data = mysqli_fetch_assoc($query);
 
-if(!$data){
+if (!$data) {
     header("Location:keranjang.php");
     exit();
 }
 
 // Tentukan stok sesuai ukuran
-if($data['ukuran']=="Small"){
+if ($data['ukuran'] == "Small") {
 
     $stok = $data['stok_small'];
 
-}elseif($data['ukuran']=="Medium"){
+} elseif ($data['ukuran'] == "Medium") {
 
     $stok = $data['stok_medium'];
 
-}else{
+} else {
 
     $stok = $data['stok_large'];
 
 }
 
 // Kalau jumlah masih di bawah stok, baru boleh tambah
-if($data['jumlah'] < $stok){
+if ($data['jumlah'] < $stok) {
 
-    mysqli_query($koneksi,"
+    mysqli_query($koneksi, "
     UPDATE keranjang
     SET jumlah = jumlah + 1
     WHERE id_keranjang='$id'
     ");
 
-}else{
+} else {
 
     echo "<script>
     alert('Jumlah sudah mencapai stok maksimal!');

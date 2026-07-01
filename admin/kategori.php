@@ -2,24 +2,24 @@
 session_start();
 include '../config/koneksi.php';
 
-if(!isset($_SESSION['email'])){
+if (!isset($_SESSION['email'])) {
     header("Location:../auth/login.php");
     exit();
 }
 
-if($_SESSION['role'] != "admin"){
+if ($_SESSION['role'] != "admin") {
     header("Location:../customer/index.php");
     exit();
 }
 
 // Tambah kategori
-if(isset($_POST['tambah'])){
+if (isset($_POST['tambah'])) {
 
     $nama_kategori = trim($_POST['nama_kategori']);
 
-    if($nama_kategori != ""){
+    if ($nama_kategori != "") {
 
-        mysqli_query($koneksi,"
+        mysqli_query($koneksi, "
         INSERT INTO kategori(nama_kategori)
         VALUES('$nama_kategori')
         ");
@@ -33,13 +33,14 @@ if(isset($_POST['tambah'])){
 
 // Statistik
 $totalKategori = mysqli_fetch_assoc(
-mysqli_query($koneksi,"
+    mysqli_query($koneksi, "
 SELECT COUNT(*) AS total
 FROM kategori
-"));
+")
+);
 
 // Data kategori
-$query = mysqli_query($koneksi,"
+$query = mysqli_query($koneksi, "
 SELECT *
 FROM kategori
 ORDER BY id_kategori DESC
@@ -51,23 +52,21 @@ ORDER BY id_kategori DESC
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Kelola Kategori</title>
+    <title>Kelola Kategori</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<link rel="stylesheet"
-href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 
-<link rel="stylesheet"
-href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap"
-rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
 
 </head>
 
@@ -75,417 +74,382 @@ rel="stylesheet">
 
     <div class="admin-wrapper">
 
-    <!-- SIDEBAR -->
+        <!-- SIDEBAR -->
 
-    <aside class="sidebar">
+        <aside class="sidebar">
 
-    <div class="logo-area">
+            <div class="logo-area">
 
-    <h2>Bloomify</h2>
+                <h2>Bloomify</h2>
 
-    <p>Florist Management</p>
+                <p>Florist Management</p>
 
-    </div>
+            </div>
 
-    <span class="menu-text">
+            <span class="menu-text">
 
-    MAIN MENU
+                MAIN MENU
 
-    </span>
+            </span>
 
-    <nav>
+            <nav>
 
-    <a href="dashboard.php">
+                <a href="dashboard.php">
 
-    <i class="bi bi-grid"></i>
+                    <i class="bi bi-grid"></i>
 
-    Dashboard
+                    Dashboard
 
-    </a>
+                </a>
 
-    <a href="produk.php">
+                <a href="produk.php">
 
-    <i class="bi bi-box-seam"></i>
+                    <i class="bi bi-box-seam"></i>
 
-    Produk
+                    Produk
 
-    </a>
+                </a>
 
-    <a href="kategori.php" class="active">
+                <a href="kategori.php" class="active">
 
-    <i class="bi bi-tags"></i>
+                    <i class="bi bi-tags"></i>
 
-    Kategori
+                    Kategori
 
-    </a>
+                </a>
 
-    <a href="transaksi.php">
+                <a href="transaksi.php">
 
-    <i class="bi bi-bag"></i>
+                    <i class="bi bi-bag"></i>
 
-    Pesanan
+                    Pesanan
 
-    </a>
+                </a>
 
-    <a href="laporan.php">
+                <a href="laporan.php">
 
-    <i class="bi bi-bar-chart"></i>
+                    <i class="bi bi-bar-chart"></i>
 
-    Laporan
+                    Laporan
 
-    </a>
+                </a>
 
-    <a href="../auth/logout.php">
+                <a href="../auth/logout.php">
 
-    <i class="bi bi-box-arrow-right"></i>
+                    <i class="bi bi-box-arrow-right"></i>
 
-    Logout
+                    Logout
 
-    </a>
+                </a>
 
-    </nav>
+            </nav>
 
-    </aside>
+        </aside>
 
-    <main class="content">
+        <main class="content">
 
-    <div class="topbar">
+            <div class="topbar">
 
-    <div>
+                <div>
 
-    <h2>Kelola Kategori</h2>
+                    <h2>Kelola Kategori</h2>
 
-    <p>
+                    <p>
 
-    Kelola kategori bouquet Bloomify.
+                        Kelola kategori bouquet Bloomify.
 
-    </p>
-
-    </div>
-
-    </div>
-
-    <div class="row mb-4">
-
-    <div class="col-lg-4">
-
-    <div class="mini-card">
-
-    <i class="bi bi-tags"></i>
-
-    <div>
-
-    <span>Total Kategori</span>
-
-    <h3>
-
-    <?= $totalKategori['total']; ?>
-
-    </h3>
-
-    </div>
-
-    </div>
-
-    </div>
-
-    </div>
-
-    <div class="form-admin-card">
-
-    <form method="POST">
-
-    <div class="row align-items-end">
-        <!-- INPUT -->
-
-        <div class="col-lg-9">
-
-        <label class="form-label">
-
-        Nama Kategori
-
-        </label>
-
-        <input
-        type="text"
-        name="nama_kategori"
-        class="form-control"
-        placeholder="Contoh : Graduation Bouquet"
-        required>
-
-        </div>
-
-        <!-- BUTTON -->
-
-        <div class="col-lg-3">
-
-        <button
-        type="submit"
-        name="tambah"
-        class="btn btn-bloom w-100">
-
-        <i class="bi bi-plus-circle me-2"></i>
-
-        Tambah Kategori
-
-        </button>
-
-        </div>
-
-        </div>
-
-        </form>
-
-        </div>
-
-        <!-- SEARCH -->
-
-        <div class="top-right">
-
-            <div class="search-box">
-
-                <i class="bi bi-search"></i>
-
-                    <input
-                    type="text"
-                    id="searchKategori"
-                    placeholder="Search...">
+                    </p>
 
                 </div>
-        </div>
 
-        <!-- LIST KATEGORI -->
+            </div>
 
-        <div class="row g-4">
+            <div class="row mb-4">
 
-        <?php
+                <div class="col-lg-4">
 
-        if(mysqli_num_rows($query)>0){
+                    <div class="mini-card">
 
-        while($data=mysqli_fetch_assoc($query)){
+                        <i class="bi bi-tags"></i>
 
-        ?>
+                        <div>
 
-        <div class="col-lg-4 kategori-item-search">
+                            <span>Total Kategori</span>
 
-        <div class="kategori-card">
+                            <h3>
 
-        <div class="kategori-icon">
+                                <?= $totalKategori['total']; ?>
 
-        <i class="bi bi-tags-fill"></i>
+                            </h3>
 
-        </div>
+                        </div>
 
-        <h4>
+                    </div>
 
-        <?= $data['nama_kategori']; ?>
+                </div>
 
-        </h4>
+            </div>
 
-        <p>
+            <div class="form-admin-card">
 
-        ID Kategori :
-        <?= $data['id_kategori']; ?>
+                <form method="POST">
 
-        </p>
+                    <div class="row align-items-end">
+                        <!-- INPUT -->
 
-        <div class="kategori-action">
+                        <div class="col-lg-9">
 
-        <button
-            class="btn btn-outline-bloom"
+                            <label class="form-label">
 
-            data-bs-toggle="modal"
+                                Nama Kategori
 
-            data-bs-target="#edit<?= $data['id_kategori']; ?>">
+                            </label>
 
-            <i class="bi bi-pencil-square"></i>
+                            <input type="text" name="nama_kategori" class="form-control"
+                                placeholder="Contoh : Graduation Bouquet" required>
 
-            Edit
+                        </div>
 
-        </button>
+                        <!-- BUTTON -->
 
-        <a
-        href="hapus_kategori.php?id=<?= $data['id_kategori']; ?>"
-        onclick="return confirm('Yakin ingin menghapus kategori ini?')"
-        class="btn btn-danger">
+                        <div class="col-lg-3">
 
-        <i class="bi bi-trash"></i>
+                            <button type="submit" name="tambah" class="btn btn-bloom w-100">
 
-        Hapus
+                                <i class="bi bi-plus-circle me-2"></i>
 
-        </a>
+                                Tambah Kategori
 
-        </div>
+                            </button>
 
-        </div>
+                        </div>
 
-        </div>
+                    </div>
 
-        <!-- Modal Edit -->
+                </form>
 
-        <div
-        class="modal fade"
-        id="edit<?= $data['id_kategori']; ?>"
-        tabindex="-1">
+            </div>
 
-        <div class="modal-dialog modal-dialog-centered">
+            <!-- SEARCH -->
 
-        <div class="modal-content">
+            <div class="top-right">
 
-        <div class="modal-header flex-column text-center position-relative">
+                <div class="search-box">
 
-        <button
-        type="button"
-        class="btn-close position-absolute top-0 end-0 m-3"
-        data-bs-dismiss="modal"></button>
+                    <i class="bi bi-search"></i>
 
-        <div class="modal-icon">
+                    <input type="text" id="searchKategori" placeholder="Search...">
 
-        <i class="bi bi-tags-fill"></i>
+                </div>
+            </div>
 
-        </div>
+            <!-- LIST KATEGORI -->
 
-        <h3 class="modal-title">
+            <div class="row g-4">
 
-        Edit Kategori
+                <?php
 
-        </h3>
+                if (mysqli_num_rows($query) > 0) {
 
-        <p class="modal-subtitle">
+                    while ($data = mysqli_fetch_assoc($query)) {
 
-        Perbarui nama kategori bouquet Bloomify.
+                        ?>
 
-        </p>
+                        <div class="col-lg-4 kategori-item-search">
 
-        </div>
+                            <div class="kategori-card">
 
-        <form
-        action="edit_kategori.php?id=<?= $data['id_kategori']; ?>"
-        method="POST">
+                                <div class="kategori-icon">
 
-        <div class="modal-body">
+                                    <i class="bi bi-tags-fill"></i>
 
-        <label class="form-label">
+                                </div>
 
-        Nama Kategori
+                                <h4>
 
-        </label>
+                                    <?= $data['nama_kategori']; ?>
 
-        <input
-        type="text"
-        name="nama_kategori"
-        class="form-control"
+                                </h4>
 
-        value="<?= $data['nama_kategori']; ?>"
+                                <p>
 
-        required>
+                                    ID Kategori :
+                                    <?= $data['id_kategori']; ?>
 
-        </div>
+                                </p>
 
-        <div class="modal-footer justify-content-end gap-2">
+                                <div class="kategori-action">
 
-        <button
-        type="button"
-        class="btn btn-light"
+                                    <button class="btn btn-outline-bloom" data-bs-toggle="modal"
+                                        data-bs-target="#edit<?= $data['id_kategori']; ?>">
 
-        data-bs-dismiss="modal">
+                                        <i class="bi bi-pencil-square"></i>
 
-        Batal
+                                        Edit
 
-        </button>
+                                    </button>
 
-        <button
-        type="submit"
-        name="update"
-        class="btn btn-bloom">
+                                    <a href="hapus_kategori.php?id=<?= $data['id_kategori']; ?>"
+                                        onclick="return confirm('Yakin ingin menghapus kategori ini?')" class="btn btn-danger">
 
-        Simpan
+                                        <i class="bi bi-trash"></i>
 
-        </button>
+                                        Hapus
 
-        </div>
+                                    </a>
 
-        </form>
+                                </div>
 
-        </div>
+                            </div>
 
-        </div>
+                        </div>
 
-        </div>
+                        <!-- Modal Edit -->
 
-        <?php
+                        <div class="modal fade" id="edit<?= $data['id_kategori']; ?>" tabindex="-1">
 
-        }
+                            <div class="modal-dialog modal-dialog-centered">
 
-        }else{
+                                <div class="modal-content">
 
-        ?>
+                                    <div class="modal-header flex-column text-center position-relative">
 
-        <div class="col-12">
+                                        <button type="button" class="btn-close position-absolute top-0 end-0 m-3"
+                                            data-bs-dismiss="modal"></button>
 
-        <div class="empty-product">
+                                        <div class="modal-icon">
 
-        <i class="bi bi-tags"></i>
+                                            <i class="bi bi-tags-fill"></i>
 
-        <h3>
+                                        </div>
 
-        Belum Ada Kategori
+                                        <h3 class="modal-title">
 
-        </h3>
+                                            Edit Kategori
 
-        <p>
+                                        </h3>
 
-        Silakan tambahkan kategori pertama.
+                                        <p class="modal-subtitle">
 
-        </p>
+                                            Perbarui nama kategori bouquet Bloomify.
 
-        </div>
+                                        </p>
 
-        </div>
+                                    </div>
 
-        <?php } ?>
+                                    <form action="edit_kategori.php?id=<?= $data['id_kategori']; ?>" method="POST">
 
-        </div>
+                                        <div class="modal-body">
+
+                                            <label class="form-label">
+
+                                                Nama Kategori
+
+                                            </label>
+
+                                            <input type="text" name="nama_kategori" class="form-control"
+                                                value="<?= $data['nama_kategori']; ?>" required>
+
+                                        </div>
+
+                                        <div class="modal-footer justify-content-end gap-2">
+
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+
+                                                Batal
+
+                                            </button>
+
+                                            <button type="submit" name="update" class="btn btn-bloom">
+
+                                                Simpan
+
+                                            </button>
+
+                                        </div>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <?php
+
+                    }
+
+                } else {
+
+                    ?>
+
+                    <div class="col-12">
+
+                        <div class="empty-product">
+
+                            <i class="bi bi-tags"></i>
+
+                            <h3>
+
+                                Belum Ada Kategori
+
+                            </h3>
+
+                            <p>
+
+                                Silakan tambahkan kategori pertama.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                <?php } ?>
+
+            </div>
 
         </main>
 
-</div>
+    </div>
 
-<script>
+    <script>
 
-// ==========================
-// Live Search
-// ==========================
+        // ==========================
+        // Live Search
+        // ==========================
 
-const searchKategori = document.getElementById("searchKategori");
+        const searchKategori = document.getElementById("searchKategori");
 
-searchKategori.addEventListener("keyup",function(){
+        searchKategori.addEventListener("keyup", function () {
 
-    let keyword = this.value.toLowerCase();
+            let keyword = this.value.toLowerCase();
 
-    let kategori = document.querySelectorAll(".kategori-item-search");
+            let kategori = document.querySelectorAll(".kategori-item-search");
 
-    kategori.forEach(function(item){
+            kategori.forEach(function (item) {
 
-        let isi = item.innerText.toLowerCase();
+                let isi = item.innerText.toLowerCase();
 
-        if(isi.indexOf(keyword) > -1){
+                if (isi.indexOf(keyword) > -1) {
 
-            item.style.display = "";
+                    item.style.display = "";
 
-        }else{
+                } else {
 
-            item.style.display = "none";
+                    item.style.display = "none";
 
-        }
+                }
 
-    });
+            });
 
-});
+        });
 
-</script>
+    </script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

@@ -2,7 +2,7 @@
 session_start();
 include "../config/koneksi.php";
 
-if(!isset($_SESSION['email'])){
+if (!isset($_SESSION['email'])) {
     header("Location:../auth/login.php");
     exit();
 }
@@ -16,10 +16,10 @@ $sql = "SELECT *
         WHERE id_transaksi='$id_transaksi'
         AND id_user='$id_user'";
 
-$query = mysqli_query($koneksi,$sql);
+$query = mysqli_query($koneksi, $sql);
 $data = mysqli_fetch_assoc($query);
 
-if(!$data){
+if (!$data) {
 
     echo "
     <script>
@@ -33,7 +33,7 @@ if(!$data){
 }
 
 // hanya bisa dibatalkan jika masih Pesanan Masuk
-if($data['status'] != "Pesanan Masuk"){
+if ($data['status'] != "Pesanan Masuk") {
 
     echo "
     <script>
@@ -47,7 +47,7 @@ if($data['status'] != "Pesanan Masuk"){
 }
 
 // ubah status
-mysqli_query($koneksi,"
+mysqli_query($koneksi, "
 UPDATE transaksi
 SET status='Menunggu Pembatalan'
 WHERE id_transaksi='$id_transaksi'

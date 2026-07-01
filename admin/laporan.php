@@ -2,7 +2,7 @@
 session_start();
 include '../config/koneksi.php';
 
-if(!isset($_SESSION['email'])){
+if (!isset($_SESSION['email'])) {
     header("Location:../auth/login.php");
     exit();
 }
@@ -14,7 +14,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : "";
 $where = "WHERE MONTH(tanggal)='$bulan'
           AND YEAR(tanggal)='$tahun'";
 
-if($status!=""){
+if ($status != "") {
     $where .= " AND status='$status'";
 }
 
@@ -25,17 +25,17 @@ $sql = "SELECT transaksi.*, produk.nama_produk
         $where
         ORDER BY tanggal DESC";
 
-$query = mysqli_query($koneksi,$sql);
+$query = mysqli_query($koneksi, $sql);
 
 $total_pesanan = mysqli_fetch_assoc(
-mysqli_query($koneksi,"
+    mysqli_query($koneksi, "
 SELECT COUNT(*) total
 FROM transaksi
 $where")
 );
 
 $total_pendapatan = mysqli_fetch_assoc(
-mysqli_query($koneksi,"
+    mysqli_query($koneksi, "
 SELECT IFNULL(SUM(total_harga),0) total
 FROM transaksi
 $where
@@ -43,7 +43,7 @@ AND status='Selesai'")
 );
 
 $pesanan_masuk = mysqli_fetch_assoc(
-mysqli_query($koneksi,"
+    mysqli_query($koneksi, "
 SELECT COUNT(*) total
 FROM transaksi
 $where
@@ -51,7 +51,7 @@ AND status='Pesanan Masuk'")
 );
 
 $diproses = mysqli_fetch_assoc(
-mysqli_query($koneksi,"
+    mysqli_query($koneksi, "
 SELECT COUNT(*) total
 FROM transaksi
 $where
@@ -59,7 +59,7 @@ AND status='Diproses'")
 );
 
 $selesai = mysqli_fetch_assoc(
-mysqli_query($koneksi,"
+    mysqli_query($koneksi, "
 SELECT COUNT(*) total
 FROM transaksi
 $where
@@ -67,7 +67,7 @@ AND status='Selesai'")
 );
 
 $dibatalkan = mysqli_fetch_assoc(
-mysqli_query($koneksi,"
+    mysqli_query($koneksi, "
 SELECT COUNT(*) total
 FROM transaksi
 $where
@@ -75,7 +75,7 @@ AND status='Dibatalkan'")
 );
 
 $menunggu = mysqli_fetch_assoc(
-mysqli_query($koneksi,"
+    mysqli_query($koneksi, "
 SELECT COUNT(*) total
 FROM transaksi
 $where
@@ -89,725 +89,697 @@ AND status='Menunggu Pembatalan'")
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Laporan Penjualan | Bloomify</title>
+    <title>Laporan Penjualan | Bloomify</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<link rel="stylesheet"
-href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 
-<link rel="stylesheet"
-href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap"
-rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
 
 </head>
 
 <body class="admin-bg">
 
-<div class="admin-wrapper">
+    <div class="admin-wrapper">
 
-<!-- ==========================
+        <!-- ==========================
 SIDEBAR
 ========================== -->
 
-<aside class="sidebar">
+        <aside class="sidebar">
 
-<div class="logo-area">
+            <div class="logo-area">
 
-<h2>Bloomify</h2>
+                <h2>Bloomify</h2>
 
-<p>Florist Management</p>
+                <p>Florist Management</p>
 
-</div>
+            </div>
 
-<span class="menu-text">
+            <span class="menu-text">
 
-MAIN MENU
+                MAIN MENU
 
-</span>
+            </span>
 
-<nav>
+            <nav>
 
-<a href="dashboard.php">
+                <a href="dashboard.php">
 
-<i class="bi bi-grid"></i>
+                    <i class="bi bi-grid"></i>
 
-Dashboard
+                    Dashboard
 
-</a>
+                </a>
 
-<a href="produk.php">
+                <a href="produk.php">
 
-<i class="bi bi-box-seam"></i>
+                    <i class="bi bi-box-seam"></i>
 
-Produk
+                    Produk
 
-</a>
+                </a>
 
-<a href="kategori.php">
+                <a href="kategori.php">
 
-<i class="bi bi-tags"></i>
+                    <i class="bi bi-tags"></i>
 
-Kategori
+                    Kategori
 
-</a>
+                </a>
 
-<a href="transaksi.php">
+                <a href="transaksi.php">
 
-<i class="bi bi-bag-heart"></i>
+                    <i class="bi bi-bag-heart"></i>
 
-Pesanan
+                    Pesanan
 
-</a>
+                </a>
 
-<a href="laporan.php" class="active">
+                <a href="laporan.php" class="active">
 
-<i class="bi bi-bar-chart"></i>
+                    <i class="bi bi-bar-chart"></i>
 
-Laporan
+                    Laporan
 
-</a>
+                </a>
 
-<a href="../auth/logout.php">
+                <a href="../auth/logout.php">
 
-<i class="bi bi-box-arrow-right"></i>
+                    <i class="bi bi-box-arrow-right"></i>
 
-Logout
+                    Logout
 
-</a>
+                </a>
 
-</nav>
+            </nav>
 
-</aside>
+        </aside>
 
-<!-- ==========================
+        <!-- ==========================
 CONTENT
 ========================== -->
 
-<main class="content">
+        <main class="content">
 
-<div class="topbar">
+            <div class="topbar">
 
-<div>
+                <div>
 
-<h2>Laporan Penjualan</h2>
+                    <h2>Laporan Penjualan</h2>
 
-<p>
+                    <p>
 
-Ringkasan transaksi dan pendapatan Bloomify.
+                        Ringkasan transaksi dan pendapatan Bloomify.
 
-</p>
+                    </p>
 
-</div>
+                </div>
 
-<a
-href="export_excel.php?bulan=<?= $bulan; ?>&tahun=<?= $tahun; ?>&status=<?= $status; ?>"
-class="btn btn-outline-bloom">
+                <a href="export_excel.php?bulan=<?= $bulan; ?>&tahun=<?= $tahun; ?>&status=<?= $status; ?>"
+                    class="btn btn-outline-bloom">
 
-<i class="bi bi-download me-2"></i>
+                    <i class="bi bi-download me-2"></i>
 
-Export Excel
+                    Export Excel
 
-</a>
+                </a>
 
-</div>
+            </div>
 
-<!-- ==========================
+            <!-- ==========================
 FILTER
 ========================== -->
 
-<div class="form-admin-card">
+            <div class="form-admin-card">
 
-<form method="GET">
+                <form method="GET">
 
-<div class="row g-3 align-items-end">
+                    <div class="row g-3 align-items-end">
 
-<!-- BULAN -->
+                        <!-- BULAN -->
 
-<div class="col-lg-3">
+                        <div class="col-lg-3">
 
-<label class="form-label">
+                            <label class="form-label">
 
-Bulan
+                                Bulan
 
-</label>
+                            </label>
 
-<select
-name="bulan"
-class="form-select">
+                            <select name="bulan" class="form-select">
 
-<?php
-for($i=1;$i<=12;$i++){
-?>
+                                <?php
+                                for ($i = 1; $i <= 12; $i++) {
+                                    ?>
 
-<option
-value="<?= sprintf("%02d",$i); ?>"
-<?= ($bulan==sprintf("%02d",$i)) ? "selected" : ""; ?>>
+                                    <option value="<?= sprintf("%02d", $i); ?>" <?= ($bulan == sprintf("%02d", $i)) ? "selected" : ""; ?>>
 
-<?= sprintf("%02d",$i); ?>
+                                        <?= sprintf("%02d", $i); ?>
 
-</option>
+                                    </option>
 
-<?php } ?>
+                                <?php } ?>
 
-</select>
+                            </select>
 
-</div>
+                        </div>
 
-<!-- TAHUN -->
+                        <!-- TAHUN -->
 
-<div class="col-lg-3">
+                        <div class="col-lg-3">
 
-<label class="form-label">
+                            <label class="form-label">
 
-Tahun
+                                Tahun
 
-</label>
+                            </label>
 
-<select
-name="tahun"
-class="form-select">
+                            <select name="tahun" class="form-select">
 
-<?php
-for($i=2024;$i<=2035;$i++){
-?>
+                                <?php
+                                for ($i = 2024; $i <= 2035; $i++) {
+                                    ?>
 
-<option
-value="<?= $i; ?>"
-<?= ($tahun==$i) ? "selected" : ""; ?>>
+                                    <option value="<?= $i; ?>" <?= ($tahun == $i) ? "selected" : ""; ?>>
 
-<?= $i; ?>
+                                        <?= $i; ?>
 
-</option>
+                                    </option>
 
-<?php } ?>
+                                <?php } ?>
 
-</select>
+                            </select>
 
-</div>
+                        </div>
 
-<!-- STATUS -->
+                        <!-- STATUS -->
 
-<div class="col-lg-3">
+                        <div class="col-lg-3">
 
-<label class="form-label">
+                            <label class="form-label">
 
-Status
+                                Status
 
-</label>
+                            </label>
 
-<select
-name="status"
-class="form-select">
+                            <select name="status" class="form-select">
 
-<option value=""
-<?= $status=="" ? "selected" : ""; ?>>
+                                <option value="" <?= $status == "" ? "selected" : ""; ?>>
 
-Semua Status
+                                    Semua Status
 
-</option>
+                                </option>
 
-<option
-value="Pesanan Masuk"
-<?= $status=="Pesanan Masuk" ? "selected" : ""; ?>>
+                                <option value="Pesanan Masuk" <?= $status == "Pesanan Masuk" ? "selected" : ""; ?>>
 
-Pesanan Masuk
+                                    Pesanan Masuk
 
-</option>
+                                </option>
 
-<option
-value="Diproses"
-<?= $status=="Diproses" ? "selected" : ""; ?>>
+                                <option value="Diproses" <?= $status == "Diproses" ? "selected" : ""; ?>>
 
-Diproses
+                                    Diproses
 
-</option>
+                                </option>
 
-<option
-value="Sedang Diantar"
-<?= $status=="Sedang Diantar" ? "selected" : ""; ?>>
+                                <option value="Sedang Diantar" <?= $status == "Sedang Diantar" ? "selected" : ""; ?>>
 
-Sedang Diantar
+                                    Sedang Diantar
 
-</option>
+                                </option>
 
-<option
-value="Selesai"
-<?= $status=="Selesai" ? "selected" : ""; ?>>
+                                <option value="Selesai" <?= $status == "Selesai" ? "selected" : ""; ?>>
 
-Selesai
+                                    Selesai
 
-</option>
+                                </option>
 
-<option
-value="Menunggu Pembatalan"
-<?= $status=="Menunggu Pembatalan" ? "selected" : ""; ?>>
+                                <option value="Menunggu Pembatalan" <?= $status == "Menunggu Pembatalan" ? "selected" : ""; ?>>
 
-Menunggu Pembatalan
+                                    Menunggu Pembatalan
 
-</option>
+                                </option>
 
-<option
-value="Dibatalkan"
-<?= $status=="Dibatalkan" ? "selected" : ""; ?>>
+                                <option value="Dibatalkan" <?= $status == "Dibatalkan" ? "selected" : ""; ?>>
 
-Dibatalkan
+                                    Dibatalkan
 
-</option>
+                                </option>
 
-</select>
+                            </select>
 
-</div>
+                        </div>
 
-<!-- BUTTON -->
+                        <!-- BUTTON -->
 
-<div class="col-lg-3">
+                        <div class="col-lg-3">
 
-<button
-type="submit"
-class="btn btn-bloom w-100">
+                            <button type="submit" class="btn btn-bloom w-100">
 
-<i class="bi bi-funnel me-2"></i>
+                                <i class="bi bi-funnel me-2"></i>
 
-Filter
+                                Filter
 
-</button>
+                            </button>
 
-</div>
+                        </div>
 
-</div>
+                    </div>
 
-</form>
+                </form>
 
-</div>
+            </div>
 
-<!-- ==========================
+            <!-- ==========================
 RINGKASAN LAPORAN
 ========================== -->
 
-<div class="row g-4 mb-4">
+            <div class="row g-4 mb-4">
 
-    <div class="col-lg-4">
+                <div class="col-lg-4">
 
-        <div class="mini-card">
+                    <div class="mini-card">
 
-            <i class="bi bi-receipt"></i>
+                        <i class="bi bi-receipt"></i>
 
-            <div>
+                        <div>
 
-                <span>Total Pesanan</span>
+                            <span>Total Pesanan</span>
 
-                <h3>
+                            <h3>
 
-                    <?= $total_pesanan['total']; ?>
+                                <?= $total_pesanan['total']; ?>
 
-                </h3>
+                            </h3>
 
-            </div>
+                        </div>
 
-        </div>
+                    </div>
 
-    </div>
+                </div>
 
-    <div class="col-lg-4">
+                <div class="col-lg-4">
 
-        <div class="mini-card">
+                    <div class="mini-card">
 
-            <i class="bi bi-wallet2"></i>
+                        <i class="bi bi-wallet2"></i>
 
-            <div>
+                        <div>
 
-                <span>Total Pendapatan</span>
+                            <span>Total Pendapatan</span>
 
-                <h3>
+                            <h3>
 
-                    Rp <?= number_format($total_pendapatan['total'],0,',','.'); ?>
+                                Rp <?= number_format($total_pendapatan['total'], 0, ',', '.'); ?>
 
-                </h3>
+                            </h3>
 
-            </div>
+                        </div>
 
-        </div>
+                    </div>
 
-    </div>
+                </div>
 
-    <div class="col-lg-4">
+                <div class="col-lg-4">
 
-        <div class="mini-card">
+                    <div class="mini-card">
 
-            <i class="bi bi-check-circle-fill"></i>
+                        <i class="bi bi-check-circle-fill"></i>
 
-            <div>
+                        <div>
 
-                <span>Pesanan Selesai</span>
+                            <span>Pesanan Selesai</span>
 
-                <h3>
+                            <h3>
 
-                    <?= $selesai['total']; ?>
+                                <?= $selesai['total']; ?>
 
-                </h3>
+                            </h3>
 
-            </div>
+                        </div>
 
-        </div>
+                    </div>
 
-    </div>
-
-</div>
-
-<div class="row g-4 mb-4">
-
-    <div class="col-lg-3">
-
-        <div class="mini-card">
-
-            <i class="bi bi-hourglass-split"></i>
-
-            <div>
-
-                <span>Pesanan Masuk</span>
-
-                <h3>
-
-                    <?= $pesanan_masuk['total']; ?>
-
-                </h3>
+                </div>
 
             </div>
 
-        </div>
+            <div class="row g-4 mb-4">
 
-    </div>
+                <div class="col-lg-3">
 
-    <div class="col-lg-3">
+                    <div class="mini-card">
 
-        <div class="mini-card">
+                        <i class="bi bi-hourglass-split"></i>
 
-            <i class="bi bi-gear-fill"></i>
+                        <div>
 
-            <div>
+                            <span>Pesanan Masuk</span>
 
-                <span>Diproses</span>
+                            <h3>
 
-                <h3>
+                                <?= $pesanan_masuk['total']; ?>
 
-                    <?= $diproses['total']; ?>
+                            </h3>
 
-                </h3>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <div class="mini-card">
+
+                        <i class="bi bi-gear-fill"></i>
+
+                        <div>
+
+                            <span>Diproses</span>
+
+                            <h3>
+
+                                <?= $diproses['total']; ?>
+
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <div class="mini-card">
+
+                        <i class="bi bi-clock-history"></i>
+
+                        <div>
+
+                            <span>Menunggu</span>
+
+                            <h3>
+
+                                <?= $menunggu['total']; ?>
+
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <div class="mini-card">
+
+                        <i class="bi bi-x-circle-fill"></i>
+
+                        <div>
+
+                            <span>Dibatalkan</span>
+
+                            <h3>
+
+                                <?= $dibatalkan['total']; ?>
+
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
-        </div>
-
-    </div>
-
-    <div class="col-lg-3">
-
-        <div class="mini-card">
-
-            <i class="bi bi-clock-history"></i>
-
-            <div>
-
-                <span>Menunggu</span>
-
-                <h3>
-
-                    <?= $menunggu['total']; ?>
-
-                </h3>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="col-lg-3">
-
-        <div class="mini-card">
-
-            <i class="bi bi-x-circle-fill"></i>
-
-            <div>
-
-                <span>Dibatalkan</span>
-
-                <h3>
-
-                    <?= $dibatalkan['total']; ?>
-
-                </h3>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- ==========================
+            <!-- ==========================
 DATA TRANSAKSI
 ========================== -->
 
-<div class="form-admin-card">
+            <div class="form-admin-card">
 
-<h4 class="mb-4">
+                <h4 class="mb-4">
 
-Daftar Transaksi
+                    Daftar Transaksi
 
-</h4>
+                </h4>
 
-<div class="table-responsive">
+                <div class="table-responsive">
 
-<table class="table table-hover align-middle">
+                    <table class="table table-hover align-middle">
 
-<thead>
+                        <thead>
 
-<tr>
+                            <tr>
 
-<th>ID</th>
+                                <th>ID</th>
 
-<th>Tanggal</th>
+                                <th>Tanggal</th>
 
-<th>Pemesan</th>
+                                <th>Pemesan</th>
 
-<th>Produk</th>
+                                <th>Produk</th>
 
-<th>Total</th>
+                                <th>Total</th>
 
-<th>Sumber</th>
+                                <th>Sumber</th>
 
-<th>Status</th>
+                                <th>Status</th>
 
-</tr>
+                            </tr>
 
-</thead>
+                        </thead>
 
-<tbody>
+                        <tbody>
 
-<?php
+                            <?php
 
-if(mysqli_num_rows($query)>0){
+                            if (mysqli_num_rows($query) > 0) {
 
-while($data=mysqli_fetch_assoc($query)){
+                                while ($data = mysqli_fetch_assoc($query)) {
 
-?>
+                                    ?>
 
-<tr>
+                                    <tr>
 
-<td>
+                                        <td>
 
-#TRX<?= str_pad($data['id_transaksi'],4,"0",STR_PAD_LEFT); ?>
+                                            #TRX<?= str_pad($data['id_transaksi'], 4, "0", STR_PAD_LEFT); ?>
 
-</td>
+                                        </td>
 
-<td>
+                                        <td>
 
-<?= date('d M Y',strtotime($data['tanggal'])); ?>
+                                            <?= date('d M Y', strtotime($data['tanggal'])); ?>
 
-</td>
+                                        </td>
 
-<td>
+                                        <td>
 
-<div class="fw-semibold">
+                                            <div class="fw-semibold">
 
-<?= $data['nama_pemesan']; ?>
+                                                <?= $data['nama_pemesan']; ?>
 
-</div>
+                                            </div>
 
-<small class="text-muted">
+                                            <small class="text-muted">
 
-<?= $data['no_hp']; ?>
+                                                <?= $data['no_hp']; ?>
 
-</small>
+                                            </small>
 
-</td>
+                                        </td>
 
-<td>
+                                        <td>
 
-<div class="fw-semibold">
+                                            <div class="fw-semibold">
 
-<?= $data['nama_produk']; ?>
+                                                <?= $data['nama_produk']; ?>
 
-</div>
+                                            </div>
 
-<small class="text-muted">
+                                            <small class="text-muted">
 
-<?= $data['ukuran']; ?>
+                                                <?= $data['ukuran']; ?>
 
-•
+                                                •
 
-<?= $data['jumlah']; ?> pcs
+                                                <?= $data['jumlah']; ?> pcs
 
-</small>
+                                            </small>
 
-</td>
+                                        </td>
 
-<td class="text-bloom">
+                                        <td class="text-bloom">
 
-<strong>
+                                            <strong>
 
-Rp <?= number_format($data['total_harga'],0,',','.'); ?>
+                                                Rp <?= number_format($data['total_harga'], 0, ',', '.'); ?>
 
-</strong>
+                                            </strong>
 
-</td>
+                                        </td>
 
-<td>
+                                        <td>
 
-<?php
+                                            <?php
 
-if($data['sumber']=="Online"){
+                                            if ($data['sumber'] == "Online") {
 
-?>
+                                                ?>
 
-<span class="badge bg-info">
+                                                <span class="badge bg-info">
 
-Online
+                                                    Online
 
-</span>
+                                                </span>
 
-<?php
+                                                <?php
 
-}else{
+                                            } else {
 
-?>
+                                                ?>
 
-<span class="badge bg-secondary">
+                                                <span class="badge bg-secondary">
 
-Offline
+                                                    Offline
 
-</span>
+                                                </span>
 
-<?php } ?>
+                                            <?php } ?>
 
-</td>
+                                        </td>
 
-<td>
+                                        <td>
 
-<?php
+                                            <?php
 
-if($data['status']=="Pesanan Masuk"){
+                                            if ($data['status'] == "Pesanan Masuk") {
 
-?>
+                                                ?>
 
-<span class="badge bg-warning text-dark">
+                                                <span class="badge bg-warning text-dark">
 
-Pesanan Masuk
+                                                    Pesanan Masuk
 
-</span>
+                                                </span>
 
-<?php
+                                                <?php
 
-}elseif($data['status']=="Diproses"){
+                                            } elseif ($data['status'] == "Diproses") {
 
-?>
+                                                ?>
 
-<span class="badge bg-primary">
+                                                <span class="badge bg-primary">
 
-Diproses
+                                                    Diproses
 
-</span>
+                                                </span>
 
-<?php
+                                                <?php
 
-}elseif($data['status']=="Sedang Diantar"){
+                                            } elseif ($data['status'] == "Sedang Diantar") {
 
-?>
+                                                ?>
 
-<span class="badge bg-info">
+                                                <span class="badge bg-info">
 
-Sedang Diantar
+                                                    Sedang Diantar
 
-</span>
+                                                </span>
 
-<?php
+                                                <?php
 
-}elseif($data['status']=="Selesai"){
+                                            } elseif ($data['status'] == "Selesai") {
 
-?>
+                                                ?>
 
-<span class="badge bg-success">
+                                                <span class="badge bg-success">
 
-Selesai
+                                                    Selesai
 
-</span>
+                                                </span>
 
-<?php
+                                                <?php
 
-}elseif($data['status']=="Menunggu Pembatalan"){
+                                            } elseif ($data['status'] == "Menunggu Pembatalan") {
 
-?>
+                                                ?>
 
-<span class="badge bg-dark">
+                                                <span class="badge bg-dark">
 
-Menunggu Pembatalan
+                                                    Menunggu Pembatalan
 
-</span>
+                                                </span>
 
-<?php
+                                                <?php
 
-}else{
+                                            } else {
 
-?>
+                                                ?>
 
-<span class="badge bg-danger">
+                                                <span class="badge bg-danger">
 
-Dibatalkan
+                                                    Dibatalkan
 
-</span>
+                                                </span>
 
-<?php } ?>
+                                            <?php } ?>
 
-</td>
+                                        </td>
 
-</tr>
+                                    </tr>
 
-<?php
+                                    <?php
 
-}
+                                }
 
-}else{
+                            } else {
 
-?>
+                                ?>
 
-<tr>
+                                <tr>
 
-<td colspan="7" class="text-center py-5">
+                                    <td colspan="7" class="text-center py-5">
 
-<i class="bi bi-inbox fs-1 text-muted"></i>
+                                        <i class="bi bi-inbox fs-1 text-muted"></i>
 
-<p class="mt-3 mb-0">
+                                        <p class="mt-3 mb-0">
 
-Belum ada data transaksi.
+                                            Belum ada data transaksi.
 
-</p>
+                                        </p>
 
-</td>
+                                    </td>
 
-</tr>
+                                </tr>
 
-<?php } ?>
+                            <?php } ?>
 
-</tbody>
+                        </tbody>
 
-</table>
+                    </table>
 
-</div>
-</div>
+                </div>
+            </div>
 
-</main>
+        </main>
 
-</div>
+    </div>
 
 </body>
 

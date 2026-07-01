@@ -2,12 +2,12 @@
 session_start();
 include '../config/koneksi.php';
 
-if(!isset($_SESSION['email'])){
+if (!isset($_SESSION['email'])) {
     header("Location:../auth/login.php");
     exit();
 }
 
-if($_SESSION['role'] != "customer"){
+if ($_SESSION['role'] != "customer") {
     header("Location:../admin/dashboard.php");
     exit();
 }
@@ -15,7 +15,7 @@ if($_SESSION['role'] != "customer"){
 
 <?php
 
-$query_produk = mysqli_query($koneksi,"
+$query_produk = mysqli_query($koneksi, "
 SELECT
 produk.*,
 kategori.nama_kategori
@@ -30,7 +30,7 @@ ORDER BY produk.id_produk DESC
 LIMIT 4
 ");
 
-$query_kategori = mysqli_query($koneksi,"
+$query_kategori = mysqli_query($koneksi, "
 SELECT *
 FROM kategori
 ORDER BY nama_kategori ASC
@@ -40,6 +40,7 @@ ORDER BY nama_kategori ASC
 
 <!DOCTYPE html>
 <html>
+
 <head>
 
     <meta charset="UTF-8">
@@ -55,7 +56,9 @@ ORDER BY nama_kategori ASC
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <!-- CSS -->
     <link rel="stylesheet" href="../assets/css/style.css">
 
@@ -101,10 +104,10 @@ ORDER BY nama_kategori ASC
 
                     <?php
                     $jumlahKeranjang = mysqli_fetch_assoc(
-                        mysqli_query($koneksi,"
+                        mysqli_query($koneksi, "
                             SELECT COUNT(*) AS total
                             FROM keranjang
-                            WHERE id_user='".$_SESSION['id_user']."'
+                            WHERE id_user='" . $_SESSION['id_user'] . "'
                         ")
                     );
                     ?>
@@ -113,7 +116,7 @@ ORDER BY nama_kategori ASC
 
                         <i class="bi bi-bag fs-5"></i>
 
-                        <?php if($jumlahKeranjang['total'] > 0){ ?>
+                        <?php if ($jumlahKeranjang['total'] > 0) { ?>
 
                             <span class="cart-badge">
 
@@ -161,7 +164,8 @@ ORDER BY nama_kategori ASC
                     </h1>
 
                     <p class="lead mb-4">
-                        Hadirkan kebahagiaan melalui rangkaian bunga yang dirancang dengan penuh cinta untuk setiap momen spesial.
+                        Hadirkan kebahagiaan melalui rangkaian bunga yang dirancang dengan penuh cinta untuk setiap
+                        momen spesial.
                     </p>
 
                     <div class="hero-info mt-4">
@@ -193,9 +197,7 @@ ORDER BY nama_kategori ASC
 
                 <div class="col-lg-6 text-center">
 
-                    <img src="../assets/img/hero.png"
-                        class="img-fluid hero-img"
-                        alt="Hero">
+                    <img src="../assets/img/hero.png" class="img-fluid hero-img" alt="Hero">
 
                 </div>
 
@@ -219,28 +221,27 @@ ORDER BY nama_kategori ASC
             </div>
 
             <div class="row g-4">
-            <?php while($kategori=mysqli_fetch_assoc($query_kategori)){ ?>
-                <div class="col-lg-4 col-md-6">
-                    <div class="card category-card text-center h-100 position-relative">
+                <?php while ($kategori = mysqli_fetch_assoc($query_kategori)) { ?>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card category-card text-center h-100 position-relative">
 
-                        <div class="card-body">
+                            <div class="card-body">
 
-                            <i class="bi bi-flower1 mb-3"></i>
+                                <i class="bi bi-flower1 mb-3"></i>
 
-                            <h5><?= $kategori['nama_kategori']; ?></h5>
+                                <h5><?= $kategori['nama_kategori']; ?></h5>
 
-                            <small class="text-secondary">
-                                Klik untuk melihat koleksi
-                            </small>
+                                <small class="text-secondary">
+                                    Klik untuk melihat koleksi
+                                </small>
+
+                            </div>
+
+                            <a href="produk.php?id_kategori=<?= $kategori['id_kategori']; ?>" class="stretched-link"></a>
 
                         </div>
-
-                        <a href="produk.php?id_kategori=<?= $kategori['id_kategori']; ?>"
-                        class="stretched-link"></a>
-
                     </div>
-                </div>
-            <?php } ?>
+                <?php } ?>
             </div>
         </div>
     </section>
@@ -271,67 +272,63 @@ ORDER BY nama_kategori ASC
 
             <div class="row g-4">
 
-            <?php while($produk = mysqli_fetch_assoc($query_produk)){ ?>
+                <?php while ($produk = mysqli_fetch_assoc($query_produk)) { ?>
 
-                <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-3 col-md-6">
 
-                    <div class="card product-card position-relative h-100">
+                        <div class="card product-card position-relative h-100">
 
-                        <span class="new-label">
-                            New Collection
-                        </span>
-
-                        <img
-                            src="../assets/img/<?= $produk['gambar']; ?>"
-                            class="card-img-top"
-                            alt="<?= $produk['nama_produk']; ?>"
-                        >
-
-                        <div class="card-body d-flex flex-column">
-
-                            <span class="badge category-badge align-self-start mb-3">
-
-                                <?= $produk['nama_kategori']; ?>
-
+                            <span class="new-label">
+                                New Collection
                             </span>
 
-                            <h5 class="product-title">
+                            <img src="../assets/img/<?= $produk['gambar']; ?>" class="card-img-top"
+                                alt="<?= $produk['nama_produk']; ?>">
 
-                                <?= $produk['nama_produk']; ?>
+                            <div class="card-body d-flex flex-column">
 
-                            </h5>
+                                <span class="badge category-badge align-self-start mb-3">
 
-                            <p class="product-desc">
+                                    <?= $produk['nama_kategori']; ?>
 
-                                <?= substr($produk['deskripsi'],0,70); ?>...
+                                </span>
 
-                            </p>
+                                <h5 class="product-title">
 
-                            <div class="product-price mb-4">
-                                
-                                Rp <?= number_format($produk['harga_small']); ?>
+                                    <?= $produk['nama_produk']; ?>
 
-                                -
+                                </h5>
 
-                                Rp <?= number_format($produk['harga_large']); ?>
+                                <p class="product-desc">
+
+                                    <?= substr($produk['deskripsi'], 0, 70); ?>...
+
+                                </p>
+
+                                <div class="product-price mb-4">
+
+                                    Rp <?= number_format($produk['harga_small']); ?>
+
+                                    -
+
+                                    Rp <?= number_format($produk['harga_large']); ?>
+
+                                </div>
+
+                                <a href="detail_produk.php?id=<?= $produk['id_produk']; ?>"
+                                    class="btn btn-bloom mt-auto w-100">
+
+                                    Lihat Detail
+
+                                </a>
 
                             </div>
-
-                            <a
-                                href="detail_produk.php?id=<?= $produk['id_produk']; ?>"
-                                class="btn btn-bloom mt-auto w-100">
-
-                                Lihat Detail
-
-                            </a>
 
                         </div>
 
                     </div>
 
-                </div>
-
-            <?php } ?>
+                <?php } ?>
 
             </div>
 
@@ -443,27 +440,25 @@ ORDER BY nama_kategori ASC
 
         <div class="container">
 
-        <div class="text-center">
+            <div class="text-center">
 
-        <h2>
+                <h2>
 
-        Ready to Make Someone Smile?
+                    Ready to Make Someone Smile?
 
-        </h2>
+                </h2>
 
-        <p class="mt-3 mb-4">
-            Craft your perfect bouquet and make every celebration unforgettable.
-        </p>
+                <p class="mt-3 mb-4">
+                    Craft your perfect bouquet and make every celebration unforgettable.
+                </p>
 
-        <a href="produk.php"
+                <a href="produk.php" class="btn btn-light px-5">
 
-        class="btn btn-light px-5">
+                    Shop Now
 
-        Shop Now
+                </a>
 
-        </a>
-
-        </div>
+            </div>
 
         </div>
 
@@ -481,7 +476,8 @@ ORDER BY nama_kategori ASC
                     <h3>Bloomify</h3>
 
                     <p class="text-secondary">
-                        Bloomify hadir untuk membantu setiap momen spesial menjadi lebih berkesan melalui rangkaian bunga yang elegan dan berkualitas.
+                        Bloomify hadir untuk membantu setiap momen spesial menjadi lebih berkesan melalui rangkaian
+                        bunga yang elegan dan berkualitas.
                     </p>
 
                 </div>
@@ -552,4 +548,5 @@ ORDER BY nama_kategori ASC
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/script.js"></script>
 </body>
+
 </html>

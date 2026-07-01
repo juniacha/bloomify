@@ -2,7 +2,7 @@
 session_start();
 include '../config/koneksi.php';
 
-if(!isset($_SESSION['email'])){
+if (!isset($_SESSION['email'])) {
     header("Location:../auth/login.php");
     exit();
 }
@@ -21,17 +21,20 @@ $data = mysqli_fetch_array($query);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Detail Produk</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
 
-        <!-- Navbar -->
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
 
@@ -65,10 +68,10 @@ $data = mysqli_fetch_array($query);
 
                     <?php
                     $jumlahKeranjang = mysqli_fetch_assoc(
-                        mysqli_query($koneksi,"
+                        mysqli_query($koneksi, "
                             SELECT COUNT(*) AS total
                             FROM keranjang
-                            WHERE id_user='".$_SESSION['id_user']."'
+                            WHERE id_user='" . $_SESSION['id_user'] . "'
                         ")
                     );
                     ?>
@@ -77,7 +80,7 @@ $data = mysqli_fetch_array($query);
 
                         <i class="bi bi-bag fs-5"></i>
 
-                        <?php if($jumlahKeranjang['total'] > 0){ ?>
+                        <?php if ($jumlahKeranjang['total'] > 0) { ?>
 
                             <span class="cart-badge">
 
@@ -107,8 +110,7 @@ $data = mysqli_fetch_array($query);
 
     <div class="container mt-4">
 
-        <a href="javascript:history.back()"
-        class="back-link">
+        <a href="javascript:history.back()" class="back-link">
 
             <i class="bi bi-arrow-left me-2"></i>
 
@@ -122,266 +124,228 @@ $data = mysqli_fetch_array($query);
 
         <div class="row g-5">
 
-        <div class="col-lg-6">
-            <img
-            src="../assets/img/<?= $data['gambar'];?>"
-            class="img-fluid rounded-4 shadow-lg detail-img">
-        </div>
+            <div class="col-lg-6">
+                <img src="../assets/img/<?= $data['gambar']; ?>" class="img-fluid rounded-4 shadow-lg detail-img">
+            </div>
 
-        <div class="col-lg-6">
+            <div class="col-lg-6">
 
-        <span class="badge new-badge">
+                <span class="badge new-badge">
 
-        <?= $data['nama_kategori']; ?>
+                    <?= $data['nama_kategori']; ?>
 
-        </span>
+                </span>
 
-        <h2 class="mt-3">
+                <h2 class="mt-3">
 
-        <?= $data['nama_produk']; ?>
+                    <?= $data['nama_produk']; ?>
 
-        </h2>
+                </h2>
 
-        <p class="text-secondary mb-4">
+                <p class="text-secondary mb-4">
 
-        Perfect bouquet for your special moment.
+                    Perfect bouquet for your special moment.
 
-        </p>
+                </p>
 
-        <p class="product-description">
+                <p class="product-description">
 
-            <?= $data['deskripsi']; ?>
+                    <?= $data['deskripsi']; ?>
 
-        </p>
+                </p>
 
-        <div class="mt-3">
+                <div class="mt-3">
 
-            <span class="badge bg-success">
+                    <span class="badge bg-success">
 
-            <?= $data['stok_small'] + $data['stok_medium'] + $data['stok_large']; ?>
+                        <?= $data['stok_small'] + $data['stok_medium'] + $data['stok_large']; ?>
 
-            Bouquet Tersedia
+                        Bouquet Tersedia
 
-            </span>
+                    </span>
 
-        </div><br>
-   
-        <h5 class="mb-3">Pilih Ukuran Bouquet</h5>
+                </div><br>
 
-        <?php if($data['stok_small'] > 0){ ?>
-        <div class="form-check border rounded-4 p-3 mb-3">
-            <input
-            class="form-check-input"
-            type="radio"
-            name="pilihUkuran"
+                <h5 class="mb-3">Pilih Ukuran Bouquet</h5>
 
-            onclick="ubahHarga(
+                <?php if ($data['stok_small'] > 0) { ?>
+                    <div class="form-check border rounded-4 p-3 mb-3">
+                        <input class="form-check-input" type="radio" name="pilihUkuran" onclick="ubahHarga(
             <?= $data['harga_small']; ?>,
             <?= $data['stok_small']; ?>,
             'Small')">
 
-            <label class="form-check-label ms-2">
+                        <label class="form-check-label ms-2">
 
-            <b>Small</b>
+                            <b>Small</b>
 
-            <br>
+                            <br>
 
-            <span class="text-secondary">
+                            <span class="text-secondary">
 
-            Stok <?= $data['stok_small']; ?>
+                                Stok <?= $data['stok_small']; ?>
 
-            </span>
+                            </span>
 
-            </label>
+                        </label>
 
-        </div>
-        <?php }else{ ?>
-        <label style="color:gray">
-            <input type="radio" disabled>
-            Small (Habis)
-        </label>
-        <?php } ?> 
+                    </div>
+                <?php } else { ?>
+                    <label style="color:gray">
+                        <input type="radio" disabled>
+                        Small (Habis)
+                    </label>
+                <?php } ?>
 
-        <?php if($data['stok_medium'] > 0){ ?>
-        <div class="form-check border rounded-4 p-3 mb-3">
+                <?php if ($data['stok_medium'] > 0) { ?>
+                    <div class="form-check border rounded-4 p-3 mb-3">
 
-            <input
-            class="form-check-input"
-            type="radio"
-            name="pilihUkuran"
-
-            onclick="ubahHarga(
+                        <input class="form-check-input" type="radio" name="pilihUkuran" onclick="ubahHarga(
             <?= $data['harga_medium']; ?>,
             <?= $data['stok_medium']; ?>,
             'medium')">
 
-            <label class="form-check-label ms-2">
+                        <label class="form-check-label ms-2">
 
-            <b>Medium</b>
+                            <b>Medium</b>
 
-            <br>
+                            <br>
 
-            <span class="text-secondary">
+                            <span class="text-secondary">
 
-            Stok <?= $data['stok_medium']; ?>
+                                Stok <?= $data['stok_medium']; ?>
 
-            </span>
+                            </span>
 
-            </label>
+                        </label>
 
-        </div>
-        <?php }else{ ?>
-        <label style="color:gray">
-            <input type="radio" disabled>
-            Medium (Habis)
-        </label>
-        <?php } ?> 
+                    </div>
+                <?php } else { ?>
+                    <label style="color:gray">
+                        <input type="radio" disabled>
+                        Medium (Habis)
+                    </label>
+                <?php } ?>
 
-        <?php if($data['stok_large'] > 0){ ?>
-        <div class="form-check border rounded-4 p-3 mb-3">
-            <input
-            class="form-check-input"
-            type="radio"
-            name="pilihUkuran"
-
-            onclick="ubahHarga(
+                <?php if ($data['stok_large'] > 0) { ?>
+                    <div class="form-check border rounded-4 p-3 mb-3">
+                        <input class="form-check-input" type="radio" name="pilihUkuran" onclick="ubahHarga(
             <?= $data['harga_large']; ?>,
             <?= $data['stok_large']; ?>,
             'large')">
 
-            <label class="form-check-label ms-2">
+                        <label class="form-check-label ms-2">
 
-            <b>Large</b>
+                            <b>Large</b>
 
-            <br>
+                            <br>
 
-            <span class="text-secondary">
+                            <span class="text-secondary">
 
-            Stok <?= $data['stok_large']; ?>
+                                Stok <?= $data['stok_large']; ?>
 
-            </span>
+                            </span>
 
-            </label>
+                        </label>
 
-        </div>
-        <?php }else{ ?>
-        <label style="color:gray">
-            <input type="radio" disabled>
-            Large (Habis)
-        </label>
-        <?php } ?>
+                    </div>
+                <?php } else { ?>
+                    <label style="color:gray">
+                        <input type="radio" disabled>
+                        Large (Habis)
+                    </label>
+                <?php } ?>
 
-    
-        <div class="alert alert-light mt-4">
 
-            <b>Stok :</b>
+                <div class="alert alert-light mt-4">
 
-            <span id="stok">
+                    <b>Stok :</b>
 
-            Pilih ukuran terlebih dahulu
+                    <span id="stok">
 
-            </span>
+                        Pilih ukuran terlebih dahulu
 
-        </div>
+                    </span>
 
-        <div class="info-box">
+                </div>
 
-            <b>Harga :</b>
+                <div class="info-box">
 
-            <span id="harga">
+                    <b>Harga :</b>
 
-            Pilih ukuran
+                    <span id="harga">
 
-            </span>
+                        Pilih ukuran
 
-        </div>
+                    </span>
 
-        <form method="GET">
+                </div>
 
-            <input type="hidden"
-                name="id_produk"
-                value="<?= $data['id_produk']; ?>">
+                <form method="GET">
 
-            <input type="hidden"
-                name="ukuran"
-                id="ukuran">
+                    <input type="hidden" name="id_produk" value="<?= $data['id_produk']; ?>">
 
-            <button
+                    <input type="hidden" name="ukuran" id="ukuran">
 
-                class="btn btn-bloom w-100 mb-3"
+                    <button class="btn btn-bloom w-100 mb-3" type="submit" id="btnKeranjang"
+                        formaction="tambah_keranjang.php" disabled>
 
-                type="submit"
+                        <i class="bi bi-cart-plus me-2"></i>
 
-                id="btnKeranjang"
+                        Tambah ke Keranjang
 
-                formaction="tambah_keranjang.php"
+                    </button>
 
-                disabled>
 
-                    <i class="bi bi-cart-plus me-2"></i>
+                    <button class="btn btn-outline-bloom w-100" type="submit" id="btnCheckout" formaction="checkout.php"
+                        disabled>
 
-                Tambah ke Keranjang
+                        <i class="bi bi-credit-card me-2"></i>
+                        Checkout Sekarang
 
-            </button>
-            
+                    </button>
 
-            <button
+                </form>
 
-                class="btn btn-outline-bloom w-100"
+                <div class="text-secondary small mt-3">
 
-                type="submit"
+                    <i class="bi bi-info-circle me-2"></i>
 
-                id="btnCheckout"
+                    Silakan pilih ukuran bouquet untuk melanjutkan pemesanan.
 
-                formaction="checkout.php"
+                </div>
 
-                disabled>
-
-                    <i class="bi bi-credit-card me-2"></i>
-                Checkout Sekarang
-
-            </button>
-
-        </form>
-
-        <div class="text-secondary small mt-3">
-
-            <i class="bi bi-info-circle me-2"></i>
-
-            Silakan pilih ukuran bouquet untuk melanjutkan pemesanan.
+            </div>
 
         </div>
 
     </div>
 
-</div>
+    <script>
 
-</div>
+        function ubahHarga(harga, stok, ukuran) {
 
-        <script>
-
-            function ubahHarga(harga, stok, ukuran){
-
-                // Tampilkan harga
-                document.getElementById("harga").innerHTML =
+            // Tampilkan harga
+            document.getElementById("harga").innerHTML =
                 "Rp " + harga.toLocaleString('id-ID');
 
-                // Tampilkan stok
-                document.getElementById("stok").innerHTML =
+            // Tampilkan stok
+            document.getElementById("stok").innerHTML =
                 stok + " tersedia";
 
-                // Simpan ukuran yang dipilih
-                document.getElementById("ukuran").value =
+            // Simpan ukuran yang dipilih
+            document.getElementById("ukuran").value =
                 ukuran;
 
-                // Aktifkan tombol Pesan Sekarang
-                document.getElementById("btnKeranjang").disabled = false;
-                document.getElementById("btnCheckout").disabled = false;
+            // Aktifkan tombol Pesan Sekarang
+            document.getElementById("btnKeranjang").disabled = false;
+            document.getElementById("btnCheckout").disabled = false;
 
-            }
+        }
 
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

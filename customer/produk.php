@@ -207,7 +207,6 @@ if(isset($id_kategori)){
                             class="btn btn-bloom mt-auto w-100">
 
                             Lihat Detail
-
                         </a>
                     </div>
                 </div>

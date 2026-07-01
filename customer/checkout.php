@@ -7,134 +7,211 @@ if(!isset($_SESSION['email'])){
     exit();
 }
 
-//USER
+// ===============================
+// AMBIL DATA PRODUK
+// ===============================
 
-$email = $_SESSION['email'];
-
-$query_user = mysqli_query($koneksi,"
-SELECT *
-FROM users
-WHERE email='$email'
-");
-
-$user = mysqli_fetch_assoc($query_user);
-if(!$user){
-    session_destroy();
-    header("Location:../auth/login.php");
-    exit();
-}
-
-//DATA DARI FORM
-if(isset($_POST['id_produk']) && !isset($_POST['buat_pesanan'])){
+if(isset($_POST['buat_pesanan'])){
 
     $id_produk = $_POST['id_produk'];
     $ukuran = $_POST['ukuran'];
-    $jumlah = $_POST['jumlah'];
 
-    $boneka = isset($_POST['boneka']) ? 1 : 0;
-    $balon = isset($_POST['balon']) ? 1 : 0;
-    $kartu_ucapan = isset($_POST['kartu_ucapan']) ? 1 : 0;
+}elseif(isset($_GET['id_produk']) && isset($_GET['ukuran'])){
 
-    $warna_buket = trim($_POST['warna_buket']);
-    $isi_surat = trim($_POST['isi_surat']);
-    $catatan = trim($_POST['catatan']);
+    $id_produk = $_GET['id_produk'];
+    $ukuran = $_GET['ukuran'];
 
-    $id_keranjang = null;
-}
-
-//DATA DARI KERANJANG
-elseif(isset($_GET['id_keranjang'])){
-
-    $id_keranjang = $_GET['id_keranjang'];
-
-    $sql = "SELECT *
-            FROM keranjang
-            WHERE id_keranjang='$id_keranjang'
-            AND id_user='".$user['id_user']."'";
-
-    $query = mysqli_query($koneksi,$sql);
-    $keranjang = mysqli_fetch_assoc($query);
-
-    if(!$keranjang){
-        die("Data keranjang tidak ditemukan");
-    }
-
-    $id_produk = $keranjang['id_produk'];
-    $ukuran = $keranjang['ukuran'];
-    $jumlah = $keranjang['jumlah'];
-
-    $boneka = $keranjang['boneka'];
-    $balon = $keranjang['balon'];
-    $kartu_ucapan = $keranjang['kartu_ucapan'];
-
-    $warna_buket = $keranjang['warna_buket'];
-    $isi_surat = $keranjang['isi_surat'];
-    $catatan = $keranjang['catatan'];
-}
-
-else{
+}else{
 
     header("Location:index.php");
     exit();
 
 }
 
-//AMBIL PRODUK
+$query = mysqli_query($koneksi,"
+SELECT produk.*, kategori.nama_kategori
+FROM produk
+JOIN kategori
+ON produk.id_kategori = kategori.id_kategori
+WHERE produk.id_produk='$id_produk'
+");
 
-$sql_produk = "SELECT produk.*, kategori.nama_kategori
-               FROM produk
-               JOIN kategori
-               ON produk.id_kategori = kategori.id_kategori
-               WHERE produk.id_produk='$id_produk'";
+$data = mysqli_fetch_assoc($query);
 
-$query_produk = mysqli_query($koneksi,$sql_produk);
-
-$produk = mysqli_fetch_assoc($query_produk);
-
-if(!$produk){
-    die("Produk tidak ditemukan");
+if(!$data){
+    header("Location:index.php");
+    exit();
 }
 
-//HARGA & STOK
+// ===============================
+// HARGA BERDASARKAN UKURAN
+// ===============================
+
 if($ukuran=="Small"){
-    $harga = $produk['harga_small'];
-    $stok = $produk['stok_small'];
-}
-elseif($ukuran=="Medium"){
-    $harga = $produk['harga_medium'];
-    $stok = $produk['stok_medium'];
-}
 
-else{
-    $harga = $produk['harga_large'];
-    $stok = $produk['stok_large'];
-}
+    $harga = $data['harga_small'];
+    $stok  = $data['stok_small'];
 
-if($stok<=0){
-    echo "<script>
-    alert('Produk habis');
-    history.back();
-    </script>";
+}elseif($ukuran=="Medium"){
 
-    exit();
+    $harga = $data['harga_medium'];
+    $stok  = $data['stok_medium'];
+
+}else{
+
+    $harga = $data['harga_large'];
+    $stok  = $data['stok_large'];
+
 }
 
-if($jumlah>$stok){
-    echo "<script>
-    alert('Stok tidak mencukupi');
-    history.back();
-    </script>";
+// ======================================
+// BUAT PESANAN
+// ======================================
 
-    exit();
+if(isset($_POST['buat_pesanan'])){
+
+    $nama_pemesan = mysqli_real_escape_string($koneksi,$_POST['nama_pemesan']);
+    $no_hp = mysqli_real_escape_string($koneksi,$_POST['no_hp']);
+    $jumlah = (int)$_POST['jumlah'];
+
+    $metode_pengiriman = $_POST['metode_pengiriman'];
+    $alamat = mysqli_real_escape_string($koneksi,$_POST['alamat']);
+
+    $boneka = isset($_POST['boneka']) ? 1 : 0;
+    $balon = isset($_POST['balon']) ? 1 : 0;
+    $kartu_ucapan = isset($_POST['kartu_ucapan']) ? 1 : 0;
+
+    $warna_buket = mysqli_real_escape_string($koneksi,$_POST['warna_buket']);
+    $isi_surat = mysqli_real_escape_string($koneksi,$_POST['isi_surat']);
+    $catatan = mysqli_real_escape_string($koneksi,$_POST['catatan']);
+
+    if($jumlah > $stok){
+
+        echo "<script>
+        alert('Stok tidak mencukupi');
+        history.back();
+        </script>";
+        exit();
+
+    }
+
+    $total = $harga * $jumlah;
+
+    if($boneka){
+        $total += 25000;
+    }
+
+    if($balon){
+        $total += 15000;
+    }
+
+    if($kartu_ucapan){
+        $total += 5000;
+    }
+
+    if($metode_pengiriman=="Delivery"){
+        $total += 20000;
+    }
+
+    $status = "Pesanan Masuk";
+    $sumber = "Online";
+
+    $insert = mysqli_query($koneksi,"
+    INSERT INTO transaksi
+    (
+        id_user,
+        nama_pemesan,
+        no_hp,
+        alamat,
+        metode_pengiriman,
+        id_produk,
+        jumlah,
+        ukuran,
+        boneka,
+        balon,
+        kartu_ucapan,
+        warna_buket,
+        isi_surat,
+        catatan,
+        total_harga,
+        status,
+        tanggal,
+        sumber
+    )
+    VALUES
+    (
+        '".$_SESSION['id_user']."',
+        '$nama_pemesan',
+        '$no_hp',
+        '$alamat',
+        '$metode_pengiriman',
+        '$id_produk',
+        '$jumlah',
+        '$ukuran',
+        '$boneka',
+        '$balon',
+        '$kartu_ucapan',
+        '$warna_buket',
+        '$isi_surat',
+        '$catatan',
+        '$total',
+        '$status',
+        NOW(),
+        '$sumber'
+    )
+    ");
+
+    if($insert){
+
+        $stokBaru = $stok - $jumlah;
+
+        if($ukuran=="Small"){
+
+            mysqli_query($koneksi,"
+            UPDATE produk
+            SET stok_small='$stokBaru'
+            WHERE id_produk='$id_produk'
+            ");
+
+        }elseif($ukuran=="Medium"){
+
+            mysqli_query($koneksi,"
+            UPDATE produk
+            SET stok_medium='$stokBaru'
+            WHERE id_produk='$id_produk'
+            ");
+
+        }else{
+
+            mysqli_query($koneksi,"
+            UPDATE produk
+            SET stok_large='$stokBaru'
+            WHERE id_produk='$id_produk'
+            ");
+
+        }
+
+        echo "<script>
+
+        alert('Pesanan berhasil dibuat');
+
+        window.location='pesanan_saya.php';
+
+        </script>";
+
+        exit();
+
+    }else{
+
+        echo "<script>
+
+        alert('Pesanan gagal dibuat');
+
+        </script>";
+
+    }
+
 }
-
-//TOTAL
-
-$total = $harga * $jumlah;
-
-if($boneka) $total += 25000;
-if($balon) $total += 15000;
-if($kartu_ucapan) $total += 5000;
 
 ?>
 
@@ -145,689 +222,537 @@ if($kartu_ucapan) $total += 5000;
 
 <meta charset="UTF-8">
 
-    <meta name="viewport"
-    content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Checkout | Bloomify</title>
+<title>Checkout | Bloomify</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet"
-    href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/style.css">
 
-    <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap"
-    rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap"
+rel="stylesheet">
 
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg sticky-top">
+<nav class="navbar navbar-expand-lg sticky-top">
 
-        <div class="container">
-            <a class="navbar-brand"
-            href="index.php">
-            <i class="bi bi-flower1 me-2"></i>
-            Bloomify
-            </a>
+<div class="container">
 
-            <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarBloomify">
+<a class="navbar-brand" href="index.php">
 
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse"
-                id="navbarBloomify">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link"
-                        href="index.php">
-                        Home
-                        </a>
-                    </li>
+<i class="bi bi-flower1 me-2"></i>
 
-                    <li class="nav-item">
-                        <a class="nav-link"
-                        href="produk.php">
-                        Produk
-                        </a>
-                    </li>
+Bloomify
 
-                    <li class="nav-item">
-                        <a class="nav-link"
-                        href="pesanan_saya.php">
-                        Riwayat Pesanan
-                        </a>
-                    </li>
+</a>
 
-                </ul>
+<div class="ms-auto">
 
-                <div class="d-flex align-items-center gap-3">
-                    <a
-                    href="keranjang.php"
-                    class="nav-cart">
-                        <i class="bi bi-bag"></i>
-                    </a>
+<a href="keranjang.php" class="btn btn-outline-bloom me-2">
 
-                    <span>
-                        Halo,
-                        <strong>
-                        <?= $_SESSION['nama']; ?>
-                        </strong>
-                    </span>
+<i class="bi bi-bag"></i>
 
-                    <a href="../auth/logout.php" class="btn btn-bloom">
-                        Logout
-                    </a>
+Keranjang
 
-                </div>
+</a>
 
-            </div>
+<a href="../auth/logout.php" class="btn btn-bloom">
 
-        </div>
+Logout
 
-    </nav>
-
-    <!-- HEADER -->
-
-    <section
-    class="py-5"
-    style="background:var(--section);">
-
-        <div class="container text-center">
-
-            <a
-            href="javascript:history.back()"
-            class="back-link">
-            <i class="bi bi-arrow-left me-2"></i>
-                Kembali
-            </a>
-
-            <span class="section-subtitle d-block mt-4">CHECKOUT</span>
-
-            <h1 class="mt-2">Ringkasan Pesanan</h1>
-            
-            <p class="text-secondary">Periksa kembali pesanan sebelum melakukan checkout.</p>
-
-        </div>
-
-    </section>
-
-    <div class="container py-5">
-
-        <div class="checkout-card">
-
-            <div class="row g-5 align-items-start">
-
-                <!-- FOTO -->
-                <div class="col-lg-5">
-                    <img
-                    src="../assets/img/<?= $produk['gambar']; ?>"
-                    class="checkout-image"
-                    alt="<?= $produk['nama_produk']; ?>">
-                </div>
-
-                <!-- DETAIL -->
-
-                <div class="col-lg-7">
-                    <span class="badge category-badge">
-                        <?= $produk['nama_kategori']; ?>
-                    </span>
-
-                    <h2 class="mt-3">
-                        <?= $produk['nama_produk']; ?>
-                    </h2>
-
-                    <p class="text-secondary">Bouquet pilihan terbaik untuk momen spesialmu.</p>
-
-                    <hr>
-                    <div class="checkout-info">
-
-                        <div>
-                            <span>Ukuran</span>
-                            <strong><?= $ukuran; ?></strong>
-                        </div>
-
-                        <div>
-                            <span>Jumlah</span>
-                            <strong><?= $jumlah; ?></strong>
-                        </div>
-
-                        <div>
-                            <span>Harga Satuan</span>
-                            <strong>
-                                Rp <?= number_format($harga,0,",","."); ?>
-                            </strong>
-                        </div>
-
-                    </div>
-
-                    <hr>
-
-                    <h5 class="mb-3">Custom Bouquet</h5>
-
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <div class="checkout-option">
-                                🧸 Boneka
-                                <br>
-                                <strong>
-                                <?= $boneka ? "Ya" : "Tidak"; ?>
-                                </strong>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="checkout-option">
-                                🎈 Balon
-                                <br>
-                                <strong>
-                                <?= $balon ? "Ya" : "Tidak"; ?>
-                                </strong>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="checkout-option">
-                                💌 Kartu
-                                <br>
-                                <strong>
-                                <?= $kartu_ucapan ? "Ya" : "Tidak"; ?>
-                                </strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <label class="form-label">
-                            Warna Buket
-                        </label>
-
-                        <div class="checkout-box">
-                            <?= $warna_buket ?: "-"; ?>
-                        </div>
-                    </div>
-
-                    <div class="mt-3">
-                        <label class="form-label">
-                            Isi Surat
-                        </label>
-
-                        <div class="checkout-box">
-                            <?= $isi_surat ?: "-"; ?>
-                        </div>
-                    </div>
-
-                    <div class="mt-3">
-                        <label class="form-label">
-                            Catatan
-                        </label>
-
-                        <div class="checkout-box">
-                            <?= $catatan ?: "-"; ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-<hr class="my-5">
-
-<form method="POST">
-
-    <div class="checkout-card mt-4">
-
-        <h4 class="mb-4">
-
-            <i class="bi bi-geo-alt me-2"></i>
-
-            Informasi Pengiriman
-
-        </h4>
-
-        <div class="row g-3">
-
-            <div class="col-md-6">
-
-                <label class="form-label">
-
-                    No. HP
-
-                </label>
-
-                <input
-                type="text"
-                class="form-control"
-                name="no_hp"
-                value="<?= $user['no_hp']; ?>"
-                required>
-
-            </div>
-
-            <div class="col-md-6">
-
-                <label class="form-label">
-
-                    Metode Pengiriman
-
-                </label>
-
-                <select
-                class="form-select"
-                name="metode_pengiriman">
-
-                    <option value="Delivery">
-
-                        Delivery
-
-                    </option>
-
-                    <option value="Ambil di Toko">
-
-                        Ambil di Toko
-
-                    </option>
-
-                </select>
-
-            </div>
-
-            <div class="col-12">
-
-                <label class="form-label">
-
-                    Alamat Lengkap
-
-                </label>
-
-                <textarea
-                class="form-control"
-                rows="4"
-                name="alamat"
-                placeholder="Masukkan alamat lengkap..."
-                required><?= isset($user['alamat']) ? $user['alamat'] : ""; ?></textarea>
-
-            </div>
-
-            <div class="col-12">
-
-                <label class="form-label">
-
-                    Metode Pembayaran
-
-                </label>
-
-                <div class="d-flex gap-4 mt-2">
-
-                    <div class="form-check">
-
-                        <input
-                        class="form-check-input"
-                        type="radio"
-                        name="metode_pembayaran"
-                        value="Transfer Bank"
-                        checked>
-
-                        <label class="form-check-label">
-
-                            Transfer Bank
-
-                        </label>
-
-                    </div>
-
-                    <div class="form-check">
-
-                        <input
-                        class="form-check-input"
-                        type="radio"
-                        name="metode_pembayaran"
-                        value="COD">
-
-                        <label class="form-check-label">
-
-                            COD
-
-                        </label>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="checkout-summary">
-
-    <h3 class="mb-4">
-
-        Ringkasan Pembayaran
-
-    </h3>
-
-    <div class="summary-row">
-
-        <span>Harga Bouquet</span>
-
-        <span>
-
-            Rp <?= number_format($harga * $jumlah,0,",","."); ?>
-
-        </span>
-
-    </div>
-
-    <?php if($boneka){ ?>
-
-    <div class="summary-row">
-
-        <span>🧸 Boneka</span>
-
-        <span>Rp 25.000</span>
-
-    </div>
-
-    <?php } ?>
-
-    <?php if($balon){ ?>
-
-    <div class="summary-row">
-
-        <span>🎈 Balon</span>
-
-        <span>Rp 15.000</span>
-
-    </div>
-
-    <?php } ?>
-
-    <?php if($kartu_ucapan){ ?>
-
-    <div class="summary-row">
-
-        <span>💌 Kartu Ucapan</span>
-
-        <span>Rp 5.000</span>
-
-    </div>
-
-    <?php } ?>
-
-    <hr>
-
-    <div class="summary-total">
-
-        <span>Total Pembayaran</span>
-
-        <h2>
-
-            Rp <?= number_format($total,0,",","."); ?>
-
-        </h2>
-
-    </div>
-
-
-        <input
-        type="hidden"
-        name="buat_pesanan"
-        value="1">
-
-        <input
-        type="hidden"
-        name="id_produk"
-        value="<?= $id_produk; ?>">
-
-        <input
-        type="hidden"
-        name="ukuran"
-        value="<?= $ukuran; ?>">
-
-        <input
-        type="hidden"
-        name="jumlah"
-        value="<?= $jumlah; ?>">
-
-        <input
-        type="hidden"
-        name="boneka"
-        value="<?= $boneka; ?>">
-
-        <input
-        type="hidden"
-        name="balon"
-        value="<?= $balon; ?>">
-
-        <input
-        type="hidden"
-        name="kartu_ucapan"
-        value="<?= $kartu_ucapan; ?>">
-
-        <input
-        type="hidden"
-        name="warna_buket"
-        value="<?= htmlspecialchars($warna_buket ?? ""); ?>">
-
-        <input
-        type="hidden"
-        name="isi_surat"
-        value="<?= htmlspecialchars($isi_surat ?? ""); ?>">
-
-        <input
-        type="hidden"
-        name="catatan"
-        value="<?= htmlspecialchars($catatan ?? ""); ?>">
-
-        <?php if($id_keranjang != null){ ?>
-
-        <input
-        type="hidden"
-        name="id_keranjang"
-        value="<?= $id_keranjang; ?>">
-
-        <?php } ?>
-
-        <button
-        type="submit"
-        class="btn btn-bloom w-100 py-3">
-
-            <i class="bi bi-credit-card me-2"></i>
-
-            Buat Pesanan
-
-        </button>
-
-    </form>
+</a>
 
 </div>
 
-    <?php
+</div>
 
-    if(isset($_POST['buat_pesanan'])){
+</nav>
 
-        $no_hp = $_POST['no_hp'];
-        $alamat = $_POST['alamat'];
-        $metode_pengiriman = $_POST['metode_pengiriman'];
-        $metode_pembayaran = $_POST['metode_pembayaran'];
+<div class="container checkout-page py-5">
 
-        // Ambil kembali data dari hidden input
-        $id_produk = $_POST['id_produk'];
-        $ukuran = $_POST['ukuran'];
-        $jumlah = $_POST['jumlah'];
+<h2 class="form-title mb-4">
 
-        $boneka = $_POST['boneka'];
-        $balon = $_POST['balon'];
-        $kartu_ucapan = $_POST['kartu_ucapan'];
+Checkout Pesanan
 
-        $warna_buket = $_POST['warna_buket'];
-        $isi_surat = $_POST['isi_surat'];
-        $catatan = $_POST['catatan'];
+</h2>
 
-        $id_keranjang = isset($_POST['id_keranjang'])
-                        ? $_POST['id_keranjang']
-                        : null;
+<form method="POST">
 
-        // Ambil ulang data produk
-        $sql_produk = "SELECT *
-                    FROM produk
-                    WHERE id_produk='$id_produk'";
+<input
+type="hidden"
+name="id_produk"
+value="<?= $id_produk; ?>">
 
-        $query_produk = mysqli_query($koneksi,$sql_produk);
-        $produk = mysqli_fetch_assoc($query_produk);
+<input
+type="hidden"
+name="ukuran"
+value="<?= $ukuran; ?>">
 
-        // Tentukan harga & stok
-        if($ukuran=="Small"){
+<div class="row">
 
-            $harga = $produk['harga_small'];
-            $stok = $produk['stok_small'];
+<div class="col-12">
+    <div class="card border-0 shadow-sm rounded-4">
 
-        }elseif($ukuran=="Medium"){
+<div class="card-body p-4">
 
-            $harga = $produk['harga_medium'];
-            $stok = $produk['stok_medium'];
+<h4 class="mb-4">
 
-        }else{
+Produk Dipilih
 
-            $harga = $produk['harga_large'];
-            $stok = $produk['stok_large'];
+</h4>
 
-        }
+<div class="row align-items-center">
 
-        // Cek stok lagi
-        if($jumlah > $stok){
+<div class="col-md-4 text-center">
 
-            echo "<script>
-            alert('Stok sudah berubah dan tidak mencukupi.');
-            history.back();
-            </script>";
-            exit();
+<img
+src="../assets/img/<?= $data['gambar']; ?>"
+class="detail-image">
 
-        }
+</div>
 
-        // Hitung total
-        $total = $harga * $jumlah;
+<div class="col-md-8">
 
-        if($boneka) $total += 25000;
-        if($balon) $total += 15000;
-        if($kartu_ucapan) $total += 5000;
+<span class="badge new-badge mb-2">
 
-        // Simpan transaksi
-        $sql ="INSERT INTO transaksi
-        (
-            id_user,
-            nama_pemesan,
-            no_hp,
-            alamat,
-            metode_pengiriman,
-            metode_pembayaran,
-            id_produk,
-            jumlah,
-            ukuran,
-            boneka,
-            balon,
-            kartu_ucapan,
-            warna_buket,
-            isi_surat,
-            catatan,
-            total_harga,
-            status,
-            sumber
-        )
-        VALUES
-        (
-            '".$user['id_user']."',
-            '".$user['nama']."',
-            '$no_hp',
-            '$alamat',
-            '$metode_pengiriman',
-            '$metode_pembayaran',
-            '$id_produk',
-            '$jumlah',
-            '$ukuran',
-            '$boneka',
-            '$balon',
-            '$kartu_ucapan',
-            '$warna_buket',
-            '$isi_surat',
-            '$catatan',
-            '$total',
-            'Pesanan Masuk',
-            'Online'
-        )";
+<?= $data['nama_kategori']; ?>
 
-        $query = mysqli_query($koneksi,$sql);
+</span>
 
-        if($query){
+<h3 class="mt-2">
 
-            // Kurangi stok
-            if($ukuran=="Small"){
+<?= $data['nama_produk']; ?>
 
-                $stok_baru = max(0,$produk['stok_small']-$jumlah);
+</h3>
 
-                mysqli_query($koneksi,"
-                UPDATE produk
-                SET stok_small='$stok_baru'
-                WHERE id_produk='$id_produk'
-                ");
+<p class="text-muted mb-3">
 
-            }elseif($ukuran=="Medium"){
+Ukuran :
+<strong><?= $ukuran; ?></strong>
 
-                $stok_baru = max(0,$produk['stok_medium']-$jumlah);
+</p>
 
-                mysqli_query($koneksi,"
-                UPDATE produk
-                SET stok_medium='$stok_baru'
-                WHERE id_produk='$id_produk'
-                ");
+<table class="table detail-table">
 
-            }else{
+<tr>
 
-                $stok_baru = max(0,$produk['stok_large']-$jumlah);
+<td>Harga</td>
 
-                mysqli_query($koneksi,"
-                UPDATE produk
-                SET stok_large='$stok_baru'
-                WHERE id_produk='$id_produk'
-                ");
+<td>
 
-            }
+<strong class="text-bloom">
 
-            // Jika checkout dari keranjang, hapus itemnya
-            if($id_keranjang){
+Rp <?= number_format($harga,0,',','.'); ?>
 
-                mysqli_query($koneksi,"
-                DELETE FROM keranjang
-                WHERE id_keranjang='$id_keranjang'
-                ");
+</strong>
 
-            }
+</td>
 
-            echo "<script>
-            alert('Pesanan berhasil dibuat!');
-            window.location='pesanan_saya.php';
-            </script>";
+</tr>
 
-            exit();
+<tr>
 
-        }else{
+<td>Stok</td>
 
-            echo "Gagal menyimpan transaksi : ".mysqli_error($koneksi);
+<td>
 
-        }
+<?= $stok; ?> Bouquet
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-12 mt-4">
+
+    <div class="card border-0 shadow-sm rounded-4">
+
+<div class="card-body p-4">
+
+<h4 class="mb-4">
+
+Informasi Pemesan
+
+</h4>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Nama Pemesan
+
+</label>
+
+<input
+type="text"
+name="nama_pemesan"
+class="form-control"
+value="<?= $_SESSION['nama']; ?>"
+required>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+No. HP
+
+</label>
+
+<input
+type="text"
+name="no_hp"
+class="form-control"
+required>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Jumlah
+
+</label>
+
+<input
+type="number"
+name="jumlah"
+id="jumlah"
+class="form-control"
+value="1"
+min="1"
+max="<?= $stok; ?>"
+required>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Metode Pengiriman
+
+</label>
+
+<select
+name="metode_pengiriman"
+id="metode_pengiriman"
+class="form-select"
+required>
+
+<option value="Delivery">Delivery (+Rp20.000)</option>
+
+<option value="Ambil di Toko">Ambil di Toko</option>
+
+</select>
+
+</div>
+
+<div
+class="mb-3"
+id="alamatBox">
+
+<label class="form-label">
+
+Alamat Lengkap
+
+</label>
+
+<textarea
+name="alamat"
+id="alamat"
+class="form-control"
+rows="4"
+required></textarea>
+
+</div>
+
+<hr class="my-4">
+
+<h4 class="mb-3">
+
+Custom Bouquet
+
+</h4>
+
+<div class="form-check mb-3">
+
+<input
+class="form-check-input"
+type="checkbox"
+name="boneka"
+id="boneka">
+
+<label
+class="form-check-label"
+for="boneka">
+
+Boneka (+Rp25.000)
+
+</label>
+
+</div>
+
+<div class="form-check mb-3">
+
+<input
+class="form-check-input"
+type="checkbox"
+name="balon"
+id="balon">
+
+<label
+class="form-check-label"
+for="balon">
+
+Balon (+Rp15.000)
+
+</label>
+
+</div>
+
+<div class="form-check mb-4">
+
+<input
+class="form-check-input"
+type="checkbox"
+name="kartu_ucapan"
+id="kartu_ucapan">
+
+<label
+class="form-check-label"
+for="kartu_ucapan">
+
+Kartu Ucapan (+Rp5.000)
+
+</label>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Warna Bouquet
+
+</label>
+
+<input
+type="text"
+name="warna_buket"
+class="form-control"
+placeholder="Contoh : Pink Pastel">
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Isi Surat
+
+</label>
+
+<textarea
+name="isi_surat"
+class="form-control"
+rows="4"
+placeholder="Tuliskan isi ucapan..."></textarea>
+
+</div>
+
+<div class="mb-3">
+
+<label class="form-label">
+
+Catatan Tambahan
+
+</label>
+
+<textarea
+name="catatan"
+class="form-control"
+rows="3"
+placeholder="Catatan untuk florist..."></textarea>
+
+</div>
+<hr class="my-4">
+
+<h4 class="mb-3">
+
+Ringkasan Pembayaran
+
+</h4>
+
+<div class="detail-box mb-4">
+
+<div class="d-flex justify-content-between mb-2">
+
+<span>Harga Bouquet</span>
+
+<strong>
+
+Rp <?= number_format($harga,0,',','.'); ?>
+
+</strong>
+
+</div>
+
+<div class="d-flex justify-content-between">
+
+<span>Total</span>
+
+<h5 class="text-bloom mb-0" id="totalHarga">
+
+Rp <?= number_format($harga,0,',','.'); ?>
+
+</h5>
+
+</div>
+
+</div>
+
+<button
+type="submit"
+name="buat_pesanan"
+class="btn btn-bloom w-100 mb-2">
+
+<i class="bi bi-credit-card me-2"></i>
+
+Buat Pesanan
+
+</button>
+
+<a
+href="detail_produk.php?id=<?= $id_produk; ?>"
+class="btn btn-outline-bloom w-100">
+
+Kembali
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+<script>
+
+function toggleAlamat(){
+
+    const metode = document.getElementById("metode_pengiriman");
+
+    const alamatBox = document.getElementById("alamatBox");
+
+    const alamat = document.getElementById("alamat");
+
+    if(metode.value=="Ambil di Toko"){
+
+        alamatBox.style.display="none";
+
+        alamat.value="";
+
+        alamat.disabled=true;
+
+        alamat.removeAttribute("required");
+
+    }else{
+
+        alamatBox.style.display="block";
+
+        alamat.disabled=false;
+
+        alamat.setAttribute("required","required");
 
     }
-    ?>
+
+}
+
+toggleAlamat();
+
+const harga = <?= $harga; ?>;
+
+const jumlah = document.getElementById("jumlah");
+
+const totalHarga = document.getElementById("totalHarga");
+
+function hitungTotal(){
+
+    let total = harga * parseInt(jumlah.value);
+
+    if(document.getElementById("boneka").checked){
+
+        total += 25000;
+
+    }
+
+    if(document.getElementById("balon").checked){
+
+        total += 15000;
+
+    }
+
+    if(document.getElementById("kartu_ucapan").checked){
+
+        total += 5000;
+
+    }
+
+    if(document.getElementById("metode_pengiriman").value=="Delivery"){
+
+        total += 20000;
+
+    }
+
+    totalHarga.innerHTML =
+    "Rp " + total.toLocaleString("id-ID");
+
+}
+
+jumlah.addEventListener("input", hitungTotal);
+
+document.getElementById("boneka").addEventListener("change", hitungTotal);
+
+document.getElementById("balon").addEventListener("change", hitungTotal);
+
+document.getElementById("kartu_ucapan").addEventListener("change", hitungTotal);
+
+document.getElementById("metode_pengiriman").addEventListener("change", function(){
+
+    toggleAlamat();
+
+    hitungTotal();
+
+});
+
+hitungTotal();
+</script> 
+
 </body>
 </html>

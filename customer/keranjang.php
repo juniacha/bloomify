@@ -321,141 +321,6 @@ $total_semua += $subtotal;
 
             <hr>
 
-            <!-- ======================================
-            CUSTOM BOUQUET
-            ====================================== -->
-
-            <h5 class="cart-subtitle">
-
-                Tambahan Bouquet
-
-            </h5>
-
-            <div class="row g-3 mb-4">
-
-                <div class="col-md-4">
-
-                    <label class="addon-card">
-
-                        <input
-                        type="checkbox"
-                        name="boneka"
-                        value="1"
-                        <?= ($data['boneka']==1) ? 'checked' : ''; ?>>
-
-                        <div>
-
-                            <h6>🧸 Boneka</h6>
-
-                            <small>+ Rp25.000</small>
-
-                        </div>
-
-                    </label>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <label class="addon-card">
-
-                        <input
-                        type="checkbox"
-                        name="balon"
-                        value="1"
-                        <?= ($data['balon']==1) ? 'checked' : ''; ?>>
-
-                        <div>
-
-                            <h6>🎈 Balon</h6>
-
-                            <small>+ Rp15.000</small>
-
-                        </div>
-
-                    </label>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <label class="addon-card">
-
-                        <input
-                        type="checkbox"
-                        name="kartu_ucapan"
-                        value="1"
-                        <?= ($data['kartu_ucapan']==1) ? 'checked' : ''; ?>>
-
-                        <div>
-
-                            <h6>💌 Kartu Ucapan</h6>
-
-                            <small>+ Rp5.000</small>
-
-                        </div>
-
-                    </label>
-
-                </div>
-
-            </div>
-
-            <div class="row">
-
-                <div class="col-md-6 mb-3">
-
-                    <label class="form-label">
-
-                        Warna Buket
-
-                    </label>
-
-                    <input
-                    type="text"
-                    class="form-control"
-                    name="warna_buket"
-                    value="<?= $data['warna_buket']; ?>"
-                    placeholder="Contoh : Pink Pastel">
-
-                </div>
-
-                <div class="col-md-6 mb-3">
-
-                    <label class="form-label">
-
-                        Isi Surat
-
-                    </label>
-
-                    <textarea
-                    class="form-control"
-                    rows="4"
-                    name="isi_surat"
-                    placeholder="Tulis pesan..."><?= $data['isi_surat']; ?></textarea>
-
-                </div>
-
-            </div>
-
-            <div class="mb-4">
-
-                <label class="form-label">
-
-                    Catatan Tambahan
-
-                </label>
-
-                <textarea
-                class="form-control"
-                rows="3"
-                name="catatan"
-                placeholder="Contoh : Tolong dibungkus warna cream"><?= $data['catatan']; ?></textarea>
-
-            </div>
-
-            <hr>
-
             <div class="cart-footer">
 
                     <div>
@@ -476,16 +341,6 @@ $total_semua += $subtotal;
 
                     <div class="cart-button-group">
 
-                        <button
-                        type="submit"
-                        class="btn btn-outline-bloom">
-
-                            <i class="bi bi-floppy me-2"></i>
-
-                            Simpan
-
-                        </button>
-
                         <a
                         href="hapus_keranjang.php?id=<?= $data['id_keranjang']; ?>"
                         class="btn btn-danger"
@@ -498,7 +353,7 @@ $total_semua += $subtotal;
                         </a>
 
                         <a
-                            href="checkout.php?id_keranjang=<?= $data['id_keranjang']; ?>"
+                            href="checkout.php?id_produk=<?= $data['id_produk']; ?>&ukuran=<?= urlencode($data['ukuran']); ?>"
                             class="btn btn-bloom">
 
                                 <i class="bi bi-credit-card me-2"></i>

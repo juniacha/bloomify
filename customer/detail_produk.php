@@ -296,7 +296,7 @@ $data = mysqli_fetch_array($query);
 
         </div>
 
-        <form action="form_pemesanan.php" method="GET">
+        <form method="GET">
 
             <input type="hidden"
                 name="id_produk"

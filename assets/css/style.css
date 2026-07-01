@@ -2908,3 +2908,83 @@ DETAIL PESANAN CUSTOMER
     margin-bottom:22px;
 
 }
+
+/*==================================
+FIX CHECKOUT LAYOUT
+==================================*/
+
+.checkout-page{
+
+    padding:50px 0;
+
+}
+
+.checkout-page .row{
+
+    align-items:flex-start;
+
+}
+
+.checkout-page .col-lg-7,
+.checkout-page .col-lg-5{
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+.checkout-page .checkout-card{
+
+    width:100%;
+    margin-bottom:24px;
+
+}
+
+.checkout-page .checkout-image{
+
+    width:180px;
+    height:180px;
+    object-fit:cover;
+    border-radius:20px;
+    flex-shrink:0;
+
+}
+
+.checkout-page .product-card{
+
+    display:flex;
+    gap:24px;
+    align-items:center;
+
+}
+
+.checkout-page textarea{
+
+    min-height:110px;
+
+}
+
+.checkout-page .card{
+
+    height:auto !important;
+    min-height:auto !important;
+
+}
+
+@media(max-width:992px){
+
+    .checkout-page .product-card{
+
+        flex-direction:column;
+        align-items:flex-start;
+
+    }
+
+    .checkout-page .checkout-image{
+
+        width:100%;
+        height:320px;
+
+    }
+
+}

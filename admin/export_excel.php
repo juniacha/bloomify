@@ -81,7 +81,7 @@ header("Content-Disposition: attachment; filename=Laporan_Bloomify.xls");
                     <td><?= $data['nama_pemesan']; ?></td>
                     <td><?= $data['no_hp']; ?></td>
                     <td><?= $data['nama_produk']; ?></td>
-                    <td><?= $data['ukuran']; ?></td>
+                    <td><?= ucfirst(strtolower($data['ukuran'])); ?></td>
                     <td><?= $data['jumlah']; ?></td>
 
                     <td>

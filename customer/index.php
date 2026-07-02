@@ -436,31 +436,17 @@ ORDER BY nama_kategori ASC
 
     </section>
 
-    <section class="cta-section py-5">
+    <section class="cta-section py-5 text-center">
 
-        <div class="container">
+        <h2>Ready to Make Someone Smile?</h2>
 
-            <div class="text-center">
+        <p class="mt-3 mb-4">
+            Craft your perfect bouquet and make every celebration unforgettable.
+        </p>
 
-                <h2>
-
-                    Ready to Make Someone Smile?
-
-                </h2>
-
-                <p class="mt-3 mb-4">
-                    Craft your perfect bouquet and make every celebration unforgettable.
-                </p>
-
-                <a href="produk.php" class="btn btn-light px-5">
-
-                    Shop Now
-
-                </a>
-
-            </div>
-
-        </div>
+        <a href="produk.php" class="btn btn-light px-5">
+            Shop Now
+        </a>
 
     </section>
 

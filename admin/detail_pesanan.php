@@ -337,7 +337,7 @@ if (!$data) {
 
                                         <td>Ukuran</td>
 
-                                        <td><?= $data['ukuran']; ?></td>
+                                        <td><?= ucfirst(strtolower($data['ukuran'])); ?></td>
 
                                     </tr>
 

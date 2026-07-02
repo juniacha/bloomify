@@ -614,7 +614,7 @@ DATA TRANSAKSI
 
                                             <small class="text-muted">
 
-                                                <?= $data['ukuran']; ?>
+                                                <?= ucfirst(strtolower($data['ukuran'])); ?>
 
                                                 •
 

@@ -205,7 +205,7 @@ $total = mysqli_num_rows($query);
 
                                             <strong>
 
-                                                <?= $data['ukuran']; ?>
+                                                <?= ucfirst(strtolower($data['ukuran'])); ?>
 
                                             </strong>
 

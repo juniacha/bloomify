@@ -215,7 +215,7 @@ if (isset($_POST['update'])) {
 
                         <th>Ukuran</th>
 
-                        <td><?= $data['ukuran']; ?></td>
+                        <td><?= ucfirst(strtolower($data['ukuran'])); ?></td>
 
                     </tr>
 
@@ -297,56 +297,41 @@ if (isset($_POST['update'])) {
 
                         <select name="status" class="form-select">
 
-                            <?php if ($data['status'] == "Selesai") { ?>
-
-                                <option value="Selesai" selected>
-                                    Selesai
-                                </option>
-
-                            <?php } elseif ($data['status'] == "Pesanan Masuk") { ?>
-
-                                <option value="Pesanan Masuk" selected>
-                                    Pesanan Masuk
-                                </option>
-
-                                <option value="Diproses">
-                                    Diproses
-                                </option>
-
-                            <?php } elseif ($data['status'] == "Diproses") { ?>
-
-                                <option value="Diproses" selected>
-                                    Diproses
-                                </option>
-
-                                <option value="Sedang Diantar">
-                                    Sedang Diantar
-                                </option>
-
-                            <?php } elseif ($data['status'] == "Sedang Diantar") { ?>
-
-                                <option value="Sedang Diantar" selected>
-                                    Sedang Diantar
-                                </option>
-
-                                <option value="Selesai">
-                                    Selesai
-                                </option>
-
-                            <?php } elseif ($data['status'] == "Menunggu Pembatalan") { ?>
+                            <?php if ($data['status'] == "Menunggu Pembatalan") { ?>
 
                                 <option value="Dibatalkan">
-                                    Setujui Pembatalan
+                                    ✅ Setujui Pembatalan
                                 </option>
 
                                 <option value="Diproses">
-                                    Tolak Pembatalan
+                                    ❌ Tolak Pembatalan
                                 </option>
 
                             <?php } else { ?>
 
-                                <option value="<?= htmlspecialchars($data['status']); ?>" selected>
-                                    <?= htmlspecialchars($data['status']); ?>
+                                <option value="Pesanan Masuk"
+                                    <?= $data['status']=='Pesanan Masuk' ? 'selected' : ''; ?>>
+                                    Pesanan Masuk
+                                </option>
+
+                                <option value="Diproses"
+                                    <?= $data['status']=='Diproses' ? 'selected' : ''; ?>>
+                                    Diproses
+                                </option>
+
+                                <option value="Sedang Diantar"
+                                    <?= $data['status']=='Sedang Diantar' ? 'selected' : ''; ?>>
+                                    Sedang Diantar
+                                </option>
+
+                                <option value="Selesai"
+                                    <?= $data['status']=='Selesai' ? 'selected' : ''; ?>>
+                                    Selesai
+                                </option>
+
+                                <option value="Dibatalkan"
+                                    <?= $data['status']=='Dibatalkan' ? 'selected' : ''; ?>>
+                                    Dibatalkan
                                 </option>
 
                             <?php } ?>

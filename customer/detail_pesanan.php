@@ -220,7 +220,7 @@ $data = mysqli_fetch_assoc($query);
 
                             <h6>
 
-                                <?= $data['ukuran']; ?>
+                                <?= ucfirst(strtolower($data['ukuran'])); ?>
 
                             </h6>
 

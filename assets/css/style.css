@@ -51,7 +51,7 @@ h1,h2,h3,h4,h5,h6{
 }
 
 section{
-    padding:80px 0;
+    padding:50px 0;
 }
 
 a{
@@ -412,9 +412,11 @@ img{
 
 .cta-section{
     background:#CB807D;
-    border-radius:30px;
-    margin:80px auto;
-    color:white;
+    color:#fff;
+    padding:80px 0;
+    margin:0;
+    width:100vw;
+    margin-left:calc(50% - 50vw);
 }
 
 .cta-section .btn{

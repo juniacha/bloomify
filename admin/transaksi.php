@@ -384,33 +384,21 @@ WHERE status='Selesai'
                                 </div>
 
                                 <div class="row mb-3">
-
                                     <div class="col-6">
-
                                         <small class="text-muted">
-
                                             Ukuran
-
                                         </small>
 
                                         <br>
-
-                                        <?= $data['ukuran']; ?>
-
+                                        <?= ucfirst(strtolower($data['ukuran'])); ?>
                                     </div>
 
                                     <div class="col-6">
-
                                         <small class="text-muted">
-
                                             Sumber
-
                                         </small>
-
                                         <br>
-
                                         <?= $data['sumber']; ?>
-
                                     </div>
 
                                 </div>

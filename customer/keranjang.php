@@ -244,7 +244,7 @@ ISI KERANJANG
 
                                         <span class="size-badge">
 
-                                            <?= $data['ukuran']; ?>
+                                            <?= ucfirst(strtolower($data['ukuran'])); ?>
 
                                         </span>
 
